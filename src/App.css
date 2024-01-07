@@ -2,17 +2,6 @@
   text-align: center;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
 .App-header {
   background-color: #282c34;
   min-height: 100vh;
@@ -24,15 +13,14 @@
   color: white;
 }
 
-.App-link {
-  color: #61dafb;
+@font-face {
+  font-family: "AtomicAge-Regular";
+  src: local("AtomicAge-Regular"),
+    url("./fonts/AtomicAge/AtomicAge-Regular.ttf") format("truetype");
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+@font-face {
+  font-family: "Cookie-Regular";
+  src: local("Cookie-Regular"),
+    url("./fonts/Cookie/Cookie-Regular.ttf") format("truetype");
 }
