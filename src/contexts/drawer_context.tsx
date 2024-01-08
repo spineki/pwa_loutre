@@ -1,14 +1,20 @@
 import { createContext, ReactElement, useCallback, useState } from "react";
 import React from "react";
+import { RouteRootName } from "../routes/Root";
+import { RoutesType } from "../routes/types";
 
 export interface DrawerContextInterface {
-    toggleDrawer: () => void,
     showDrawer: boolean,
+    toggleDrawer: () => void,
+    currentRoute: RoutesType,
+    setCurrentRoute: (currentRoute: RoutesType) => void
 }
 
 export const DrawerContext = createContext<DrawerContextInterface>({
+    showDrawer: false,
     toggleDrawer: () => { },
-    showDrawer: false
+    currentRoute: RouteRootName,
+    setCurrentRoute: (currentRoute: RoutesType) => { }
 });
 
 /**
@@ -22,6 +28,7 @@ export function DrawerContextProvider({
     children: ReactElement;
 }): ReactElement {
     const [showDrawer, _setShowDrawer] = useState<boolean>(false);
+    const [currentRoute, setCurrentRoute] = useState<RoutesType>(RouteRootName)
 
     const toggleDrawer = useCallback(
         () => _setShowDrawer(!showDrawer),
@@ -29,7 +36,7 @@ export function DrawerContextProvider({
     );
 
     return (
-        <DrawerContext.Provider value={{ toggleDrawer, showDrawer }}>
+        <DrawerContext.Provider value={{ showDrawer, toggleDrawer, currentRoute, setCurrentRoute }}>
             {children}
         </DrawerContext.Provider>
     );

@@ -26,10 +26,8 @@ import { ColorModeContext } from "../contexts/colormode_context";
 
 export function Drawer() {
     const theme = useTheme();
-    const { showDrawer, toggleDrawer } = useContext(DrawerContext);
+    const { showDrawer, toggleDrawer, currentRoute } = useContext(DrawerContext);
     const { colorMode, toggleColorMode } = useContext(ColorModeContext)
-
-
 
     const StyledListItem = styled(ListItem)<ListItemProps>(({ theme }) => ({
         background: theme.palette.background.paper
@@ -37,7 +35,6 @@ export function Drawer() {
     const StyledList = styled(List)<ListProps>(({ theme }) => ({
         background: theme.palette.background.paper
     }));
-
 
 
     return (
@@ -85,7 +82,8 @@ export function Drawer() {
                     }
                 >
                     <StyledListItem disablePadding>
-                        <ListItemButton>
+                        <ListItemButton
+                            selected={currentRoute === "Root"} >
                             <ListItemIcon>
                                 <FormatListBulletedIcon />
                             </ListItemIcon>
