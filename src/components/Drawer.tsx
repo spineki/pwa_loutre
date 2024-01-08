@@ -1,4 +1,6 @@
 import React, { useContext } from "react";
+import { useTranslation } from 'react-i18next';
+
 import { styled, useTheme } from "@mui/material/styles";
 import Avatar from "@mui/material/Avatar";
 import Box from '@mui/material/Box';
@@ -18,7 +20,6 @@ import ChecklistIcon from '@mui/icons-material/Checklist';
 import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
 import TagIcon from '@mui/icons-material/Tag';
 import TapasIcon from '@mui/icons-material/Tapas';
-
 import appLogo from "../icons/loutre.png"
 
 import { DrawerContext } from "../contexts/drawer_context";
@@ -28,6 +29,8 @@ export function Drawer() {
     const theme = useTheme();
     const { showDrawer, toggleDrawer, currentRoute } = useContext(DrawerContext);
     const { colorMode, toggleColorMode } = useContext(ColorModeContext)
+
+    const { t } = useTranslation();
 
     const StyledListItem = styled(ListItem)<ListItemProps>(({ theme }) => ({
         background: theme.palette.background.paper
@@ -77,7 +80,7 @@ export function Drawer() {
                 <StyledList
                     subheader={
                         <ListSubheader component="div">
-                            Pages
+                            {t("Pages")}
                         </ListSubheader>
                     }
                 >
@@ -87,7 +90,7 @@ export function Drawer() {
                             <ListItemIcon>
                                 <FormatListBulletedIcon />
                             </ListItemIcon>
-                            <ListItemText primary="Recipes" />
+                            <ListItemText primary={t("Recipes")} />
                         </ListItemButton>
                     </StyledListItem>
                     <StyledListItem disablePadding>
@@ -95,7 +98,7 @@ export function Drawer() {
                             <ListItemIcon>
                                 <TapasIcon />
                             </ListItemIcon>
-                            <ListItemText primary="Categories" />
+                            <ListItemText primary={t("Categories")} />
                         </ListItemButton>
                     </StyledListItem>
                     <StyledListItem disablePadding>
@@ -103,7 +106,7 @@ export function Drawer() {
                             <ListItemIcon>
                                 <TagIcon />
                             </ListItemIcon>
-                            <ListItemText primary="Tags" />
+                            <ListItemText primary={t("Tags")} />
                         </ListItemButton>
                     </StyledListItem>
                 </StyledList>
@@ -111,7 +114,7 @@ export function Drawer() {
                 <StyledList
                     subheader={
                         <ListSubheader component="div">
-                            Mode
+                            {t("Mode")}
                         </ListSubheader>
                     }
                 >
@@ -123,14 +126,14 @@ export function Drawer() {
                                         <ListItemIcon>
                                             <Brightness5Icon />
                                         </ListItemIcon>
-                                        <ListItemText primary="Day" />
+                                        <ListItemText primary={t("Day")} />
                                     </>
                                     :
                                     <>
                                         <ListItemIcon>
                                             <DarkModeIcon />
                                         </ListItemIcon>
-                                        <ListItemText primary="Night" />
+                                        <ListItemText primary={t("Night")} />
                                     </>
                             }
                         </ListItemButton>
@@ -140,7 +143,7 @@ export function Drawer() {
                 <StyledList
                     subheader={
                         <ListSubheader component="div">
-                            News
+                            {t("News")}
                         </ListSubheader>
                     }
                 >
@@ -149,7 +152,7 @@ export function Drawer() {
                             <ListItemIcon>
                                 <ChecklistIcon />
                             </ListItemIcon>
-                            <ListItemText primary="Changelog" />
+                            <ListItemText primary={t("ChangeLogs")} />
                         </ListItemButton>
                     </StyledListItem>
                 </StyledList>
