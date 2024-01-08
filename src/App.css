@@ -24,3 +24,9 @@
   src: local("Cookie-Regular"),
     url("./fonts/Cookie/Cookie-Regular.ttf") format("truetype");
 }
+
+@font-face {
+  font-family: "Roboto";
+  src: local("Roboto-Regular"),
+    url("./fonts/Roboto/Roboto-Regular.ttf") format("truetype");
+}
