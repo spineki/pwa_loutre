@@ -1,14 +1,13 @@
 import React from 'react';
 import './App.css';
-import { ThemeContextProvider } from './contexts/theme_context';
 import { ThemedApp } from './ThemedApp';
+import { ColorModeProvider } from './contexts/colormode_context';
 
 function App() {
-
   return (
-    <ThemeContextProvider>
+    <ColorModeProvider>
       <ThemedApp />
-    </ThemeContextProvider>
+    </ColorModeProvider>
   );
 }
 

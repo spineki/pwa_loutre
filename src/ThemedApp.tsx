@@ -1,21 +1,19 @@
-import React from "react";
-import { useContext } from "react";
-import { ThemeContext, ThemeContextProvider } from "./contexts/theme_context";
+import React, { useContext } from "react";
 import { NavigatorApp } from "./NavigatorApp";
 import CssBaseline from '@mui/material/CssBaseline';
+import { ThemeProvider } from '@mui/material/styles';
+import { ColorModeContext } from "./contexts/colormode_context";
+
 
 export function ThemedApp() {
-    const {
-        theming: { isDarkMode }
-    } = useContext(ThemeContext);
+    const { theme } = useContext(ColorModeContext);
+    // Update the theme only if the mode changes
 
     return (
-        <>
+        <ThemeProvider theme={theme}>
             <CssBaseline />
-            <ThemeContextProvider>
-                <NavigatorApp />
-            </ThemeContextProvider>
-        </>
+            <NavigatorApp />
+        </ThemeProvider>
     );
 }
 
