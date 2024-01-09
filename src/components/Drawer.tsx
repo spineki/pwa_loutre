@@ -27,10 +27,10 @@ import { ColorModeContext } from "../contexts/colormode_context";
 
 export function Drawer() {
     const theme = useTheme();
+    const { t } = useTranslation();
     const { showDrawer, toggleDrawer, currentRoute } = useContext(DrawerContext);
     const { colorMode, toggleColorMode } = useContext(ColorModeContext)
 
-    const { t } = useTranslation();
 
     const StyledListItem = styled(ListItem)<ListItemProps>(({ theme }) => ({
         background: theme.palette.background.paper
