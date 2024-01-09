@@ -1,9 +1,8 @@
-import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
-import CardMedia from "@mui/material/CardMedia";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
 import CardActionArea from "@mui/material/CardActionArea";
+import Image from "mui-image";
 
 import { Time } from "../models/Recipe";
 import { CardRow } from "./CardRow";
@@ -12,32 +11,43 @@ import { CardRow } from "./CardRow";
 type RecipeCardProps = {
     isFavorite: boolean
     name: string,
-    picture?: string,
+    picture: string,
     time: Time,
 }
+
 
 export function RecipeCard(props: RecipeCardProps) {
 
     let { name, picture, time, isFavorite } = props;
 
     return (
-        <Card elevation={2} sx={{ marginTop: 2, marginBottom: 2 }}>
-            <CardActionArea onClick={() => alert("test")}>
-
-                <CardContent sx={{ paddingTop: 2, paddingLeft: 0, paddingRight: 0, paddingBottom: 0 }}>
-                    <Typography gutterBottom variant="h6" component="div" sx={{ paddingLeft: 2, paddingRight: 2 }}>
+        <Card elevation={2}>
+            <CardActionArea>
+                <CardContent sx={{ paddingBottom: 0, paddingTop: 1 }}>
+                    <Typography
+                        gutterBottom
+                        variant="h5"
+                        component="div"
+                        sx={{
+                            fontFamily: "Cookie-Regular",
+                            paddingTop: 0,
+                            paddingBottom: 0,
+                            whiteSpace: "nowrap",
+                            overflow: "hidden",
+                            textOverflow: "ellipsis"
+                        }}>
                         {name}
                     </Typography>
-                    <CardMedia
-                        sx={{ width: "100%", height: "auto" }}
-                        component="img"
-                        image={picture}
-                    />
-                    <Box sx={{ position: "relative", "left": 4, bottom: 42 }}>
-                        <CardRow duration={time.total} isFavorite={isFavorite} />
-                    </Box>
+                </CardContent>
+                <Image src={picture} style={{
+                    objectFit: "contain",
+                    width: "100%",
+                    aspectRatio: "14/9", // hacks, but already lost already too much time on  it
+                }} />
+                <CardContent sx={{ paddingBottom: 1, paddingTop: 1 }}>
+                    <CardRow duration={time.total} isFavorite={isFavorite} />
                 </CardContent>
             </CardActionArea>
-        </Card>
+        </Card >
     );
 }

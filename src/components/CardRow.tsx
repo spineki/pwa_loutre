@@ -19,7 +19,7 @@ export function CardRow(props: Props) {
     let { duration, isFavorite } = props;
 
     return (
-        <Box sx={{ display: "flex", flexDirection: "row", alignItems: "center", justifyContent: "left" }}>
+        <Box sx={{ display: "flex", flexDirection: "row", alignItems: "center", justifyContent: "space-between", width: "100%" }}>
             <Chip icon={<RestoreIcon />} label={formatTime(duration)} />
             {
                 isFavorite ?
@@ -27,12 +27,12 @@ export function CardRow(props: Props) {
                         event.stopPropagation();
                         alert("todo: should cease being favorite");
                     }}>
-                        <FavoriteIcon />
+                        <FavoriteIcon style={{ color: "red" }} />
                     </IconButton>
                     :
                     <IconButton onClick={(event) => {
                         event.stopPropagation();
-                        alert("todo: should become favorite")
+                        alert("todo:should become favorite")
                     }}>
                         <FavoriteBorderIcon />
                     </IconButton>

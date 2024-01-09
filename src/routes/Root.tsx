@@ -1,58 +1,16 @@
 import { useContext, useEffect } from "react";
 
 import Paper from "@mui/material/Paper";
-import { FixedSizeList, ListChildComponentProps } from "react-window";
-import AutoSizer from "react-virtualized-auto-sizer";
 
 import { DrawerContext } from "../contexts/drawer_context";
 import { RecipeCard } from "../components/RecipeCard";
-import { Recipe } from "../models/Recipe";
+import { fakeRecipes } from "../fixtures";
+import InfiniteScroll from "react-infinite-scroll-component";
+import Box from "@mui/material/Box";
+import Grid from "@mui/material/Grid";
 
 export const RouteRootName = "Root";
 
-const fakeRecipes: Recipe[] = [
-    {
-        id: 0,
-        isFavorite: false,
-        name: "Chicken and eggs",
-        pictures: ["/fake_placeholder.jpg"],
-        time: {
-            preparation: 1,
-            baking: 2,
-            total: 3
-        },
-    },
-    {
-        id: 1,
-        isFavorite: true,
-        name: "Apples and Peaches",
-        pictures: ["/fake_placeholder.jpg"],
-        time: {
-            preparation: 2,
-            baking: 3,
-            total: 4
-        },
-    },
-    {
-        id: 2,
-        isFavorite: false,
-        name: "Apples and Peaches",
-        pictures: ["/fake_placeholder.jpg"],
-        time: {
-            preparation: 5,
-            baking: 6,
-            total: 7
-        },
-    },
-];
-
-function renderRow(props: ListChildComponentProps) {
-    const { index } = props;
-    let { isFavorite, name, pictures, time } = fakeRecipes[index];
-    return (
-        <RecipeCard key={index} isFavorite={isFavorite} name={name} picture={pictures[0]} time={time} />
-    );
-}
 
 export function Root() {
     const { setCurrentRoute } = useContext(DrawerContext);
@@ -60,24 +18,33 @@ export function Root() {
         setCurrentRoute(RouteRootName);
     }, [setCurrentRoute])
 
+
+    function fetchData() {
+        console.log("called", "test");
+    }
+
     return (
         <Paper sx={{
             height: "100%",
             p: 2
         }}>
-            <AutoSizer>
-                {({ height, width }: { height: number, width: number }) => (
-                    <FixedSizeList
-                        height={height}
-                        width={width}
-                        itemSize={100}
-                        itemCount={fakeRecipes.length}
-                        overscanCount={5}
-                    >
-                        {renderRow}
-                    </FixedSizeList>
-                )}
-            </AutoSizer>
+            <InfiniteScroll
+                dataLength={fakeRecipes.length}
+                next={fetchData}
+                hasMore={true} // Replace with a condition based on your data source
+                loader={<p>Loading...</p>}
+                endMessage={<p>No more data to load.</p>}
+            >
+                <Box sx={{ flexGrow: 1 }}>
+                    <Grid container spacing={2} columns={{ xs: 2, sm: 4, md: 6 }}>
+                        {fakeRecipes.map((item, index) => (
+                            <Grid item xs={1} sx={{ aspectRatio: "1/1" }}>
+                                <RecipeCard key={index} isFavorite={item.isFavorite} name={item.name} picture={item.pictures[0]} time={item.time} />
+                            </Grid>
+                        ))}
+                    </Grid>
+                </Box>
+            </InfiniteScroll>
         </Paper>
     );
 }

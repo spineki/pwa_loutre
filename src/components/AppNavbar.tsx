@@ -56,6 +56,9 @@ const SearchIconWrapper = styled('div')(({ theme }) => ({
     justifyContent: 'center',
 }));
 
+// An offset is required to make some room for the appNavbar (scrolling issue)
+const Offset = styled('div')(({ theme }) => theme.mixins.toolbar);
+
 export function AppNavbar() {
     const {
         toggleDrawer
@@ -63,7 +66,7 @@ export function AppNavbar() {
 
     return (
         <Box sx={{ flexGrow: 1 }}>
-            <AppBar position="static">
+            <AppBar position="fixed">
                 <Toolbar>
                     <IconButton
                         size="large"
@@ -103,6 +106,7 @@ export function AppNavbar() {
                     </IconButton>
                 </Toolbar>
             </AppBar>
+            <Offset />
         </Box>
     );
 }
