@@ -17,28 +17,30 @@ type Props = {
     time: Time
 };
 
-export function TimeBlock(props: Props) {
+export function TimeRow(props: Props) {
 
     let { time } = props;
     const { t } = useTranslation();
 
+
+
     return (
-        <Box sx={{ display: "flex", flexDirection: "row", alignItems: "center", flex: 1 }}>
+        <Box sx={{ display: "flex", flexDirection: "row", alignItems: "center", justifyContent: "flex-end", flex: 1 }}>
             <RestoreIcon fontSize="medium" />
-            <Box sx={{ display: "flex", flexDirection: "row", justifyContent: "space-evenly", flex: 1 }}>
-                <VerticalBox >
+            <Box sx={{ display: "flex", flexDirection: "row", flex: 1 }}>
+                <VerticalBox sx={{ m: 1 }} >
                     <Typography variant="caption">{t("Prep")}:</Typography>
                     <Typography variant="caption">
                         {formatTime(time.preparation)}
                     </Typography>
                 </VerticalBox>
-                <VerticalBox >
+                <VerticalBox sx={{ m: 1 }}>
                     <Typography variant="caption">{t("Baking")}:</Typography>
                     <Typography variant="caption">
                         {formatTime(time.baking)}
                     </Typography>
                 </VerticalBox>
-                <VerticalBox >
+                <VerticalBox sx={{ m: 1 }} >
                     <Typography variant="caption">{t("Total")}:</Typography>
                     <Typography variant="caption">
                         {formatTime(time.total)}

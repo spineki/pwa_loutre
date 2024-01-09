@@ -13,8 +13,9 @@ export const RouteRootName = "Root";
 const fakeRecipes: Recipe[] = [
     {
         id: 0,
+        isFavorite: false,
         name: "Chicken and eggs",
-        pictures: ["/logo192.png"],
+        pictures: ["/fake_placeholder.jpg"],
         time: {
             preparation: 1,
             baking: 2,
@@ -23,21 +24,33 @@ const fakeRecipes: Recipe[] = [
     },
     {
         id: 1,
+        isFavorite: true,
         name: "Apples and Peaches",
-        pictures: ["/logo512.png"],
+        pictures: ["/fake_placeholder.jpg"],
         time: {
             preparation: 2,
             baking: 3,
             total: 4
         },
     },
+    {
+        id: 2,
+        isFavorite: false,
+        name: "Apples and Peaches",
+        pictures: ["/fake_placeholder.jpg"],
+        time: {
+            preparation: 5,
+            baking: 6,
+            total: 7
+        },
+    },
 ];
 
 function renderRow(props: ListChildComponentProps) {
     const { index } = props;
-    let { name, pictures, time } = fakeRecipes[index];
+    let { isFavorite, name, pictures, time } = fakeRecipes[index];
     return (
-        <RecipeCard key={index} name={name} picture={pictures[0]} time={time} />
+        <RecipeCard key={index} isFavorite={isFavorite} name={name} picture={pictures[0]} time={time} />
     );
 }
 

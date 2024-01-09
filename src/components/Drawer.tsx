@@ -14,6 +14,7 @@ import ListSubheader from "@mui/material/ListSubheader";
 import SwipeableDrawer from '@mui/material/SwipeableDrawer';
 import Typography from "@mui/material/Typography";
 
+import FavoriteIcon from '@mui/icons-material/Favorite';
 import Brightness5Icon from '@mui/icons-material/Brightness5';
 import DarkModeIcon from '@mui/icons-material/DarkMode';
 import ChecklistIcon from '@mui/icons-material/Checklist';
@@ -84,6 +85,14 @@ export function Drawer() {
                         </ListSubheader>
                     }
                 >
+                    <StyledListItem disablePadding>
+                        <ListItemButton>
+                            <ListItemIcon>
+                                <FavoriteIcon />
+                            </ListItemIcon>
+                            <ListItemText primary={t("Favorites")} />
+                        </ListItemButton>
+                    </StyledListItem>
                     <StyledListItem disablePadding>
                         <ListItemButton
                             selected={currentRoute === "Root"} >

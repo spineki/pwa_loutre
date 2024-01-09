@@ -1,44 +1,43 @@
+import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 import CardMedia from "@mui/material/CardMedia";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
-import CardActions from "@mui/material/CardActions";
+import CardActionArea from "@mui/material/CardActionArea";
 
 import { Time } from "../models/Recipe";
-
-
-import { TimeBlock } from "./TimeBlock";
-import ButtonBase from "@mui/material/ButtonBase";
+import { CardRow } from "./CardRow";
 
 
 type RecipeCardProps = {
+    isFavorite: boolean
     name: string,
     picture?: string,
-    time: Time
+    time: Time,
 }
 
 export function RecipeCard(props: RecipeCardProps) {
 
-    let { name, picture, time } = props;
+    let { name, picture, time, isFavorite } = props;
 
     return (
         <Card elevation={2} sx={{ marginTop: 2, marginBottom: 2 }}>
-            <CardContent>
-                <Typography gutterBottom variant="h6" component="div">
-                    {name}
-                </Typography>
-                <ButtonBase sx={{ width: "100%" }} onClick={() => alert("test")}>
+            <CardActionArea onClick={() => alert("test")}>
+
+                <CardContent sx={{ paddingTop: 2, paddingLeft: 0, paddingRight: 0, paddingBottom: 0 }}>
+                    <Typography gutterBottom variant="h6" component="div" sx={{ paddingLeft: 2, paddingRight: 2 }}>
+                        {name}
+                    </Typography>
                     <CardMedia
-                        sx={{ width: "auto", height: 100 }}
+                        sx={{ width: "100%", height: "auto" }}
                         component="img"
                         image={picture}
                     />
-                </ButtonBase>
-            </CardContent>
-
-            <CardActions sx={{ flex: 1 }}>
-                <TimeBlock time={time} />
-            </CardActions>
+                    <Box sx={{ position: "relative", "left": 4, bottom: 42 }}>
+                        <CardRow duration={time.total} isFavorite={isFavorite} />
+                    </Box>
+                </CardContent>
+            </CardActionArea>
         </Card>
     );
 }

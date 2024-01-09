@@ -7,6 +7,7 @@ export type Time = {
 export type Recipe = {
   id: number;
   name: string;
+  isFavorite: boolean;
   // steps: string[];
   // comments: string[];
   time: Time;
