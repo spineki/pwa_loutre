@@ -105,7 +105,7 @@ export function Drawer() {
                                 colorMode === "light" ?
                                     <>
                                         <ListItemIcon>
-                                            <Brightness5Icon htmlColor="orange" />
+                                            <Brightness5Icon />
                                         </ListItemIcon>
                                         <ListItemText primary={t("Day")} />
                                     </>

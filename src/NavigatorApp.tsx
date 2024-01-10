@@ -14,7 +14,7 @@ import { WorkInProgress, RouteWorkInProgressName } from "./routes/WorkInProgress
 
 const router = createBrowserRouter([
     {
-        path: "/*",
+        path: "/",
         element: <Root />,
         errorElement: <NotFound />,
         children: [
