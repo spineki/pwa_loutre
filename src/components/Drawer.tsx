@@ -28,17 +28,14 @@ import { DrawerContext } from "../contexts/drawer_context";
 import { ColorModeContext } from "../contexts/colormode_context";
 import { RouteFavoriteRecipesName } from "../routes/FavoriteRecipes";
 import { RouteAllRecipesName } from "../routes/AllRecipes";
+import { DrawerListItem } from "./DrawerListItem";
 
 export function Drawer() {
     const theme = useTheme();
     const { t } = useTranslation();
-    const { showDrawer, toggleDrawer, currentRoute } = useContext(DrawerContext);
+    const { showDrawer, toggleDrawer } = useContext(DrawerContext);
     const { colorMode, toggleColorMode } = useContext(ColorModeContext)
 
-
-    const StyledListItem = styled(ListItem)<ListItemProps>(({ theme }) => ({
-        background: theme.palette.background.paper
-    }));
     const StyledList = styled(List)<ListProps>(({ theme }) => ({
         background: theme.palette.background.paper
     }));
@@ -88,44 +85,10 @@ export function Drawer() {
                         </ListSubheader>
                     }
                 >
-                    <ListItem disablePadding>
-                        <ListItemButton
-                            component={Link}
-                            to={RouteFavoriteRecipesName}
-                            selected={currentRoute === RouteFavoriteRecipesName} >
-                            <ListItemIcon>
-                                <FavoriteIcon />
-                            </ListItemIcon>
-                            <ListItemText primary={t("Favorites")} />
-                        </ListItemButton>
-                    </ListItem>
-                    <StyledListItem disablePadding>
-                        <ListItemButton
-                            component={Link}
-                            to={RouteAllRecipesName}
-                            selected={currentRoute === RouteAllRecipesName} >
-                            <ListItemIcon>
-                                <FormatListBulletedIcon />
-                            </ListItemIcon>
-                            <ListItemText primary={t("Recipes")} />
-                        </ListItemButton>
-                    </StyledListItem>
-                    <StyledListItem disablePadding>
-                        <ListItemButton>
-                            <ListItemIcon>
-                                <TapasIcon />
-                            </ListItemIcon>
-                            <ListItemText primary={t("Categories")} />
-                        </ListItemButton>
-                    </StyledListItem>
-                    <StyledListItem disablePadding>
-                        <ListItemButton>
-                            <ListItemIcon>
-                                <TagIcon />
-                            </ListItemIcon>
-                            <ListItemText primary={t("Tags")} />
-                        </ListItemButton>
-                    </StyledListItem>
+                    <DrawerListItem to={RouteFavoriteRecipesName} CustomIcon={FavoriteIcon} iconColor="red" text={t("Favorites")} />
+                    <DrawerListItem to={RouteAllRecipesName} CustomIcon={FormatListBulletedIcon} text={t("Recipes")} />
+                    <DrawerListItem to={"/"} CustomIcon={TapasIcon} text={t("Categories")} />
+                    <DrawerListItem to={"/"} CustomIcon={TagIcon} text={t("Tags")} />
                 </StyledList>
                 <Divider />
                 <StyledList
@@ -135,13 +98,13 @@ export function Drawer() {
                         </ListSubheader>
                     }
                 >
-                    <StyledListItem disablePadding>
+                    <ListItem disablePadding style={{ background: theme.palette.background.paper }}>
                         < ListItemButton onClick={() => toggleColorMode()}>
                             {
                                 colorMode === "light" ?
                                     <>
                                         <ListItemIcon>
-                                            <Brightness5Icon />
+                                            <Brightness5Icon htmlColor="orange" />
                                         </ListItemIcon>
                                         <ListItemText primary={t("Day")} />
                                     </>
@@ -154,7 +117,7 @@ export function Drawer() {
                                     </>
                             }
                         </ListItemButton>
-                    </StyledListItem>
+                    </ListItem>
                 </StyledList>
                 <Divider />
                 <StyledList
@@ -164,14 +127,7 @@ export function Drawer() {
                         </ListSubheader>
                     }
                 >
-                    <StyledListItem disablePadding>
-                        <ListItemButton>
-                            <ListItemIcon>
-                                <ChecklistIcon />
-                            </ListItemIcon>
-                            <ListItemText primary={t("ChangeLogs")} />
-                        </ListItemButton>
-                    </StyledListItem>
+                    <DrawerListItem to={"/"} CustomIcon={ChecklistIcon} text={t("ChangeLogs")} />
                 </StyledList>
             </Box>
         </SwipeableDrawer >

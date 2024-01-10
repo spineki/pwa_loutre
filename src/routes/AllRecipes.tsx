@@ -73,7 +73,6 @@ export function AllRecipes() {
                             </Grid>
                         </Box>
                     </InfiniteScroll>
-
                     :
                     <CircularProgress />
             }
