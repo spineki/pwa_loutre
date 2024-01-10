@@ -29,6 +29,7 @@ import { ColorModeContext } from "../contexts/colormode_context";
 import { RouteFavoriteRecipesName } from "../routes/FavoriteRecipes";
 import { RouteAllRecipesName } from "../routes/AllRecipes";
 import { DrawerListItem } from "./DrawerListItem";
+import { RouteWorkInProgressName } from "../routes/WorkInProgress";
 
 export function Drawer() {
     const theme = useTheme();
@@ -87,8 +88,8 @@ export function Drawer() {
                 >
                     <DrawerListItem to={RouteFavoriteRecipesName} CustomIcon={FavoriteIcon} iconColor="red" text={t("Favorites")} />
                     <DrawerListItem to={RouteAllRecipesName} CustomIcon={FormatListBulletedIcon} text={t("Recipes")} />
-                    <DrawerListItem to={"/"} CustomIcon={TapasIcon} text={t("Categories")} />
-                    <DrawerListItem to={"/"} CustomIcon={TagIcon} text={t("Tags")} />
+                    <DrawerListItem to={RouteWorkInProgressName} CustomIcon={TapasIcon} text={t("Categories")} />
+                    <DrawerListItem to={RouteWorkInProgressName} CustomIcon={TagIcon} text={t("Tags")} />
                 </StyledList>
                 <Divider />
                 <StyledList
@@ -127,7 +128,7 @@ export function Drawer() {
                         </ListSubheader>
                     }
                 >
-                    <DrawerListItem to={"/"} CustomIcon={ChecklistIcon} text={t("ChangeLogs")} />
+                    <DrawerListItem to={RouteWorkInProgressName} CustomIcon={ChecklistIcon} text={t("ChangeLogs")} />
                 </StyledList>
             </Box>
         </SwipeableDrawer >

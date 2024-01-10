@@ -37,6 +37,7 @@ export const resources: Resource = {
       Night: "Night",
       OK: "OK",
       Picture: "Picture",
+      PageNotFound: "Page not found!",
       Portions: "Portions",
       Prep: "Prep",
       RecipeName: "Recipe Name",
@@ -50,6 +51,7 @@ export const resources: Resource = {
       Temperature: "Temperature",
       Total: "Total",
       Volumes: "Volumes",
+      WIP: "Work in Progress!",
     },
   },
 
@@ -89,6 +91,7 @@ export const resources: Resource = {
       News: "Nouveautés",
       Night: "Nuit",
       OK: "OK",
+      PageNotFound: "Page introuvable !",
       Picture: "Image",
       Portions: "Portions",
       Prep: "Prép",
@@ -103,6 +106,7 @@ export const resources: Resource = {
       Temperature: "Température",
       Total: "Total",
       Volumes: "Volumes",
+      WIP: "En chantier!",
     },
   },
 };

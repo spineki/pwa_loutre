@@ -9,6 +9,7 @@ import { NotFound } from "./routes/NotFound";
 import { DrawerContextProvider } from "./contexts/drawer_context";
 import { AllRecipes, RouteAllRecipesName } from "./routes/AllRecipes";
 import { FavoriteRecipes, RouteFavoriteRecipesName } from "./routes/FavoriteRecipes";
+import { WorkInProgress, RouteWorkInProgressName } from "./routes/WorkInProgress";
 
 
 const router = createBrowserRouter([
@@ -24,11 +25,14 @@ const router = createBrowserRouter([
             {
                 path: RouteAllRecipesName,
                 element: <AllRecipes />,
-
             },
             {
                 path: RouteFavoriteRecipesName,
                 element: <FavoriteRecipes />,
+            },
+            {
+                path: RouteWorkInProgressName,
+                element: <WorkInProgress />,
             },
         ],
     },
