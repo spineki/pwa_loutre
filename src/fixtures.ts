@@ -2,7 +2,6 @@ import { Recipe } from "./models/Recipe";
 
 export const fakeRecipes: Recipe[] = [
   {
-    id: 0,
     isFavorite: false,
     name: "Savory Sunset Chicken",
     pictures: ["/logo192.png"],
@@ -13,7 +12,6 @@ export const fakeRecipes: Recipe[] = [
     },
   },
   {
-    id: 1,
     isFavorite: true,
     name: "Tropical Fusion Delight",
     pictures: ["/fake_placeholder.jpg"],
@@ -24,7 +22,6 @@ export const fakeRecipes: Recipe[] = [
     },
   },
   {
-    id: 2,
     isFavorite: false,
     name: "Cinnamon Spiced Apples",
     pictures: ["/fake_placeholder.jpg"],
@@ -35,7 +32,6 @@ export const fakeRecipes: Recipe[] = [
     },
   },
   {
-    id: 3,
     isFavorite: true,
     name: "Lemon Zest Peach Surprise",
     pictures: ["/fake_placeholder.jpg"],
@@ -46,7 +42,6 @@ export const fakeRecipes: Recipe[] = [
     },
   },
   {
-    id: 4,
     isFavorite: false,
     name: "Mediterranean Chicken Delight",
     pictures: ["/fake_placeholder.jpg"],
@@ -57,7 +52,6 @@ export const fakeRecipes: Recipe[] = [
     },
   },
   {
-    id: 5,
     isFavorite: false,
     name: "Exquisite Homemade Spaghetti with Tomato Sauce and Basil Toppings",
     pictures: ["/fake_placeholder.jpg"],
@@ -68,7 +62,6 @@ export const fakeRecipes: Recipe[] = [
     },
   },
   {
-    id: 6,
     isFavorite: true,
     name: "Deliciously Rich Chocolate Layered Cake with Vanilla Frosting and Berries",
     pictures: ["/fake_placeholder.jpg"],
@@ -79,7 +72,6 @@ export const fakeRecipes: Recipe[] = [
     },
   },
   {
-    id: 7,
     isFavorite: false,
     name: "Savory Herb-Crusted Grilled Salmon with Lemon Butter Sauce and Roasted Vegetables",
     pictures: ["/fake_placeholder.jpg"],
@@ -90,7 +82,6 @@ export const fakeRecipes: Recipe[] = [
     },
   },
   {
-    id: 8,
     isFavorite: true,
     name: "Sumptuous Mediterranean-Style Stuffed Bell Peppers with Feta and Spinach",
     pictures: ["/fake_placeholder.jpg"],
@@ -101,7 +92,6 @@ export const fakeRecipes: Recipe[] = [
     },
   },
   {
-    id: 9,
     isFavorite: false,
     name: "Flavorful",
     pictures: ["/fake_placeholder.jpg"],

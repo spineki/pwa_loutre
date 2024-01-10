@@ -4,8 +4,8 @@ export type Time = {
   total: number;
 };
 
-export type Recipe = {
-  id: number;
+export interface Recipe {
+  id?: number;
   name: string;
   isFavorite: boolean;
   // steps: string[];
@@ -17,4 +17,4 @@ export type Recipe = {
   pictures: string[];
   // category: string;
   // tags: string[];
-};
+}
