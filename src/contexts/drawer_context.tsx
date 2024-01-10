@@ -9,12 +9,7 @@ export interface DrawerContextInterface {
     setCurrentRoute: (currentRoute: RoutesType) => void
 }
 
-export const DrawerContext = createContext<DrawerContextInterface>({
-    showDrawer: false,
-    toggleDrawer: () => { },
-    currentRoute: "/",
-    setCurrentRoute: (currentRoute: RoutesType) => { }
-});
+export const DrawerContext = createContext<DrawerContextInterface>({} as DrawerContextInterface);
 
 /**
  * A theme to

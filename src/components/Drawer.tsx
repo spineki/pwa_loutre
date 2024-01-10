@@ -1,13 +1,12 @@
-import React, { useContext } from "react";
+import { useContext } from "react";
 import { useTranslation } from 'react-i18next';
-import { Link } from "react-router-dom";
 
 import { styled, useTheme } from "@mui/material/styles";
 import Avatar from "@mui/material/Avatar";
 import Box from '@mui/material/Box';
 import Divider from '@mui/material/Divider';
 import List, { ListProps } from '@mui/material/List';
-import ListItem, { ListItemProps } from '@mui/material/ListItem';
+import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';

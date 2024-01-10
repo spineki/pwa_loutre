@@ -22,7 +22,7 @@ type RecipeCardProps = {
 
 export function RecipeCard(props: RecipeCardProps) {
 
-    let { id, name, picture, time, isFavorite } = props;
+    const { id, name, picture, time, isFavorite } = props;
 
     const handleLike = useCallback(async () => {
         await partialUpdateRecipe(id, { isFavorite: true });

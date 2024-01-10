@@ -58,7 +58,7 @@ export function AllRecipes() {
                     >
                         <Box sx={{ flexGrow: 1 }}>
                             <Grid container spacing={2} columns={{ xs: 2, sm: 4, md: 6 }}>
-                                {recipes.map((recipe, index) => (
+                                {recipes.map(recipe => (
                                     <Grid key={recipe.id!} item xs={1} sx={{ aspectRatio: "1/1" }}>
                                         <RecipeCard
                                             // A recipe has an id, asserting it for ts

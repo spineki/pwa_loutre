@@ -8,7 +8,7 @@ import RestoreIcon from '@mui/icons-material/Restore';
 import { Time } from "../models/Recipe";
 import { formatTime } from "../utils/time";
 
-const VerticalBox = styled(Box)(({ theme }) => ({
+const VerticalBox = styled(Box)(() => ({
     display: "flex",
     flexDirection: "column"
 }));
@@ -19,10 +19,8 @@ type Props = {
 
 export function TimeRow(props: Props) {
 
-    let { time } = props;
+    const { time } = props;
     const { t } = useTranslation();
-
-
 
     return (
         <Box sx={{ display: "flex", flexDirection: "row", alignItems: "center", justifyContent: "flex-end", flex: 1 }}>

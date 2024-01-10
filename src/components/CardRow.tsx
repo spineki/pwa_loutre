@@ -18,7 +18,7 @@ type Props = {
 
 export function CardRow(props: Props) {
 
-    let { duration, isFavorite, onLiked, onUnliked } = props;
+    const { duration, isFavorite, onLiked, onUnliked } = props;
 
     return (
         <Box sx={{ display: "flex", flexDirection: "row", alignItems: "center", justifyContent: "space-between", width: "100%" }}>

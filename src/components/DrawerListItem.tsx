@@ -27,7 +27,7 @@ export function DrawerListItem(props: DrawerListItemProps) {
     const theme = useTheme();
     const { currentRoute } = useContext(DrawerContext);
 
-    let matchCurrentRoute = currentRoute === to;
+    const matchCurrentRoute = currentRoute === to;
 
     return (
         <ListItem disablePadding style={{ background: theme.palette.background.paper }}>

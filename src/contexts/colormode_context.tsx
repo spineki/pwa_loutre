@@ -11,12 +11,7 @@ export interface ColorModeContextInterface {
     toggleColorMode: () => void;
 }
 
-export const ColorModeContext = createContext<ColorModeContextInterface>({
-    //@ts-ignore This theme will be filled in any case by the initialisation
-    theme: {},
-    toggleColorMode: () => { },
-    colorMode: "dark"
-});
+export const ColorModeContext = createContext<ColorModeContextInterface>({} as ColorModeContextInterface);
 
 const getDesignTokens = (mode: PaletteMode) => ({
     palette: {
