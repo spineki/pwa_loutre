@@ -44,10 +44,10 @@ export function RecipeCard(props: RecipeCardProps) {
                     width: "100%",
                     aspectRatio: "14/9", // hacks, but already lost already too much time on  it
                 }} />
-                <CardContent sx={{ paddingBottom: 1, paddingTop: 1 }}>
-                    <CardRow duration={time.total} isFavorite={isFavorite} />
-                </CardContent>
             </CardActionArea>
+            <CardContent sx={{ p: 1 }} style={{ paddingBottom: 8, paddingTop: 8 }}>
+                <CardRow duration={time.total} isFavorite={isFavorite} />
+            </CardContent>
         </Card >
     );
 }

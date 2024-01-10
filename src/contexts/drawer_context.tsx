@@ -1,5 +1,4 @@
 import { createContext, ReactElement, useCallback, useState } from "react";
-import React from "react";
 import { RouteRootName } from "../routes/Root";
 import { RoutesType } from "../routes/types";
 
@@ -13,7 +12,7 @@ export interface DrawerContextInterface {
 export const DrawerContext = createContext<DrawerContextInterface>({
     showDrawer: false,
     toggleDrawer: () => { },
-    currentRoute: RouteRootName,
+    currentRoute: "/",
     setCurrentRoute: (currentRoute: RoutesType) => { }
 });
 

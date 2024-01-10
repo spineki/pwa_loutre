@@ -1,5 +1,6 @@
 import React, { useContext } from "react";
 import { useTranslation } from 'react-i18next';
+import { Link } from "react-router-dom";
 
 import { styled, useTheme } from "@mui/material/styles";
 import Avatar from "@mui/material/Avatar";
@@ -25,6 +26,8 @@ import appLogo from "../icons/loutre.png"
 
 import { DrawerContext } from "../contexts/drawer_context";
 import { ColorModeContext } from "../contexts/colormode_context";
+import { RouteFavoriteRecipesName } from "../routes/FavoriteRecipes";
+import { RouteAllRecipesName } from "../routes/AllRecipes";
 
 export function Drawer() {
     const theme = useTheme();
@@ -85,17 +88,22 @@ export function Drawer() {
                         </ListSubheader>
                     }
                 >
-                    <StyledListItem disablePadding>
-                        <ListItemButton>
+                    <ListItem disablePadding>
+                        <ListItemButton
+                            component={Link}
+                            to={RouteFavoriteRecipesName}
+                            selected={currentRoute === RouteFavoriteRecipesName} >
                             <ListItemIcon>
                                 <FavoriteIcon />
                             </ListItemIcon>
                             <ListItemText primary={t("Favorites")} />
                         </ListItemButton>
-                    </StyledListItem>
+                    </ListItem>
                     <StyledListItem disablePadding>
                         <ListItemButton
-                            selected={currentRoute === "Root"} >
+                            component={Link}
+                            to={RouteAllRecipesName}
+                            selected={currentRoute === RouteAllRecipesName} >
                             <ListItemIcon>
                                 <FormatListBulletedIcon />
                             </ListItemIcon>
