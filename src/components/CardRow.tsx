@@ -11,12 +11,14 @@ import { formatTime } from "../utils/time";
 
 type Props = {
     duration: number,
-    isFavorite: boolean
+    isFavorite: boolean,
+    onLiked: () => void
+    onUnliked: () => void
 };
 
 export function CardRow(props: Props) {
 
-    let { duration, isFavorite } = props;
+    let { duration, isFavorite, onLiked, onUnliked } = props;
 
     return (
         <Box sx={{ display: "flex", flexDirection: "row", alignItems: "center", justifyContent: "space-between", width: "100%" }}>
@@ -25,19 +27,18 @@ export function CardRow(props: Props) {
                 isFavorite ?
                     <IconButton onClick={(event) => {
                         event.stopPropagation();
-                        alert("todo: should cease being favorite");
+                        onUnliked();
                     }}>
                         <FavoriteIcon style={{ color: "red" }} />
                     </IconButton>
                     :
                     <IconButton onClick={(event) => {
                         event.stopPropagation();
-                        alert("todo:should become favorite")
+                        onLiked();
                     }}>
                         <FavoriteBorderIcon />
                     </IconButton>
             }
-
         </Box>
     );
 }

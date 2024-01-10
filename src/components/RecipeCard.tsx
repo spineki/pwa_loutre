@@ -1,3 +1,5 @@
+import { useCallback } from "react";
+
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
@@ -6,9 +8,11 @@ import Image from "mui-image";
 
 import { Time } from "../models/Recipe";
 import { CardRow } from "./CardRow";
+import { partialUpdateRecipe } from "../models/controllers";
 
 
 type RecipeCardProps = {
+    id: number,
     isFavorite: boolean
     name: string,
     picture: string,
@@ -18,7 +22,15 @@ type RecipeCardProps = {
 
 export function RecipeCard(props: RecipeCardProps) {
 
-    let { name, picture, time, isFavorite } = props;
+    let { id, name, picture, time, isFavorite } = props;
+
+    const handleLike = useCallback(async () => {
+        await partialUpdateRecipe(id, { isFavorite: true });
+    }, [id])
+
+    const handleUnlike = useCallback(async () => {
+        await partialUpdateRecipe(id, { isFavorite: false });
+    }, [id])
 
     return (
         <Card elevation={2}>
@@ -46,7 +58,7 @@ export function RecipeCard(props: RecipeCardProps) {
                 }} />
             </CardActionArea>
             <CardContent sx={{ p: 1 }} style={{ paddingBottom: 8, paddingTop: 8 }}>
-                <CardRow duration={time.total} isFavorite={isFavorite} />
+                <CardRow duration={time.total} isFavorite={isFavorite} onLiked={handleLike} onUnliked={handleUnlike} />
             </CardContent>
         </Card >
     );

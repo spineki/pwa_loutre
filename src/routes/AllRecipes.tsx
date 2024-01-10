@@ -23,11 +23,8 @@ export function AllRecipes() {
     const recipes = useLiveQuery(
         async () => {
             const recipes = await database.recipes
-                // .where('age')
-                // .between(minAge, maxAge)
+                .orderBy("name")
                 .toArray();
-
-            // Return result
             return recipes;
         },
         // specify vars that affect query:
@@ -54,9 +51,16 @@ export function AllRecipes() {
                     >
                         <Box sx={{ flexGrow: 1 }}>
                             <Grid container spacing={2} columns={{ xs: 2, sm: 4, md: 6 }}>
-                                {recipes.map((item, index) => (
-                                    <Grid item xs={1} sx={{ aspectRatio: "1/1" }}>
-                                        <RecipeCard key={index} isFavorite={item.isFavorite} name={item.name} picture={item.pictures[0]} time={item.time} />
+                                {recipes.map((recipe, index) => (
+                                    <Grid key={recipe.id!} item xs={1} sx={{ aspectRatio: "1/1" }}>
+                                        <RecipeCard
+                                            // A recipe has an id, asserting it for ts
+                                            id={recipe.id!}
+                                            isFavorite={recipe.isFavorite}
+                                            name={recipe.name}
+                                            picture={recipe.pictures[0]}
+                                            time={recipe.time}
+                                        />
                                     </Grid>
                                 ))}
                             </Grid>

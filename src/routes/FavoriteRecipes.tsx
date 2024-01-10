@@ -9,7 +9,7 @@ import Grid from "@mui/material/Grid";
 import { DrawerContext } from "../contexts/drawer_context";
 import { RecipeCard } from "../components/RecipeCard";
 import CircularProgress from "@mui/material/CircularProgress";
-import { fakeRecipes } from "../fixtures";
+import { database } from "../models/database";
 
 export const RouteFavoriteRecipesName = "favorites";
 
@@ -22,11 +22,11 @@ export function FavoriteRecipes() {
     // todo: implement proper pagination to only load a subset into memory
     const recipes = useLiveQuery(
         async () => {
-            // const recipes = await database.recipes
-            //     .where({ "isFavorite": true })
-            //     .toArray();
-            // return recipes;
-            return fakeRecipes;
+            const recipes = await database.recipes
+                .orderBy("name")
+                .filter(recipe => recipe.isFavorite)
+                .toArray();
+            return recipes;
         },
         []
     );
@@ -51,9 +51,16 @@ export function FavoriteRecipes() {
                     >
                         <Box sx={{ flexGrow: 1 }}>
                             <Grid container spacing={2} columns={{ xs: 2, sm: 4, md: 6 }}>
-                                {recipes.map((item, index) => (
-                                    <Grid item xs={1} sx={{ aspectRatio: "1/1" }}>
-                                        <RecipeCard key={index} isFavorite={item.isFavorite} name={item.name} picture={item.pictures[0]} time={item.time} />
+                                {recipes.map((recipe, index) => (
+                                    <Grid key={recipe.id!} item xs={1} sx={{ aspectRatio: "1/1" }}>
+                                        <RecipeCard
+                                            // A recipe has an id, asserting it for ts
+                                            id={recipe.id!}
+                                            isFavorite={recipe.isFavorite}
+                                            name={recipe.name}
+                                            picture={recipe.pictures[0]}
+                                            time={recipe.time}
+                                        />
                                     </Grid>
                                 ))}
                             </Grid>
