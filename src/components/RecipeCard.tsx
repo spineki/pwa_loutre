@@ -4,11 +4,11 @@ import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
 import CardActionArea from "@mui/material/CardActionArea";
-import Image from "mui-image";
 
 import { Time } from "../models/Recipe";
 import { CardRow } from "./CardRow";
 import { partialUpdateRecipe } from "../models/controllers";
+import { CardMedia } from "@mui/material";
 
 
 type RecipeCardProps = {
@@ -51,11 +51,14 @@ export function RecipeCard(props: RecipeCardProps) {
                         {name}
                     </Typography>
                 </CardContent>
-                <Image src={picture} style={{
-                    objectFit: "contain",
-                    width: "100%",
-                    aspectRatio: "14/9", // hacks, but already lost already too much time on  it
-                }} />
+                <CardMedia
+                    image={picture}
+                    style={{
+                        objectFit: "contain",
+                        width: "100%",
+                        aspectRatio: "14/9", // hacks, but already lost already too much time on  it
+                    }}
+                />
             </CardActionArea>
             <CardContent sx={{ p: 1 }} style={{ paddingBottom: 8, paddingTop: 8 }}>
                 <CardRow duration={time.total} isFavorite={isFavorite} onLiked={handleLike} onUnliked={handleUnlike} />
