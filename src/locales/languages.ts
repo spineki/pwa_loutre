@@ -9,6 +9,7 @@ export const resources: Resource = {
       "Clipboard with usable address": "Clipboard with usable address",
       "Do you really want to delete this delicious recipe?!":
         "Do you really want to delete this delicious recipe?!",
+      DownloadRecipes: "Download recipes",
       "Export saved recipes": "Export saved recipes",
       "Import saved recipes": "Import saved recipes",
       "Pick an image": "Pick an image",
@@ -65,7 +66,8 @@ export const resources: Resource = {
         "Presse-Papier avec une addresse utilisable",
       "Do you really want to delete this delicious recipe?!":
         "Voulez-vous vraiment supprimer cette délicieuse recette?!",
-      "Export saved recipes": "Exporter des recettes",
+      DownloadRecipes: "Télécharger les recettes",
+      "Export saved recipes": "Exporter les recettes",
       "Import saved recipes": "Importer des recettes",
       "Pick an image": "Choisir une image",
       "Remove portion": "Retirer une portion",

@@ -13,3 +13,12 @@ export function formatTime(minutes: number): string {
   }
   return `${hour}h${pad(minute, 2)}`;
 }
+
+/**
+ * Example; 2024_01_23
+ * @param date
+ * @returns
+ */
+export function dateToPathCompatibleIsoFormat(date: Date) {
+  return date.toISOString().split("T")[0].replaceAll("-", "_");
+}

@@ -2,10 +2,21 @@
 
 import { useCallback, useEffect, useState } from "react";
 
-function createJSonFileFromObject(fileName: string, object: object): File {
-  const jsonContent = JSON.stringify(object);
-  const file = new File([jsonContent], fileName, { type: "application/json" });
+import { dateToPathCompatibleIsoFormat } from "../utils/time";
+
+function createTxtFileFromObject(fileName: string, object: object): File {
+  const jsonContent = JSON.stringify(object, null, 2);
+  const file = new File([jsonContent], `${fileName}.txt`, {
+    type: "text/plain",
+  });
   return file;
+}
+
+function getAllRecipesFileName() {
+  const now = new Date();
+  const formattedDate = dateToPathCompatibleIsoFormat(now);
+  const fileName = `all_recipes_${formattedDate}`;
+  return fileName;
 }
 
 export function useSharing() {
@@ -17,7 +28,7 @@ export function useSharing() {
     }
 
     // Create some test data with a file, to check if the browser supports sharing it.
-    const testFile = createJSonFileFromObject("test", { test: "test" }); //new File(["foo"], "foo.txt", { type: "text/plain" });
+    const testFile = createTxtFileFromObject("test", { test: "test" }); //new File(["foo"], "foo.txt", { type: "text/plain" });
     const data = { files: [testFile] };
 
     setBrowserCanShareFiles(navigator.canShare(data));
@@ -27,21 +38,16 @@ export function useSharing() {
     async (object: object) => {
       if (browserCanShareFiles) {
         try {
-          const fileName = "all_recipes"; // todo, add date here
+          const fileName = getAllRecipesFileName();
+          const file = createTxtFileFromObject(fileName, object);
+          if (navigator.canShare({ files: [file] })) {
+            const data = {
+              title: fileName,
+              files: [file],
+            };
 
-          const file = createJSonFileFromObject(fileName, object);
-          const data = {
-            title: fileName + ".json",
-            files: [file],
-          };
-          if (navigator.canShare(data)) {
-            alert("can share data");
             await navigator.share(data);
-          } else {
-            alert("navigator cannot share data");
           }
-
-          alert("The file was successfully shared");
         } catch (err) {
           alert(`The file could not be shared: ${err}`);
         }
@@ -52,5 +58,15 @@ export function useSharing() {
     [browserCanShareFiles]
   );
 
-  return { browserCanShareFiles, shareFile };
+  const downloadFile = useCallback((object: object) => {
+    const link = document.createElement("a");
+    const fileName = getAllRecipesFileName();
+    link.download = fileName;
+    const file = createTxtFileFromObject(fileName, object);
+    link.href = window.URL.createObjectURL(file);
+    link.click();
+    link.remove();
+  }, []);
+
+  return { browserCanShareFiles, downloadFile, shareFile };
 }

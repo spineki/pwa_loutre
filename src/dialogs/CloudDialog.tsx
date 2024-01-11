@@ -1,9 +1,8 @@
 import { useContext } from "react";
 import { useTranslation } from "react-i18next";
 
-import BackupIcon from '@mui/icons-material/Backup';
-import CloudDownloadIcon from '@mui/icons-material/CloudDownload';
 import Dialog from "@mui/material/Dialog";
+import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import List from "@mui/material/List";
@@ -12,24 +11,40 @@ import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 
+import BackupIcon from '@mui/icons-material/Backup';
+import CloudDownloadIcon from '@mui/icons-material/CloudDownload';
+import DownloadIcon from '@mui/icons-material/Download';
+
 import { useSharing } from "../hooks/useSharing";
 import { getAllRecipes } from "../models/controllers";
 import { CloudDialogContext } from "../contexts/CloudDialogContext";
-import DialogContent from "@mui/material/DialogContent";
 
 
 export function CloudDialog() {
     const { t } = useTranslation();
     const { showDialog, setShowDialog } = useContext(CloudDialogContext);
-    const { browserCanShareFiles, shareFile } = useSharing();
+    const {
+        browserCanShareFiles,
+        downloadFile,
+        shareFile
+    } = useSharing();
 
     const handleClose = () => {
         setShowDialog(false);
     };
 
+    const handleImport = async () => {
+        alert("import")
+    }
+
     const handleExport = async () => {
         const allRecipes = await getAllRecipes();
         shareFile(allRecipes);
+    }
+
+    const handleDownload = async () => {
+        const allRecipes = await getAllRecipes();
+        downloadFile(allRecipes);
     }
 
     return (
@@ -38,7 +53,7 @@ export function CloudDialog() {
             {browserCanShareFiles ?
                 <List sx={{ pt: 0 }}>
                     <ListItem disableGutters>
-                        <ListItemButton disabled={!browserCanShareFiles} onClick={() => alert("test")}>
+                        <ListItemButton disabled={!browserCanShareFiles} onClick={() => handleImport()}>
                             <ListItemIcon>
                                 <CloudDownloadIcon />
                             </ListItemIcon>
@@ -46,11 +61,19 @@ export function CloudDialog() {
                         </ListItemButton>
                     </ListItem>
                     <ListItem disableGutters>
-                        <ListItemButton disabled={!browserCanShareFiles} onClick={handleExport}>
+                        <ListItemButton disabled={!browserCanShareFiles} onClick={() => handleExport()}>
                             <ListItemIcon>
                                 <BackupIcon />
                             </ListItemIcon>
                             <ListItemText primary={t("Export saved recipes")} />
+                        </ListItemButton>
+                    </ListItem>
+                    <ListItem disableGutters>
+                        <ListItemButton disabled={!browserCanShareFiles} onClick={() => handleDownload()}>
+                            <ListItemIcon>
+                                <DownloadIcon />
+                            </ListItemIcon>
+                            <ListItemText primary={t("DownloadRecipes")} />
                         </ListItemButton>
                     </ListItem>
                 </List>
