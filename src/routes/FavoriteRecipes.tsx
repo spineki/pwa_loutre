@@ -6,7 +6,7 @@ import Paper from "@mui/material/Paper";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 
-import { DrawerContext } from "../contexts/drawer_context";
+import { DrawerContext } from "../contexts/DrawerContext";
 import { RecipeCard } from "../components/RecipeCard";
 import CircularProgress from "@mui/material/CircularProgress";
 import { database } from "../models/database";

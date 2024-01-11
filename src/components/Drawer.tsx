@@ -23,8 +23,8 @@ import TagIcon from '@mui/icons-material/Tag';
 import TapasIcon from '@mui/icons-material/Tapas';
 import appLogo from "../icons/loutre.png"
 
-import { DrawerContext } from "../contexts/drawer_context";
-import { ColorModeContext } from "../contexts/colormode_context";
+import { DrawerContext } from "../contexts/DrawerContext";
+import { ColorModeContext } from "../contexts/ColormodeContext";
 import { RouteFavoriteRecipesName } from "../routes/FavoriteRecipes";
 import { RouteAllRecipesName } from "../routes/AllRecipes";
 import { DrawerListItem } from "./DrawerListItem";

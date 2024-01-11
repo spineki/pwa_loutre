@@ -6,7 +6,7 @@ import {
 
 import { Root } from "./routes/Root";
 import { NotFound } from "./routes/NotFound";
-import { DrawerContextProvider } from "./contexts/drawer_context";
+import { DrawerContextProvider } from "./contexts/DrawerContext";
 import { AllRecipes, RouteAllRecipesName } from "./routes/AllRecipes";
 import { FavoriteRecipes, RouteFavoriteRecipesName } from "./routes/FavoriteRecipes";
 import { WorkInProgress, RouteWorkInProgressName } from "./routes/WorkInProgress";

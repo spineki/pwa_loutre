@@ -9,7 +9,7 @@ import { SvgIconProps } from "@mui/material/SvgIcon";
 import { useTheme } from "@mui/material/styles";
 
 import { RoutesType } from "../routes/types";
-import { DrawerContext } from "../contexts/drawer_context";
+import { DrawerContext } from "../contexts/DrawerContext";
 
 interface DrawerListItemProps {
     to: RoutesType,

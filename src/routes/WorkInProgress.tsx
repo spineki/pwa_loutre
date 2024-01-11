@@ -1,8 +1,9 @@
+import { useContext, useEffect } from "react";
+import { useTranslation } from "react-i18next";
+
 import { Typography } from "@mui/material";
 import Paper from "@mui/material/Paper";
-import { useContext, useEffect } from "react";
-import { DrawerContext } from "../contexts/drawer_context";
-import { useTranslation } from "react-i18next";
+import { DrawerContext } from "../contexts/DrawerContext";
 
 export const RouteWorkInProgressName = "WorkInProgress";
 

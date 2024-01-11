@@ -1,3 +1,5 @@
+import { useContext } from "react";
+
 import Box from "@mui/material/Box";
 import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
@@ -10,8 +12,8 @@ import SearchIcon from '@mui/icons-material/Search';
 import CloudIcon from '@mui/icons-material/CloudQueue';
 import ScaleIcon from '@mui/icons-material/Scale';
 
-import { useContext } from "react";
-import { DrawerContext } from "../contexts/drawer_context";
+import { DrawerContext } from "../contexts/DrawerContext";
+import { CloudDialogContext } from "../contexts/CloudDialogContext";
 
 const Search = styled('div')(({ theme }) => ({
     position: 'relative',
@@ -64,6 +66,14 @@ export function AppNavbar() {
         toggleDrawer
     } = useContext(DrawerContext);
 
+    const {
+        setShowDialog
+    } = useContext(CloudDialogContext);
+
+    const openCloudDialog = () => {
+        setShowDialog(true);
+    }
+
     return (
         <Box sx={{ flexGrow: 1 }}>
             <AppBar position="fixed">
@@ -90,7 +100,7 @@ export function AppNavbar() {
                         edge="start"
                         color="inherit"
                         sx={{ mr: 2 }}
-                        onClick={() => alert("todo")}
+                        onClick={openCloudDialog}
                     >
                         <CloudIcon fontSize="large" />
                     </IconButton>

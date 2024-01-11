@@ -10,7 +10,7 @@ import Paper from "@mui/material/Paper";
 
 import AddIcon from '@mui/icons-material/Add';
 
-import { DrawerContext } from "../contexts/drawer_context";
+import { DrawerContext } from "../contexts/DrawerContext";
 import { RecipeCard } from "../components/RecipeCard";
 import { database } from "../models/database"
 

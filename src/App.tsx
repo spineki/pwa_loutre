@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import './App.css';
 import { ThemedApp } from './ThemedApp';
-import { ColorModeProvider } from './contexts/colormode_context';
+import { ColorModeProvider } from './contexts/ColormodeContext';
 import { database } from './models/database';
 import { fakeRecipes } from './fixtures';
 
