@@ -39,11 +39,17 @@ export function CloudDialog() {
 
     const handleExport = async () => {
         const allRecipes = await getAllRecipes();
+        allRecipes.forEach(element => {
+            delete element.id;
+        });
         shareFile(allRecipes);
     }
 
     const handleDownload = async () => {
         const allRecipes = await getAllRecipes();
+        allRecipes.forEach(element => {
+            delete element.id;
+        });
         downloadFile(allRecipes);
     }
 
