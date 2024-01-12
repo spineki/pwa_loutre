@@ -66,7 +66,13 @@ export function DetailsRecipe() {
         <Paper sx={{ p: 1, width: "100%", height: "100%" }} >
             <Box sx={{ width: "100%" }}>
                 <Tabs
-                    style={{ position: "fixed", width: "100%" }}
+                    style={{
+                        position: "fixed",
+                        width: "100%",
+                        backgroundColor: theme.palette.background.default,
+                        backgroundImage: "linear-gradient(rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.05))",
+                        zIndex: 1
+                    }}
                     value={currentTabIndex}
                     onChange={handleTabsChange}
                     textColor="secondary"
@@ -114,6 +120,6 @@ export function DetailsRecipe() {
                 }}>
                 <EditIcon />
             </Fab>
-        </ Paper>
+        </ Paper >
     )
 }
