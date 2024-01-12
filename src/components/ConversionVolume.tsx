@@ -17,43 +17,55 @@ import OutlinedInput from '@mui/material/OutlinedInput';
 import SwapVertIcon from '@mui/icons-material/SwapVert';
 import InputAdornment from "@mui/material/InputAdornment";
 
-enum Masses {
-    G = "g",
-    KG = "kg",
-    LB = "lb",
-    MG = "mg",
-    OZ = "oz",
-    ST = "st",
+enum Volumes {
+    CL = "cl",
+    CUP = "cup",
+    DL = "dl",
+    FLUID_OZ_UK = "fl oz (UK)",
+    FLUID_OZ_US = "fl oz (US)",
+    GAL_UK = "gal (UK)",
+    GAL_US = "gal (US)",
+    L = "l",
+    ML = "ml",
+    PINT_UK = "pt(Imp)",
+    PINT_DRY_US = "pt(US dry)",
+    PINT_FLUID_US = "pt(US fl)",
 }
 
-const massData = {
-    [Masses.G]: 1000.0,
-    [Masses.KG]: 1.0,
-    [Masses.LB]: 2.20462,
-    [Masses.MG]: 1000000,
-    [Masses.OZ]: 35.274,
-    [Masses.ST]: 0.157473,
+const volumeData = {
+    [Volumes.CL]: 100.0,
+    [Volumes.CUP]: 4.0,
+    [Volumes.DL]: 10.0,
+    [Volumes.FLUID_OZ_UK]: 35.195079727854,
+    [Volumes.FLUID_OZ_US]: 33.814022701843,
+    [Volumes.GAL_UK]: 0.21996924829909,
+    [Volumes.GAL_US]: 0.26417205235815,
+    [Volumes.L]: 1.0,
+    [Volumes.ML]: 1000.0,
+    [Volumes.PINT_UK]: 1.7597539863927,
+    [Volumes.PINT_DRY_US]: 1.8161659685377,
+    [Volumes.PINT_FLUID_US]: 2.1133764188652,
 };
 
-function convertMass(
-    unit_src: Masses,
-    unit_dest: Masses,
+function convertVolume(
+    unit_src: Volumes,
+    unit_dest: Volumes,
     value: number
 ): number {
-    return (value / massData[unit_src]) * massData[unit_dest];
+    return (value / volumeData[unit_src]) * volumeData[unit_dest];
 }
 
 interface Props {
     onBackPressed: () => void;
 }
 
-export function ConversionMass(props: Props) {
+export function ConversionVolume(props: Props) {
     const { onBackPressed } = props;
 
     const { t } = useTranslation();
 
-    const [srcUnit, setSrcUnit] = useState(Masses.OZ);
-    const [destUnit, setDestUnit] = useState(Masses.G);
+    const [srcUnit, setSrcUnit] = useState(Volumes.CUP);
+    const [destUnit, setDestUnit] = useState(Volumes.L);
     const [srcValue, setSrcValue] = useState<number | string>(0);
     const [destValue, setDestValue] = useState<number | string>("0");
 
@@ -63,7 +75,7 @@ export function ConversionMass(props: Props) {
         }
 
         setDestValue(
-            convertMass(srcUnit, destUnit, parseFloat(srcValue.toString())).toFixed(2)
+            convertVolume(srcUnit, destUnit, parseFloat(srcValue.toString())).toFixed(2)
         );
     }, [srcValue, srcUnit, destUnit]);
 
@@ -81,24 +93,24 @@ export function ConversionMass(props: Props) {
                         <ListItemIcon>
                             <ArrowBackIcon />
                         </ListItemIcon>
-                        <ListItemText primary={t("Masses")} />
+                        <ListItemText primary={t("Volumes")} />
                     </ListItemButton>
                 </ListItem>
             </List>
 
             <Box sx={{ p: 2 }}>
                 <Grid container>
-                    <Grid item xs={3}>
+                    <Grid item xs={5}>
                         <Select
                             value={srcUnit}
-                            onChange={(event: SelectChangeEvent) => setSrcUnit(event.target.value as Masses)}
+                            onChange={(event: SelectChangeEvent) => setSrcUnit(event.target.value as Volumes)}
                         >
-                            {Object.values(Masses).map((unit) =>
+                            {Object.values(Volumes).map((unit) =>
                                 <MenuItem key={unit} value={unit}>{unit}</MenuItem>
                             )}
                         </Select>
                     </Grid>
-                    <Grid item xs={4} />
+                    <Grid item xs={2} />
 
                     <Grid item xs={5} sx={{ display: "flex" }}>
                         <OutlinedInput
@@ -106,7 +118,7 @@ export function ConversionMass(props: Props) {
                             value={srcValue}
                             endAdornment={<InputAdornment position="end">{srcUnit}</InputAdornment>}
                             onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                                const rawText = event.target.value as Masses;
+                                const rawText = event.target.value as Volumes;
                                 const text = rawText.trim();
                                 const parsedValue = parseFloat(text);
 
@@ -127,17 +139,17 @@ export function ConversionMass(props: Props) {
                 </Box>
 
                 <Grid container>
-                    <Grid item xs={3}>
+                    <Grid item xs={5}>
                         <Select
                             value={destUnit}
-                            onChange={(event: SelectChangeEvent) => setDestUnit(event.target.value as Masses)}
+                            onChange={(event: SelectChangeEvent) => setDestUnit(event.target.value as Volumes)}
                         >
-                            {Object.values(Masses).map((unit) =>
+                            {Object.values(Volumes).map((unit) =>
                                 <MenuItem key={unit} value={unit}>{unit}</MenuItem>
                             )}
                         </Select>
                     </Grid>
-                    <Grid item xs={4} />
+                    <Grid item xs={2} />
                     <Grid item xs={5} sx={{ display: "flex" }}>
                         <OutlinedInput
                             style={{ flex: 1 }}

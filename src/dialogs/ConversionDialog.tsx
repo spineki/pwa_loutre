@@ -17,6 +17,7 @@ import SquareFootIcon from '@mui/icons-material/SquareFoot';
 import { ConversionDialogContext } from "../contexts/ConversionDialogContext";
 import { ConversionTemperature } from "../components/ConversionTemperature";
 import { ConversionMass } from "../components/ConversionMass";
+import { ConversionVolume } from "../components/ConversionVolume";
 
 
 enum Conversion {
@@ -42,22 +43,10 @@ export function ConversionDialog() {
                 return (<ConversionTemperature onBackPressed={() => setCurrentConversion(null)} />);
             case Conversion.MASSES:
                 return (<ConversionMass onBackPressed={() => setCurrentConversion(null)} />);
-            // case Conversion.VOLUMES:
-            //     return (
-            //         <VolumeConversion
-            //             onBackPressed={() => {
-            //                 setCurrentPane(Panes.Conversions);
-            //             }}
-            //         />
-            //     );
-            // case Panes.VOLUME_TO_MASS:
-            //     return (
-            //         <VolumeToMassConversion
-            //             onBackPressed={() => {
-            //                 setCurrentPane(Panes.Conversions);
-            //             }}
-            //         />
-            //     );
+            case Conversion.VOLUMES:
+                return (<ConversionVolume onBackPressed={() => setCurrentConversion(null)} />);
+            // case Conversion.VOLUME_TO_MASS:
+            //     return (<ConversionMass onBackPressed={() => setCurrentConversion(null)} />);
             default:
                 return <></>
                 break;
@@ -88,7 +77,7 @@ export function ConversionDialog() {
                             </ListItemButton>
                         </ListItem>
                         <ListItem disableGutters>
-                            <ListItemButton>
+                            <ListItemButton onClick={() => setCurrentConversion(Conversion.VOLUMES)}>
                                 <ListItemIcon>
                                     <SquareFootIcon />
                                 </ListItemIcon>
@@ -96,7 +85,7 @@ export function ConversionDialog() {
                             </ListItemButton>
                         </ListItem>
                         <ListItem disableGutters>
-                            <ListItemButton>
+                            <ListItemButton onClick={() => setCurrentConversion(Conversion.VOLUME_TO_MASS)}>
                                 <ListItemIcon>
                                     <LocalDrinkIcon />
                                 </ListItemIcon>
