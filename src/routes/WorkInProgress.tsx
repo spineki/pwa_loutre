@@ -1,9 +1,11 @@
 import { useContext, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 
-import { Typography } from "@mui/material";
 import Paper from "@mui/material/Paper";
+import Typography from "@mui/material/Typography";
+
 import { DrawerContext } from "../contexts/DrawerContext";
+import Grid from "@mui/material/Grid";
 
 export const RouteWorkInProgressName = "work-in-progress";
 
@@ -15,13 +17,20 @@ export function WorkInProgress() {
     }, [setCurrentRoute])
 
     return (
-        <Paper style={{ height: "100%", display: "flex", flexDirection: "column", justifyContent: "space-evenly", backgroundColor: "#60d6e2" }}>
+        <Paper style={{ height: "100%", display: "flex", flexDirection: "column", justifyContent: "space-evenly", backgroundColor: "#5bd3e0" }}>
             <Typography variant="h1" component="h2" sx={{ fontFamily: "Cookie-Regular", fontSize: "3rem", textAlign: "center" }}>
                 {t("WIP")}
             </Typography>
-            <div style={{ display: "flex", alignItems: "center" }}>
-                <img src="/wip_placeholder.jpeg" alt="wip" style={{ width: "100%" }} />
-            </div>
+
+            <Grid container>
+                <Grid item xs={0} md={4} />
+                <Grid item xs={12} md={4}>
+                    <div style={{ display: "flex", alignItems: "center" }}>
+                        <img src="/wip_placeholder.jpeg" alt="wip" style={{ width: "100%" }} />
+                    </div>
+                </Grid>
+                <Grid item xs={0} md={4} />
+            </Grid>
         </Paper>
     );
 }
