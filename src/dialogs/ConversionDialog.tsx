@@ -16,6 +16,7 @@ import SquareFootIcon from '@mui/icons-material/SquareFoot';
 
 import { ConversionDialogContext } from "../contexts/ConversionDialogContext";
 import { ConversionTemperature } from "../components/ConversionTemperature";
+import { ConversionMass } from "../components/ConversionMass";
 
 
 enum Conversion {
@@ -38,21 +39,9 @@ export function ConversionDialog() {
     const conversionSelector = useCallback((conversion: Conversion) => {
         switch (conversion) {
             case Conversion.TEMPERATURE:
-                return (
-                    <ConversionTemperature
-                        onBackPressed={() => {
-                            setCurrentConversion(null);
-                        }}
-                    />
-                );
-            // case Conversion.MASSES:
-            //     return (
-            //         <MassConversion
-            //             onBackPressed={() => {
-            //                 setCurrentPane(Panes.Conversions);
-            //             }}
-            //         />
-            //     );
+                return (<ConversionTemperature onBackPressed={() => setCurrentConversion(null)} />);
+            case Conversion.MASSES:
+                return (<ConversionMass onBackPressed={() => setCurrentConversion(null)} />);
             // case Conversion.VOLUMES:
             //     return (
             //         <VolumeConversion
@@ -91,7 +80,7 @@ export function ConversionDialog() {
                             </ListItemButton>
                         </ListItem>
                         <ListItem disableGutters>
-                            <ListItemButton>
+                            <ListItemButton onClick={() => setCurrentConversion(Conversion.MASSES)}>
                                 <ListItemIcon>
                                     <MonitorWeightIcon />
                                 </ListItemIcon>

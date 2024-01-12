@@ -17,30 +17,43 @@ import OutlinedInput from '@mui/material/OutlinedInput';
 import SwapVertIcon from '@mui/icons-material/SwapVert';
 import InputAdornment from "@mui/material/InputAdornment";
 
+enum Masses {
+    G = "g",
+    KG = "kg",
+    LB = "lb",
+    MG = "mg",
+    OZ = "oz",
+    ST = "st",
+}
+
+const massData = {
+    [Masses.G]: 1000.0,
+    [Masses.KG]: 1.0,
+    [Masses.LB]: 2.20462,
+    [Masses.MG]: 1000000,
+    [Masses.OZ]: 35.274,
+    [Masses.ST]: 0.157473,
+};
+
+function convertMass(
+    unit_src: Masses,
+    unit_dest: Masses,
+    value: number
+): number {
+    return (value / massData[unit_src]) * massData[unit_dest];
+}
+
 interface Props {
     onBackPressed: () => void;
 }
 
-enum Temperature {
-    C = "°C",
-    F = "°F",
-}
-
-function convertCelciusToFahrenheit(degree: number): number {
-    return degree * 1.8 + 32;
-}
-
-function convertFahrenheitToCelcius(degree: number): number {
-    return (degree - 32) / 1.8;
-}
-
-export function ConversionTemperature(props: Props) {
+export function ConversionMass(props: Props) {
     const { onBackPressed } = props;
 
     const { t } = useTranslation();
 
-    const [srcUnit, setSrcUnit] = useState(Temperature.F);
-    const [destUnit, setDestUnit] = useState(Temperature.C);
+    const [srcUnit, setSrcUnit] = useState(Masses.OZ);
+    const [destUnit, setDestUnit] = useState(Masses.G);
     const [srcValue, setSrcValue] = useState<number | string>(0);
     const [destValue, setDestValue] = useState<number | string>("-17.78");
 
@@ -49,21 +62,9 @@ export function ConversionTemperature(props: Props) {
             return;
         }
 
-        if (srcUnit === Temperature.F && destUnit == Temperature.C) {
-            setDestValue(convertFahrenheitToCelcius(srcValue).toFixed(2));
-        }
-
-        if (srcUnit === Temperature.F && destUnit == Temperature.F) {
-            setDestValue(srcValue.toFixed(2));
-        }
-
-        if (srcUnit === Temperature.C && destUnit == Temperature.F) {
-            setDestValue(convertCelciusToFahrenheit(srcValue).toFixed(2));
-        }
-
-        if (srcUnit === Temperature.C && destUnit == Temperature.C) {
-            setDestValue(srcValue.toFixed(2));
-        }
+        setDestValue(
+            convertMass(srcUnit, destUnit, parseFloat(srcValue.toString())).toFixed(2)
+        );
     }, [srcValue, srcUnit, destUnit]);
 
     const swapUnits = () => {
@@ -80,7 +81,7 @@ export function ConversionTemperature(props: Props) {
                         <ListItemIcon>
                             <ArrowBackIcon />
                         </ListItemIcon>
-                        <ListItemText primary={t("Temperatures")} />
+                        <ListItemText primary={t("Masses")} />
                     </ListItemButton>
                 </ListItem>
             </List>
@@ -90,20 +91,22 @@ export function ConversionTemperature(props: Props) {
                     <Grid item xs={3}>
                         <Select
                             value={srcUnit}
-                            onChange={(event: SelectChangeEvent) => setSrcUnit(event.target.value as Temperature)}
+                            onChange={(event: SelectChangeEvent) => setSrcUnit(event.target.value as Masses)}
                         >
-                            <MenuItem value={Temperature.F}>{Temperature.F}</MenuItem>
-                            <MenuItem value={Temperature.C}>{Temperature.C}</MenuItem>
+                            {Object.values(Masses).map((unit) =>
+                                <MenuItem key={unit} value={unit}>{unit}</MenuItem>
+                            )}
                         </Select>
                     </Grid>
                     <Grid item xs={4} />
 
-                    <Grid item xs={5}>
+                    <Grid item xs={5} sx={{ display: "flex" }}>
                         <OutlinedInput
+                            style={{ flex: 1 }}
                             value={srcValue}
                             endAdornment={<InputAdornment position="end">{srcUnit}</InputAdornment>}
                             onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                                const rawText = event.target.value as Temperature;
+                                const rawText = event.target.value as Masses;
                                 const text = rawText.trim();
                                 const parsedValue = parseFloat(text);
 
@@ -127,15 +130,17 @@ export function ConversionTemperature(props: Props) {
                     <Grid item xs={3}>
                         <Select
                             value={destUnit}
-                            onChange={(event: SelectChangeEvent) => setDestUnit(event.target.value as Temperature)}
+                            onChange={(event: SelectChangeEvent) => setDestUnit(event.target.value as Masses)}
                         >
-                            <MenuItem value={Temperature.F}>{Temperature.F}</MenuItem>
-                            <MenuItem value={Temperature.C}>{Temperature.C}</MenuItem>
+                            {Object.values(Masses).map((unit) =>
+                                <MenuItem key={unit} value={unit}>{unit}</MenuItem>
+                            )}
                         </Select>
                     </Grid>
                     <Grid item xs={4} />
-                    <Grid item xs={5}>
+                    <Grid item xs={5} sx={{ display: "flex" }}>
                         <OutlinedInput
+                            style={{ flex: 1 }}
                             value={destValue}
                             disabled={true}
                             endAdornment={<InputAdornment position="end">{destUnit}</InputAdornment>}
