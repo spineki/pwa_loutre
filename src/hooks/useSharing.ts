@@ -21,6 +21,7 @@ function getAllRecipesFileName() {
 
 export function useSharing() {
   const [browserCanShareFiles, setBrowserCanShareFiles] = useState(true);
+
   useEffect(() => {
     if (!navigator.share || !navigator.canShare) {
       setBrowserCanShareFiles(false);
@@ -68,5 +69,20 @@ export function useSharing() {
     link.remove();
   }, []);
 
-  return { browserCanShareFiles, downloadFile, shareFile };
+  const importFile = useCallback(async (): Promise<
+    string | { error: unknown }
+  > => {
+    try {
+      const [handle] = await window.showOpenFilePicker({ multiple: false });
+      const file = await handle.getFile();
+      const content = await file.text();
+
+      return content;
+    } catch (error: unknown) {
+      console.error("An error occured while opening file from Picker");
+      return { error };
+    }
+  }, []);
+
+  return { browserCanShareFiles, downloadFile, shareFile, importFile };
 }

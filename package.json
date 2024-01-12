@@ -68,6 +68,7 @@
   "devDependencies": {
     "@types/mui-image": "^1.0.5",
     "@types/react-window": "^1.8.8",
+    "@types/wicg-file-system-access": "^2023.10.4",
     "@typescript-eslint/eslint-plugin": "^6.18.1",
     "@typescript-eslint/parser": "^6.18.1",
     "eslint": "^8.56.0",

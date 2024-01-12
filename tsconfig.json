@@ -16,7 +16,8 @@
     "resolveJsonModule": true,
     "skipLibCheck": true,
     "strict": true,
-    "strictNullChecks": true
+    "strictNullChecks": true,
+    "types": ["@types/wicg-file-system-access"]
   },
   "include": ["src"]
 }

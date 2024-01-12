@@ -16,7 +16,7 @@ import CloudDownloadIcon from '@mui/icons-material/CloudDownload';
 import DownloadIcon from '@mui/icons-material/Download';
 
 import { useSharing } from "../hooks/useSharing";
-import { getAllRecipes } from "../models/controllers";
+import { bulkUpsertRecipes, getAllRecipes } from "../models/controllers";
 import { CloudDialogContext } from "../contexts/CloudDialogContext";
 
 
@@ -26,6 +26,7 @@ export function CloudDialog() {
     const {
         browserCanShareFiles,
         downloadFile,
+        importFile,
         shareFile
     } = useSharing();
 
@@ -34,7 +35,26 @@ export function CloudDialog() {
     };
 
     const handleImport = async () => {
-        alert("import")
+        const content = await importFile();
+        if (!(typeof content == "string")) {
+            console.error(`Error while handling import ${content.error}`);
+            return;
+        }
+
+        let recipes;
+        try {
+            recipes = JSON.parse(content);
+        } catch (error: unknown) {
+            console.error("An error occured while parsing files to json");
+            return { error };
+        }
+
+        if (!Array.isArray(recipes)) {
+            return { error: "The provided document does not contain an array" };
+        }
+
+        await bulkUpsertRecipes(recipes);
+        setShowDialog(false);
     }
 
     const handleExport = async () => {

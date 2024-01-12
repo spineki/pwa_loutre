@@ -53,7 +53,7 @@ export function AllRecipes() {
                         dataLength={recipes.length}
                         next={fetchData}
                         hasMore={true} // Replace with a condition based on your data source
-                        loader={<p>Loading...</p>}
+                        loader={<p>Loading...(currently {recipes.length} recipes)</p>}
                         endMessage={<p>No more data to load.</p>}
                     >
                         <Box sx={{ flexGrow: 1 }}>

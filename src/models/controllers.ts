@@ -5,12 +5,15 @@ export async function getAllRecipes() {
   return await database.recipes.toArray();
 }
 
+export async function bulkUpsertRecipes(recipes: Recipe[]) {
+  await database.recipes.bulkPut(recipes);
+}
+
 /**
  * Add a recipe if it does not exist, else overwrite existing recipe
- * @param id
  * @param recipe
  */
-export async function upsertRecipe(id: number, recipe: Recipe) {
+export async function upsertRecipe(recipe: Recipe) {
   await database.recipes.put(recipe);
 }
 

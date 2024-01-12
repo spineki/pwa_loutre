@@ -9,7 +9,7 @@ function App() {
   useEffect(() => {
     async function fillFixturesInDatabase() {
       if (await database.recipes.count() === 0) {
-        await database.recipes.bulkAdd([...fakeRecipes, ...fakeRecipes, ...fakeRecipes, ...fakeRecipes]);
+        await database.recipes.bulkAdd(fakeRecipes);
       }
     }
     fillFixturesInDatabase()
