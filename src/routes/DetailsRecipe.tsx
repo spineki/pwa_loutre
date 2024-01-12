@@ -1,13 +1,16 @@
 import { useState } from "react";
 import SwipeableViews from "react-swipeable-views";
 import { useTranslation } from "react-i18next";
-import { ActionFunction, useLoaderData } from "react-router-dom";
+import { ActionFunction, Link, useLoaderData } from "react-router-dom";
 
-import Paper from "@mui/material/Paper";
-import Tabs from "@mui/material/Tabs";
-import Tab from "@mui/material/Tab";
 import Box from "@mui/material/Box";
+import Fab from "@mui/material/Fab";
+import Paper from "@mui/material/Paper";
+import Tab from "@mui/material/Tab";
+import Tabs from "@mui/material/Tabs";
 import { useTheme } from "@mui/material/styles";
+
+import EditIcon from '@mui/icons-material/Edit';
 
 import { RouteAllRecipesName } from "./AllRecipes";
 import { getRecipeById } from "../models/controllers";
@@ -15,6 +18,7 @@ import { Recipe } from "../models/Recipe";
 import { RecipeRequirements } from "../components/RecipeRequirements";
 import { RecipeSteps } from "../components/RecipeSteps";
 import { RecipeComments } from "../components/RecipeComments";
+import { RouteWorkInProgressName } from "./WorkInProgress";
 
 export const RouteDetailsRecipesName = RouteAllRecipesName + "/:id";
 
@@ -97,7 +101,19 @@ export function DetailsRecipe() {
                 {currentTabIndex == 1 ? <RecipeSteps steps={recipe.steps} /> : <></>}
                 {currentTabIndex == 2 ? <RecipeComments comments={recipe.comments} /> : <></>}
             </SwipeableViews>
-            <span>{recipe.isFavorite} </span>
+
+            <Fab
+                component={Link}
+                to={"/" + RouteWorkInProgressName}
+                size="medium"
+                color="secondary"
+                sx={{
+                    position: "fixed",
+                    bottom: 16,
+                    right: 16,
+                }}>
+                <EditIcon />
+            </Fab>
         </ Paper>
     )
 }
