@@ -18,7 +18,7 @@ import { ConversionDialogContext } from "../contexts/ConversionDialogContext";
 import { ConversionTemperature } from "../components/ConversionTemperature";
 import { ConversionMass } from "../components/ConversionMass";
 import { ConversionVolume } from "../components/ConversionVolume";
-
+import { ConversionVolumeToMass } from "../components/ConversionVolumeToMass";
 
 enum Conversion {
     TEMPERATURE = "temperature",
@@ -45,18 +45,15 @@ export function ConversionDialog() {
                 return (<ConversionMass onBackPressed={() => setCurrentConversion(null)} />);
             case Conversion.VOLUMES:
                 return (<ConversionVolume onBackPressed={() => setCurrentConversion(null)} />);
-            // case Conversion.VOLUME_TO_MASS:
-            //     return (<ConversionMass onBackPressed={() => setCurrentConversion(null)} />);
-            default:
-                return <></>
-                break;
+            case Conversion.VOLUME_TO_MASS:
+                return (<ConversionVolumeToMass onBackPressed={() => setCurrentConversion(null)} />);
         }
     }, []);
 
 
     return (
         <Dialog onClose={handleClose} open={showDialog}>
-            <DialogTitle>{t("Saves")}</DialogTitle>
+            <DialogTitle>{t("Conversions")}</DialogTitle>
             {
                 currentConversion ? conversionSelector(currentConversion) :
                     <List sx={{ pt: 0 }}>

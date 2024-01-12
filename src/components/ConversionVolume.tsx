@@ -16,6 +16,7 @@ import OutlinedInput from '@mui/material/OutlinedInput';
 
 import SwapVertIcon from '@mui/icons-material/SwapVert';
 import InputAdornment from "@mui/material/InputAdornment";
+import { convertVolume } from "../script/conversions";
 
 enum Volumes {
     CL = "cl",
@@ -30,29 +31,6 @@ enum Volumes {
     PINT_UK = "pt(Imp)",
     PINT_DRY_US = "pt(US dry)",
     PINT_FLUID_US = "pt(US fl)",
-}
-
-const volumeData = {
-    [Volumes.CL]: 100.0,
-    [Volumes.CUP]: 4.0,
-    [Volumes.DL]: 10.0,
-    [Volumes.FLUID_OZ_UK]: 35.195079727854,
-    [Volumes.FLUID_OZ_US]: 33.814022701843,
-    [Volumes.GAL_UK]: 0.21996924829909,
-    [Volumes.GAL_US]: 0.26417205235815,
-    [Volumes.L]: 1.0,
-    [Volumes.ML]: 1000.0,
-    [Volumes.PINT_UK]: 1.7597539863927,
-    [Volumes.PINT_DRY_US]: 1.8161659685377,
-    [Volumes.PINT_FLUID_US]: 2.1133764188652,
-};
-
-function convertVolume(
-    unit_src: Volumes,
-    unit_dest: Volumes,
-    value: number
-): number {
-    return (value / volumeData[unit_src]) * volumeData[unit_dest];
 }
 
 interface Props {
@@ -100,8 +78,9 @@ export function ConversionVolume(props: Props) {
 
             <Box sx={{ p: 2 }}>
                 <Grid container>
-                    <Grid item xs={5}>
+                    <Grid item xs={5} sx={{ display: "flex" }}>
                         <Select
+                            sx={{ flex: 1 }}
                             value={srcUnit}
                             onChange={(event: SelectChangeEvent) => setSrcUnit(event.target.value as Volumes)}
                         >
@@ -139,8 +118,9 @@ export function ConversionVolume(props: Props) {
                 </Box>
 
                 <Grid container>
-                    <Grid item xs={5}>
+                    <Grid item xs={5} sx={{ display: "flex" }}>
                         <Select
+                            sx={{ flex: 1 }}
                             value={destUnit}
                             onChange={(event: SelectChangeEvent) => setDestUnit(event.target.value as Volumes)}
                         >

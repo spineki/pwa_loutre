@@ -16,32 +16,7 @@ import OutlinedInput from '@mui/material/OutlinedInput';
 
 import SwapVertIcon from '@mui/icons-material/SwapVert';
 import InputAdornment from "@mui/material/InputAdornment";
-
-enum Masses {
-    G = "g",
-    KG = "kg",
-    LB = "lb",
-    MG = "mg",
-    OZ = "oz",
-    ST = "st",
-}
-
-const massData = {
-    [Masses.G]: 1000.0,
-    [Masses.KG]: 1.0,
-    [Masses.LB]: 2.20462,
-    [Masses.MG]: 1000000,
-    [Masses.OZ]: 35.274,
-    [Masses.ST]: 0.157473,
-};
-
-function convertMass(
-    unit_src: Masses,
-    unit_dest: Masses,
-    value: number
-): number {
-    return (value / massData[unit_src]) * massData[unit_dest];
-}
+import { Masses, convertMass } from "../script/conversions";
 
 interface Props {
     onBackPressed: () => void;
@@ -88,8 +63,9 @@ export function ConversionMass(props: Props) {
 
             <Box sx={{ p: 2 }}>
                 <Grid container>
-                    <Grid item xs={3}>
+                    <Grid item xs={5} sx={{ display: "flex" }}>
                         <Select
+                            sx={{ flex: 1 }}
                             value={srcUnit}
                             onChange={(event: SelectChangeEvent) => setSrcUnit(event.target.value as Masses)}
                         >
@@ -98,7 +74,7 @@ export function ConversionMass(props: Props) {
                             )}
                         </Select>
                     </Grid>
-                    <Grid item xs={4} />
+                    <Grid item xs={2} />
 
                     <Grid item xs={5} sx={{ display: "flex" }}>
                         <OutlinedInput
@@ -127,8 +103,9 @@ export function ConversionMass(props: Props) {
                 </Box>
 
                 <Grid container>
-                    <Grid item xs={3}>
+                    <Grid item xs={5} sx={{ display: "flex" }}>
                         <Select
+                            sx={{ flex: 1 }}
                             value={destUnit}
                             onChange={(event: SelectChangeEvent) => setDestUnit(event.target.value as Masses)}
                         >
@@ -137,7 +114,7 @@ export function ConversionMass(props: Props) {
                             )}
                         </Select>
                     </Grid>
-                    <Grid item xs={4} />
+                    <Grid item xs={2} />
                     <Grid item xs={5} sx={{ display: "flex" }}>
                         <OutlinedInput
                             style={{ flex: 1 }}
