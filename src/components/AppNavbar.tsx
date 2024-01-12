@@ -14,6 +14,7 @@ import ScaleIcon from '@mui/icons-material/Scale';
 
 import { DrawerContext } from "../contexts/DrawerContext";
 import { CloudDialogContext } from "../contexts/CloudDialogContext";
+import { ConversionDialogContext } from "../contexts/ConversionDialogContext";
 
 const Search = styled('div')(({ theme }) => ({
     position: 'relative',
@@ -67,11 +68,18 @@ export function AppNavbar() {
     } = useContext(DrawerContext);
 
     const {
-        setShowDialog
+        setShowDialog: setShowCloudDialog
     } = useContext(CloudDialogContext);
 
+    const {
+        setShowDialog: setShowConversionDialog
+    } = useContext(ConversionDialogContext);
+
     const openCloudDialog = () => {
-        setShowDialog(true);
+        setShowCloudDialog(true);
+    }
+    const openConversionDialog = () => {
+        setShowConversionDialog(true);
     }
 
     return (
@@ -110,7 +118,7 @@ export function AppNavbar() {
                         edge="start"
                         color="inherit"
                         sx={{ mr: 2 }}
-                        onClick={() => alert("todo")}
+                        onClick={openConversionDialog}
                     >
                         <ScaleIcon fontSize="large" />
                     </IconButton>
