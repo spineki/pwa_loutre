@@ -11,7 +11,7 @@ export interface Recipe {
   isFavorite: boolean;
   ingredients: string[];
   // source: string;
-  // portion: number;
+  portion: number;
   pictures: string[];
   steps: string[];
   time: Time;

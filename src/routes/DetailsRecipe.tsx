@@ -11,6 +11,7 @@ import Tabs from "@mui/material/Tabs";
 import { useTheme } from "@mui/material/styles";
 
 import EditIcon from '@mui/icons-material/Edit';
+import BreakfastDiningIcon from '@mui/icons-material/BreakfastDining';
 
 import { RouteAllRecipesName } from "./AllRecipes";
 import { getRecipeById } from "../models/controllers";
@@ -19,6 +20,7 @@ import { RecipeRequirements } from "../components/RecipeRequirements";
 import { RecipeSteps } from "../components/RecipeSteps";
 import { RecipeComments } from "../components/RecipeComments";
 import { RouteWorkInProgressName } from "./WorkInProgress";
+import Badge from "@mui/material/Badge";
 
 export const RouteDetailsRecipesName = RouteAllRecipesName + "/:id";
 
@@ -99,7 +101,7 @@ export function DetailsRecipe() {
             </Box>
             <SwipeableViews
                 axis={theme.direction === "rtl" ? "x-reverse" : "x"}
-                style={{ padding: 8 }}
+                style={{ padding: 8, height: "100%" }}
                 index={currentTabIndex}
                 onChangeIndex={handleTabsChangeIndex}
             >
@@ -107,6 +109,23 @@ export function DetailsRecipe() {
                 {currentTabIndex == 1 ? <RecipeSteps steps={recipe.steps} /> : <></>}
                 {currentTabIndex == 2 ? <RecipeComments comments={recipe.comments} /> : <></>}
             </SwipeableViews>
+
+            {currentTabIndex == 0 &&
+                <Fab
+                    component={Link}
+                    to={"/" + RouteWorkInProgressName}
+                    size="medium"
+                    color="primary"
+                    sx={{
+                        position: "fixed",
+                        bottom: 80,
+                        right: 16,
+                    }}>
+                    <Badge badgeContent={recipe.portion} color="secondary" sx={{ p: 0.5 }}>
+                        <BreakfastDiningIcon />
+                    </Badge>
+                </Fab>
+            }
 
             <Fab
                 component={Link}

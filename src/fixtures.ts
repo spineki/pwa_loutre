@@ -7,6 +7,7 @@ export const fakeRecipes: Recipe[] = [
     isFavorite: false,
     name: "Savory Sunset Chicken",
     pictures: ["/logo192.png"],
+    portion: 1,
     steps: [],
     time: {
       preparation: 1,
@@ -20,6 +21,7 @@ export const fakeRecipes: Recipe[] = [
     isFavorite: true,
     name: "Tropical Fusion Delight",
     pictures: ["/fake_placeholder.jpg"],
+    portion: 1,
     steps: [],
     time: {
       preparation: 2,
@@ -34,6 +36,7 @@ export const fakeRecipes: Recipe[] = [
     isFavorite: false,
     name: "Cinnamon Spiced Apples",
     pictures: ["/fake_placeholder.jpg"],
+    portion: 1,
     steps: [
       "step1",
       "step2",
@@ -52,6 +55,7 @@ export const fakeRecipes: Recipe[] = [
     isFavorite: true,
     name: "Lemon Zest Peach Surprise",
     pictures: ["/fake_placeholder.jpg"],
+    portion: 1,
     steps: [],
     time: {
       preparation: 3,
@@ -65,6 +69,7 @@ export const fakeRecipes: Recipe[] = [
     isFavorite: false,
     name: "Mediterranean Chicken Delight",
     pictures: ["/fake_placeholder.jpg"],
+    portion: 1,
     steps: [],
     time: {
       preparation: 4,
@@ -78,6 +83,7 @@ export const fakeRecipes: Recipe[] = [
     isFavorite: false,
     name: "Exquisite Homemade Spaghetti with Tomato Sauce and Basil Toppings",
     pictures: ["/fake_placeholder.jpg"],
+    portion: 1,
     steps: [],
     time: {
       preparation: 25,
@@ -91,6 +97,7 @@ export const fakeRecipes: Recipe[] = [
     isFavorite: true,
     name: "Deliciously Rich Chocolate Layered Cake with Vanilla Frosting and Berries",
     pictures: ["/fake_placeholder.jpg"],
+    portion: 1,
     steps: [],
     time: {
       preparation: 40,
@@ -104,6 +111,7 @@ export const fakeRecipes: Recipe[] = [
     isFavorite: false,
     name: "Savory Herb-Crusted Grilled Salmon with Lemon Butter Sauce and Roasted Vegetables",
     pictures: ["/fake_placeholder.jpg"],
+    portion: 1,
     steps: [],
     time: {
       preparation: 20,
@@ -117,6 +125,7 @@ export const fakeRecipes: Recipe[] = [
     isFavorite: true,
     name: "Sumptuous Mediterranean-Style Stuffed Bell Peppers with Feta and Spinach",
     pictures: ["/fake_placeholder.jpg"],
+    portion: 1,
     steps: [],
     time: {
       preparation: 30,
@@ -130,6 +139,7 @@ export const fakeRecipes: Recipe[] = [
     isFavorite: false,
     name: "Flavorful",
     pictures: ["/fake_placeholder.jpg"],
+    portion: 1,
     steps: [],
     time: {
       preparation: 20,
