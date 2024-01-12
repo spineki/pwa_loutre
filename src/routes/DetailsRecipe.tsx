@@ -60,7 +60,7 @@ export function DetailsRecipe() {
 
     return (
         <Paper sx={{ p: 1, width: "100%", height: "100%" }} >
-            <Box sx={{ borderBottom: 1, borderColor: "divider", width: "100%" }}>
+            <Box sx={{ width: "100%" }}>
                 <Tabs
                     style={{ position: "fixed", width: "100%" }}
                     value={currentTabIndex}

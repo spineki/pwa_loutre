@@ -30,10 +30,6 @@ export function RecipeRequirements(props: RecipeRequirementsProps) {
 
                 <Grid item xs={12} md={4}>
                     <List>
-                        <ListItem>
-                            <TimeRow time={time} />
-
-                        </ListItem>
 
                         <ListItem sx={{ display: "flex", justifyContent: "center" }}>
                             <ListItemAvatar>
@@ -53,6 +49,10 @@ export function RecipeRequirements(props: RecipeRequirementsProps) {
 
                             </ListItemText>
 
+                        </ListItem>
+
+                        <ListItem>
+                            <TimeRow time={time} />
                         </ListItem>
 
                         {
