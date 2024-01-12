@@ -10,6 +10,7 @@ import { DrawerContextProvider } from "./contexts/DrawerContext";
 import { AllRecipes, RouteAllRecipesName } from "./routes/AllRecipes";
 import { FavoriteRecipes, RouteFavoriteRecipesName } from "./routes/FavoriteRecipes";
 import { WorkInProgress, RouteWorkInProgressName } from "./routes/WorkInProgress";
+import { Changelogs, RouteChangelogsName } from "./routes/Changelogs";
 
 
 const router = createBrowserRouter([
@@ -29,6 +30,10 @@ const router = createBrowserRouter([
             {
                 path: RouteFavoriteRecipesName,
                 element: <FavoriteRecipes />,
+            },
+            {
+                path: RouteChangelogsName,
+                element: <Changelogs />,
             },
             {
                 path: RouteWorkInProgressName,

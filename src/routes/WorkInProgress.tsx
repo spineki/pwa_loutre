@@ -5,7 +5,7 @@ import { Typography } from "@mui/material";
 import Paper from "@mui/material/Paper";
 import { DrawerContext } from "../contexts/DrawerContext";
 
-export const RouteWorkInProgressName = "WorkInProgress";
+export const RouteWorkInProgressName = "work-in-progress";
 
 export function WorkInProgress() {
     const { setCurrentRoute } = useContext(DrawerContext);

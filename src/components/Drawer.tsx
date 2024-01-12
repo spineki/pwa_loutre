@@ -29,6 +29,8 @@ import { RouteFavoriteRecipesName } from "../routes/FavoriteRecipes";
 import { RouteAllRecipesName } from "../routes/AllRecipes";
 import { DrawerListItem } from "./DrawerListItem";
 import { RouteWorkInProgressName } from "../routes/WorkInProgress";
+import { RouteChangelogsName } from "../routes/Changelogs";
+import packageJson from "../../package.json";
 
 export function Drawer() {
     const theme = useTheme();
@@ -70,7 +72,7 @@ export function Drawer() {
                             <Box sx={{ fontFamily: 'Cookie-Regular', fontSize: 40, lineHeight: 1 }}>
                                 Loutre
                             </Box>
-                            <code style={{ fontSize: 12 }}>version: 0.0.1</code>
+                            <code style={{ fontSize: 12 }}>version: {packageJson.version}</code>
                             <Box sx={{ fontFamily: 'AtomicAge-Regular', fontSize: 12 }}>
                                 Par Antoine Marras
                             </Box>
@@ -127,7 +129,7 @@ export function Drawer() {
                         </ListSubheader>
                     }
                 >
-                    <DrawerListItem to={RouteWorkInProgressName} CustomIcon={ChecklistIcon} text={t("ChangeLogs")} />
+                    <DrawerListItem to={RouteChangelogsName} CustomIcon={ChecklistIcon} text={t("ChangeLogs")} />
                 </StyledList>
             </Box>
         </SwipeableDrawer >
