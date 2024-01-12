@@ -1,6 +1,10 @@
 import { Recipe } from "./Recipe";
 import { database } from "./database";
 
+export async function getRecipeById(id: number) {
+  return await database.recipes.get({ id });
+}
+
 export async function getAllRecipes() {
   return await database.recipes.toArray();
 }

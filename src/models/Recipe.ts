@@ -11,7 +11,7 @@ export interface Recipe {
   // steps: string[];
   // comments: string[];
   time: Time;
-  // ingredients: string[];
+  ingredients: string[];
   // source: string;
   // portion: number;
   pictures: string[];

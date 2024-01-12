@@ -16,7 +16,7 @@ import OutlinedInput from '@mui/material/OutlinedInput';
 
 import SwapVertIcon from '@mui/icons-material/SwapVert';
 import InputAdornment from "@mui/material/InputAdornment";
-import { Temperature, convertCelciusToFahrenheit, convertFahrenheitToCelcius } from "../script/conversions";
+import { Temperature, convertCelciusToFahrenheit, convertFahrenheitToCelcius } from "../utils/conversions";
 
 interface Props {
     onBackPressed: () => void;

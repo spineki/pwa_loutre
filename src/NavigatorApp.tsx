@@ -11,6 +11,7 @@ import { AllRecipes, RouteAllRecipesName } from "./routes/AllRecipes";
 import { FavoriteRecipes, RouteFavoriteRecipesName } from "./routes/FavoriteRecipes";
 import { WorkInProgress, RouteWorkInProgressName } from "./routes/WorkInProgress";
 import { Changelogs, RouteChangelogsName } from "./routes/Changelogs";
+import { DetailsRecipe, detailsRecipeLoader, RouteDetailsRecipesName } from "./routes/DetailsRecipe";
 
 
 const router = createBrowserRouter([
@@ -26,6 +27,12 @@ const router = createBrowserRouter([
             {
                 path: RouteAllRecipesName,
                 element: <AllRecipes />,
+            },
+            {
+                path: RouteDetailsRecipesName,
+                loader: detailsRecipeLoader,
+                element: <DetailsRecipe />,
+                errorElement: <NotFound />,
             },
             {
                 path: RouteFavoriteRecipesName,

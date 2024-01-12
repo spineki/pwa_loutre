@@ -9,6 +9,7 @@ import { Time } from "../models/Recipe";
 import { CardRow } from "./CardRow";
 import { partialUpdateRecipe } from "../models/controllers";
 import { CardMedia } from "@mui/material";
+import { Link } from "react-router-dom";
 
 
 type RecipeCardProps = {
@@ -34,7 +35,7 @@ export function RecipeCard(props: RecipeCardProps) {
 
     return (
         <Card elevation={2}>
-            <CardActionArea>
+            <CardActionArea component={Link} to={`${id}`}>
                 <CardContent sx={{ paddingBottom: 0, paddingTop: 1 }}>
                     <Typography
                         gutterBottom

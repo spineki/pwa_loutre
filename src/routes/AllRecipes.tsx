@@ -14,7 +14,7 @@ import { DrawerContext } from "../contexts/DrawerContext";
 import { RecipeCard } from "../components/RecipeCard";
 import { database } from "../models/database"
 
-export const RouteAllRecipesName = "list";
+export const RouteAllRecipesName = "recipes";
 
 export function AllRecipes() {
     const { setCurrentRoute } = useContext(DrawerContext);

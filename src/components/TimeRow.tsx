@@ -24,8 +24,8 @@ export function TimeRow(props: Props) {
 
     return (
         <Box sx={{ display: "flex", flexDirection: "row", alignItems: "center", justifyContent: "flex-end", flex: 1 }}>
-            <RestoreIcon fontSize="medium" />
-            <Box sx={{ display: "flex", flexDirection: "row", flex: 1 }}>
+            <RestoreIcon fontSize="large" />
+            <Box sx={{ display: "flex", flexDirection: "row", flex: 1, justifyContent: "space-around" }}>
                 <VerticalBox sx={{ m: 1 }} >
                     <Typography variant="caption">{t("Prep")}:</Typography>
                     <Typography variant="caption">

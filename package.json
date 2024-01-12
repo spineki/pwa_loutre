@@ -23,6 +23,7 @@
     "react-infinite-scroll-component": "^6.1.0",
     "react-router-dom": "^6.21.1",
     "react-scripts": "5.0.1",
+    "react-swipeable-views": "^0.14.0",
     "typescript": "^5.3.3",
     "web-vitals": "^2.1.4",
     "workbox-background-sync": "^6.4.2",
@@ -67,6 +68,7 @@
   },
   "devDependencies": {
     "@types/mui-image": "^1.0.5",
+    "@types/react-swipeable-views": "^0.13.5",
     "@types/react-window": "^1.8.8",
     "@types/wicg-file-system-access": "^2023.10.4",
     "@typescript-eslint/eslint-plugin": "^6.18.1",

@@ -14,7 +14,7 @@ import Select, { SelectChangeEvent } from '@mui/material/Select';
 import OutlinedInput from '@mui/material/OutlinedInput';
 
 import InputAdornment from "@mui/material/InputAdornment";
-import { Masses, Matter, Volumes, convertVolumeMatterToMass } from "../script/conversions";
+import { Masses, Matter, Volumes, convertVolumeMatterToMass } from "../utils/conversions";
 
 
 interface Props {

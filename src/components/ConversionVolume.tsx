@@ -16,7 +16,7 @@ import OutlinedInput from '@mui/material/OutlinedInput';
 
 import SwapVertIcon from '@mui/icons-material/SwapVert';
 import InputAdornment from "@mui/material/InputAdornment";
-import { convertVolume } from "../script/conversions";
+import { convertVolume } from "../utils/conversions";
 
 enum Volumes {
     CL = "cl",

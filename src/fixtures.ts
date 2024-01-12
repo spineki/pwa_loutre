@@ -2,6 +2,7 @@ import { Recipe } from "./models/Recipe";
 
 export const fakeRecipes: Recipe[] = [
   {
+    ingredients: ["1 baguette", "1 carotte", "2 oignons"],
     isFavorite: false,
     name: "Savory Sunset Chicken",
     pictures: ["/logo192.png"],
@@ -12,6 +13,7 @@ export const fakeRecipes: Recipe[] = [
     },
   },
   {
+    ingredients: [],
     isFavorite: true,
     name: "Tropical Fusion Delight",
     pictures: ["/fake_placeholder.jpg"],
@@ -22,6 +24,7 @@ export const fakeRecipes: Recipe[] = [
     },
   },
   {
+    ingredients: ["1 cinnammon", "1 spice", "2 onions"],
     isFavorite: false,
     name: "Cinnamon Spiced Apples",
     pictures: ["/fake_placeholder.jpg"],
@@ -32,6 +35,7 @@ export const fakeRecipes: Recipe[] = [
     },
   },
   {
+    ingredients: [],
     isFavorite: true,
     name: "Lemon Zest Peach Surprise",
     pictures: ["/fake_placeholder.jpg"],
@@ -42,6 +46,7 @@ export const fakeRecipes: Recipe[] = [
     },
   },
   {
+    ingredients: [],
     isFavorite: false,
     name: "Mediterranean Chicken Delight",
     pictures: ["/fake_placeholder.jpg"],
@@ -52,6 +57,7 @@ export const fakeRecipes: Recipe[] = [
     },
   },
   {
+    ingredients: [],
     isFavorite: false,
     name: "Exquisite Homemade Spaghetti with Tomato Sauce and Basil Toppings",
     pictures: ["/fake_placeholder.jpg"],
@@ -62,6 +68,7 @@ export const fakeRecipes: Recipe[] = [
     },
   },
   {
+    ingredients: [],
     isFavorite: true,
     name: "Deliciously Rich Chocolate Layered Cake with Vanilla Frosting and Berries",
     pictures: ["/fake_placeholder.jpg"],
@@ -72,6 +79,7 @@ export const fakeRecipes: Recipe[] = [
     },
   },
   {
+    ingredients: [],
     isFavorite: false,
     name: "Savory Herb-Crusted Grilled Salmon with Lemon Butter Sauce and Roasted Vegetables",
     pictures: ["/fake_placeholder.jpg"],
@@ -82,6 +90,7 @@ export const fakeRecipes: Recipe[] = [
     },
   },
   {
+    ingredients: [],
     isFavorite: true,
     name: "Sumptuous Mediterranean-Style Stuffed Bell Peppers with Feta and Spinach",
     pictures: ["/fake_placeholder.jpg"],
@@ -92,6 +101,7 @@ export const fakeRecipes: Recipe[] = [
     },
   },
   {
+    ingredients: [],
     isFavorite: false,
     name: "Flavorful",
     pictures: ["/fake_placeholder.jpg"],

@@ -16,7 +16,7 @@ import OutlinedInput from '@mui/material/OutlinedInput';
 
 import SwapVertIcon from '@mui/icons-material/SwapVert';
 import InputAdornment from "@mui/material/InputAdornment";
-import { Masses, convertMass } from "../script/conversions";
+import { Masses, convertMass } from "../utils/conversions";
 
 interface Props {
     onBackPressed: () => void;
