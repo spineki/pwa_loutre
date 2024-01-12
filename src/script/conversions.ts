@@ -13,7 +13,7 @@ export enum Volumes {
   PINT_FLUID_US = "pt(US fl)",
 }
 
-const volumeData = {
+const volumeData: Record<Volumes, number> = {
   [Volumes.CL]: 100.0,
   [Volumes.CUP]: 4.0,
   [Volumes.DL]: 10.0,
@@ -37,7 +37,7 @@ export enum Masses {
   ST = "st",
 }
 
-const massData = {
+const massData: Record<Masses, number> = {
   [Masses.G]: 1000.0,
   [Masses.KG]: 1.0,
   [Masses.LB]: 2.20462,
@@ -64,9 +64,9 @@ export enum Matter {
   HONEY = "honey",
   MAPLE_SYRUP = "maple syrup",
   MILK = "milk",
-  PEANUT_BUTTER = "peanut butter",
   OAT = "oat",
   OIL = "oil",
+  PEANUT_BUTTER = "peanut butter",
   PUMPKIN_PUREE = "pumpkin purre",
   RICE_DRY = "dry rice",
   TOMATO_CRUSHED = "crush tomatoes",
@@ -75,11 +75,11 @@ export enum Matter {
   YOGURT = "yogurt",
 }
 
-const matterData = {
+const matterData: Record<Matter, number> = {
   [Matter.ALMOND_FLOUR]: 0.384,
   [Matter.APPLESAUCE]: 1.02,
-  [Matter.BROWN_SUGAR]: 0.852,
   [Matter.BERRIES_FROZEN]: 0.568,
+  [Matter.BROWN_SUGAR]: 0.852,
   [Matter.BUTTER]: 0.918,
   [Matter.CHOCOLATE_CHIP]: 0.68,
   [Matter.COCOA_POWDER]: 0.336,
@@ -93,9 +93,9 @@ const matterData = {
   [Matter.HONEY]: 1.42,
   [Matter.MAPLE_SYRUP]: 1.248,
   [Matter.MILK]: 1.03,
-  [Matter.PEANUT_BUTTER]: 1.08,
   [Matter.OAT]: 0.324,
   [Matter.OIL]: 0.92,
+  [Matter.PEANUT_BUTTER]: 1.08,
   [Matter.PUMPKIN_PUREE]: 0.908,
   [Matter.RICE_DRY]: 0.8,
   [Matter.TOMATO_CRUSHED]: 1.04,
