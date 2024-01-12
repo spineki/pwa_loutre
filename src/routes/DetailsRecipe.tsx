@@ -8,8 +8,6 @@ import Box from "@mui/material/Box";
 import Fab from "@mui/material/Fab";
 import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
-import Tab from "@mui/material/Tab";
-import Tabs from "@mui/material/Tabs";
 import { useTheme } from "@mui/material/styles";
 
 import AddIcon from "@mui/icons-material/Add";
@@ -25,6 +23,7 @@ import { RecipeRequirements } from "../components/RecipeRequirements";
 import { RecipeSteps } from "../components/RecipeSteps";
 import { RecipeComments } from "../components/RecipeComments";
 import { RouteWorkInProgressName } from "./WorkInProgress";
+import { RecipeTabs } from "../components/RecipeTabs";
 
 export const RouteDetailsRecipesName = RouteAllRecipesName + "/:id";
 
@@ -80,48 +79,20 @@ export function DetailsRecipe() {
         setPortion(recipe.portion);
     }, [recipe.portion])
 
-    const handleTabsChange = (event: React.SyntheticEvent, newValue: number) => {
-        setCurrentTabIndex(newValue);
-    };
 
     const handleTabsChangeIndex = (index: number) => {
         setCurrentTabIndex(index);
     };
 
+
     return (
-        <Paper sx={{ p: 1, width: "100%", height: "100%" }} >
-            <Box sx={{ width: "100%" }}>
-                <Tabs
-                    style={{
-                        position: "fixed",
-                        width: "100%",
-                        backgroundColor: theme.palette.background.default,
-                        backgroundImage: "linear-gradient(rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.05))",
-                        zIndex: 1
-                    }}
-                    value={currentTabIndex}
-                    onChange={handleTabsChange}
-                    textColor="secondary"
-                    indicatorColor="secondary"
-                    centered
-                >
-                    <Tab label={t("Ingredients")} />
-                    <Tab label={t("Recipe")} />
-                    <Tab label={t("Comments")} />
-                </Tabs>
+        <Paper sx={{ p: 1, width: "100%", height: "100%", display: "flex", flexDirection: "column" }} >
+            <Box sx={{ width: "100%", position: "fixed", zIndex: 1, }}>
+                <RecipeTabs currentTabIndex={currentTabIndex} handleTabsChange={handleTabsChangeIndex} />
             </Box>
             {/* Dirty hack to add enough space... not so great */}
-            <Box sx={{ borderBottom: 1, borderColor: "divider", visibility: "hidden" }}>
-                <Tabs
-                    value={currentTabIndex}
-                    textColor="secondary"
-                    indicatorColor="secondary"
-                    centered
-                >
-                    <Tab label={t("Ingredients")} />
-                    <Tab label={t("Recipe")} />
-                    <Tab label={t("Comments")} />
-                </Tabs>
+            <Box sx={{ width: "100%", visibility: "hidden", position: "relative" }}>
+                <RecipeTabs currentTabIndex={currentTabIndex} handleTabsChange={handleTabsChangeIndex} />
             </Box>
             <SwipeableViews
                 axis={theme.direction === "rtl" ? "x-reverse" : "x"}
