@@ -6,9 +6,9 @@ export type Time = {
 
 export interface Recipe {
   id?: number;
+  comments: string;
   name: string;
   isFavorite: boolean;
-  // comments: string[];
   ingredients: string[];
   // source: string;
   // portion: number;

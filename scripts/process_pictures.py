@@ -64,7 +64,8 @@ class Task():
 
 tasks: List[Task] = [
     Task( "../heavy_assets/ingredients.jpeg", "../public/ingredients.png", True, (64, 64)),
-    Task( "../heavy_assets/cooking_book.jpeg", "../public/cooking_book.png", True, (64, 64))
+    Task( "../heavy_assets/cooking_book.jpeg", "../public/cooking_book.png", True, (64, 64)),
+    Task( "../heavy_assets/comments.jpeg", "../public/comments.png", True, (64, 64))
 ]
 
 for task in tasks:

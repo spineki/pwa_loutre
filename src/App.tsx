@@ -13,10 +13,10 @@ function App() {
       if (await database.recipes.count() === 0) {
         await database.recipes.bulkAdd(fakeRecipes);
       }
-      // else {
-      //   await database.recipes.clear();
-      //   await database.recipes.bulkAdd(fakeRecipes);
-      // }
+      else {
+        await database.recipes.clear();
+        await database.recipes.bulkAdd(fakeRecipes);
+      }
     }
     fillFixturesInDatabase()
   }, [])

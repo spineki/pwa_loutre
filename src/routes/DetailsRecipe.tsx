@@ -14,6 +14,7 @@ import { getRecipeById } from "../models/controllers";
 import { Recipe } from "../models/Recipe";
 import { RecipeRequirements } from "../components/RecipeRequirements";
 import { RecipeSteps } from "../components/RecipeSteps";
+import { RecipeComments } from "../components/RecipeComments";
 
 export const RouteDetailsRecipesName = RouteAllRecipesName + "/:id";
 
@@ -94,7 +95,7 @@ export function DetailsRecipe() {
             >
                 {currentTabIndex == 0 ? <RecipeRequirements ingredients={recipe.ingredients} time={recipe.time} /> : <></>}
                 {currentTabIndex == 1 ? <RecipeSteps steps={recipe.steps} /> : <></>}
-                {currentTabIndex == 2 ? <span> page 2</span> : <></>}
+                {currentTabIndex == 2 ? <RecipeComments comments={recipe.comments} /> : <></>}
             </SwipeableViews>
             <span>{recipe.isFavorite} </span>
         </ Paper>
