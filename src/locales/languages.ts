@@ -5,16 +5,14 @@ export const resources: Resource = {
     translation: {
       "A recipe was found using the url":
         "A recipe was found using the url in your clipboard. Do you want to use it?",
-      "Add portion": "Add portion",
       "Clipboard with usable address": "Clipboard with usable address",
       "Do you really want to delete this delicious recipe?!":
         "Do you really want to delete this delicious recipe?!",
-      DownloadRecipes: "Download recipes",
       "Export saved recipes": "Export saved recipes",
       "Import saved recipes": "Import saved recipes",
       "Pick an image": "Pick an image",
-      "Remove portion": "Remove portion",
       "Type here": "Type here",
+      AddPortion: "Add portion",
       Baking: "Baking",
       By: "By",
       Cancel: "Cancel",
@@ -24,6 +22,7 @@ export const resources: Resource = {
       Comments: "Comments",
       Conversions: "Conversions",
       Day: "Day",
+      DownloadRecipes: "Download recipes",
       Durations: "Durations",
       Favorites: "Favorites",
       Hours: "Hours",
@@ -42,6 +41,7 @@ export const resources: Resource = {
       RecipeName: "Recipe Name",
       recipes: "recipes",
       Recipes: "Recipes",
+      RemovePortion: "Remove portion",
       Reset: "Reset",
       Save: "Save",
       Saves: "Saves",
@@ -63,18 +63,15 @@ export const resources: Resource = {
     translation: {
       "A recipe was found using the url":
         "Une recette a été trouvée en utilisant l'url du presse-papier. Voulez-vous l'utiliser?",
-      "Add portion": "Ajouter une portion",
       "Clipboard with usable address":
         "Presse-Papier avec une addresse utilisable",
       "Do you really want to delete this delicious recipe?!":
         "Voulez-vous vraiment supprimer cette délicieuse recette?!",
-      DownloadRecipes: "Télécharger les recettes",
       "Export saved recipes": "Exporter les recettes",
       "Import saved recipes": "Importer des recettes",
       "Pick an image": "Choisir une image",
-      "Remove portion": "Retirer une portion",
       "Type here": "Écrire ici",
-
+      AddPortion: "Ajouter une portion",
       Baking: "Cuisson",
       By: "Par",
       Cancel: "Annuler",
@@ -84,6 +81,7 @@ export const resources: Resource = {
       Comments: "Commentaires",
       Conversions: "Conversions",
       Day: "Jour",
+      DownloadRecipes: "Télécharger les recettes",
       Durations: "Durées",
       Favorites: "Favoris",
       Hours: "Heures",
@@ -102,6 +100,7 @@ export const resources: Resource = {
       RecipeName: "Nom de la recette",
       recipes: "recettes",
       Recipes: "Recettes",
+      RemovePortion: "Retirer une portion",
       Reset: "Réinitialiser",
       Save: "Enregistrer",
       Saves: "Sauvegardes",

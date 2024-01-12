@@ -1,17 +1,22 @@
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import SwipeableViews from "react-swipeable-views";
 import { useTranslation } from "react-i18next";
 import { ActionFunction, Link, useLoaderData } from "react-router-dom";
 
+import Badge from "@mui/material/Badge";
 import Box from "@mui/material/Box";
 import Fab from "@mui/material/Fab";
+import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
 import Tab from "@mui/material/Tab";
 import Tabs from "@mui/material/Tabs";
 import { useTheme } from "@mui/material/styles";
 
-import EditIcon from '@mui/icons-material/Edit';
-import BreakfastDiningIcon from '@mui/icons-material/BreakfastDining';
+import AddIcon from "@mui/icons-material/Add";
+import BreakfastDiningIcon from "@mui/icons-material/BreakfastDining";
+import EditIcon from "@mui/icons-material/Edit";
+import RemoveIcon from '@mui/icons-material/Remove';
+import ReplayIcon from '@mui/icons-material/Replay';
 
 import { RouteAllRecipesName } from "./AllRecipes";
 import { getRecipeById } from "../models/controllers";
@@ -20,7 +25,6 @@ import { RecipeRequirements } from "../components/RecipeRequirements";
 import { RecipeSteps } from "../components/RecipeSteps";
 import { RecipeComments } from "../components/RecipeComments";
 import { RouteWorkInProgressName } from "./WorkInProgress";
-import Badge from "@mui/material/Badge";
 
 export const RouteDetailsRecipesName = RouteAllRecipesName + "/:id";
 
@@ -54,6 +58,27 @@ export function DetailsRecipe() {
     const theme = useTheme();
 
     const [currentTabIndex, setCurrentTabIndex] = useState<number>(0);
+    const [portion, setPortion] = useState<number>(recipe.portion);
+
+    const [showPortionSelection, setShowPortionSelection] = useState<boolean>(false);
+
+    const handleClickPortionSelection = useCallback(() => {
+        setShowPortionSelection(!showPortionSelection);
+    }, [showPortionSelection])
+
+    const increasePortion = useCallback(() => {
+        setPortion(portion + 1);
+    }, [portion])
+
+    const decreasePortion = useCallback(() => {
+        if (portion > 1) {
+            setPortion(portion - 1);
+        }
+    }, [portion])
+
+    const resetPortion = useCallback(() => {
+        setPortion(recipe.portion);
+    }, [recipe.portion])
 
     const handleTabsChange = (event: React.SyntheticEvent, newValue: number) => {
         setCurrentTabIndex(newValue);
@@ -62,7 +87,6 @@ export function DetailsRecipe() {
     const handleTabsChangeIndex = (index: number) => {
         setCurrentTabIndex(index);
     };
-
 
     return (
         <Paper sx={{ p: 1, width: "100%", height: "100%" }} >
@@ -110,10 +134,51 @@ export function DetailsRecipe() {
                 {currentTabIndex == 2 ? <RecipeComments comments={recipe.comments} /> : <></>}
             </SwipeableViews>
 
+            {(currentTabIndex == 0 && showPortionSelection) &&
+                <Box
+                    sx={{
+                        position: "fixed",
+                        bottom: 150,
+                        right: 16,
+                        paddingRight: 0.5,
+                    }}>
+                    <Grid container gap={2}>
+                        <Grid container gap={2} sx={{ display: "flex", justifyContent: "end", alignItems: "center" }}>
+                            <Grid item>
+                                {t("Reset")}
+                            </Grid>
+                            <Grid item>
+                                <Fab size="small" onClick={() => resetPortion()}>
+                                    <ReplayIcon />
+                                </Fab>
+                            </Grid>
+                        </Grid>
+                        <Grid container gap={2} sx={{ display: "flex", justifyContent: "end", alignItems: "center" }}>
+                            <Grid item>
+                                {t("AddPortion")}
+                            </Grid>
+                            <Grid item>
+                                <Fab size="small" onClick={() => increasePortion()}>
+                                    <AddIcon />
+                                </Fab>
+                            </Grid>
+                        </Grid>
+                        <Grid container gap={2} sx={{ display: "flex", justifyContent: "end", alignItems: "center" }}>
+                            <Grid item>
+                                {t("RemovePortion")}
+                            </Grid>
+                            <Grid item>
+                                <Fab size="small" onClick={() => decreasePortion()}>
+                                    <RemoveIcon />
+                                </Fab>
+                            </Grid>
+                        </Grid>
+                    </Grid>
+                </Box>
+            }
             {currentTabIndex == 0 &&
                 <Fab
-                    component={Link}
-                    to={"/" + RouteWorkInProgressName}
+                    onClick={() => handleClickPortionSelection()}
                     size="medium"
                     color="primary"
                     sx={{
@@ -121,7 +186,7 @@ export function DetailsRecipe() {
                         bottom: 80,
                         right: 16,
                     }}>
-                    <Badge badgeContent={recipe.portion} color="secondary" sx={{ p: 0.5 }}>
+                    <Badge badgeContent={portion} color="secondary" sx={{ p: 0.5 }}>
                         <BreakfastDiningIcon />
                     </Badge>
                 </Fab>
