@@ -13,6 +13,7 @@ import { RouteAllRecipesName } from "./AllRecipes";
 import { getRecipeById } from "../models/controllers";
 import { Recipe } from "../models/Recipe";
 import { RecipeRequirements } from "../components/RecipeRequirements";
+import { RecipeSteps } from "../components/RecipeSteps";
 
 export const RouteDetailsRecipesName = RouteAllRecipesName + "/:id";
 
@@ -92,7 +93,7 @@ export function DetailsRecipe() {
                 onChangeIndex={handleTabsChangeIndex}
             >
                 {currentTabIndex == 0 ? <RecipeRequirements ingredients={recipe.ingredients} time={recipe.time} /> : <></>}
-                {currentTabIndex == 1 ? <span> page 1</span> : <></>}
+                {currentTabIndex == 1 ? <RecipeSteps steps={recipe.steps} /> : <></>}
                 {currentTabIndex == 2 ? <span> page 2</span> : <></>}
             </SwipeableViews>
             <span>{recipe.isFavorite} </span>

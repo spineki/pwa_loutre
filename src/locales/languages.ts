@@ -15,8 +15,6 @@ export const resources: Resource = {
       "Pick an image": "Pick an image",
       "Remove portion": "Remove portion",
       "Type here": "Type here",
-      "Your Comments!": "Your Comments!",
-      "Your Recipe!": "Your Recipe!",
       Baking: "Baking",
       By: "By",
       Cancel: "Cancel",
@@ -55,7 +53,9 @@ export const resources: Resource = {
       Volumes: "Volumes",
       VolumeToMass: "Volume to mass",
       WIP: "Work in Progress!",
+      YourComments: "Your Comments!",
       YourIngredients: "Your Ingredients!",
+      YourRecipe: "Your Recipe!",
     },
   },
 
@@ -74,8 +74,7 @@ export const resources: Resource = {
       "Pick an image": "Choisir une image",
       "Remove portion": "Retirer une portion",
       "Type here": "Écrire ici",
-      "Your Comments!": "Vos Commentaires!",
-      "Your Recipe!": "Votre Recette!",
+
       Baking: "Cuisson",
       By: "Par",
       Cancel: "Annuler",
@@ -114,7 +113,9 @@ export const resources: Resource = {
       Volumes: "Volumes",
       VolumeToMass: "Volume vers masse",
       WIP: "En chantier!",
+      YourComments: "Vos Commentaires!",
       YourIngredients: "Vos Ingrédients!",
+      YourRecipe: "Votre Recette!",
     },
   },
 };

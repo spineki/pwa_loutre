@@ -1,7 +1,6 @@
 import { useTranslation } from "react-i18next";
 
 import Avatar from "@mui/material/Avatar";
-import Badge from "@mui/material/Badge";
 import Box from "@mui/material/Box"
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
@@ -9,36 +8,29 @@ import ListItemAvatar from "@mui/material/ListItemAvatar";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import Typography from "@mui/material/Typography";
-
-import { TimeRow } from "./TimeRow";
-import { Time } from "../models/Recipe";
+import { useTheme } from "@mui/material/styles";
 import Grid from "@mui/material/Grid";
 
-interface RecipeRequirementsProps {
-    ingredients: string[],
-    time: Time
+interface RecipeStepsProps {
+    steps: string[],
 }
 
-export function RecipeRequirements(props: RecipeRequirementsProps) {
-    const { ingredients, time } = props;
+export function RecipeSteps(props: RecipeStepsProps) {
+    const { steps } = props;
     const { t } = useTranslation();
+    const theme = useTheme();
 
     return (
         <Box sx={{ display: "flex", flexDirection: "column" }}>
-            <Grid container >
+            <Grid container>
                 <Grid item xs={0} md={4} />
-
                 <Grid item xs={12} md={4}>
+
                     <List>
-                        <ListItem>
-                            <TimeRow time={time} />
-
-                        </ListItem>
-
                         <ListItem sx={{ display: "flex", justifyContent: "center" }}>
                             <ListItemAvatar>
                                 <Avatar
-                                    src="/ingredients.png"
+                                    src="/cooking_book.png"
                                     variant="square" />
                             </ListItemAvatar>
                             <ListItemText sx={{ flexGrow: 0 }}>
@@ -48,7 +40,7 @@ export function RecipeRequirements(props: RecipeRequirementsProps) {
                                     fontFamily={"Cookie-Regular"}
                                     alignSelf="center"
                                 >
-                                    {t("YourIngredients")}
+                                    {t("YourRecipe")}
                                 </Typography>
 
                             </ListItemText>
@@ -56,22 +48,32 @@ export function RecipeRequirements(props: RecipeRequirementsProps) {
                         </ListItem>
 
                         {
-                            ingredients.map((ingredient, index) =>
-                                <ListItem key={index}>
-                                    <ListItemIcon sx={{ minWidth: 16 }}>
-                                        <Badge badgeContent="" color="primary" variant="dot" />
+                            steps.map((step, index) =>
+                                <ListItem key={index} alignItems="flex-start">
+                                    <ListItemIcon sx={{ minWidth: 32 }}>
+                                        <Avatar sx={{
+                                            width: 8,
+                                            height: 8,
+                                            p: 1,
+                                            fontSize: 12,
+                                            color: theme.palette.secondary.light,
+                                            bgcolor: theme.palette.secondary.dark
+                                        }}  >
+                                            {index}
+                                        </Avatar>
+
                                     </ListItemIcon>
 
                                     <ListItemText>
-                                        {ingredient}
+                                        {step}
                                     </ListItemText>
                                 </ListItem>
                             )
                         }
                     </List>
                 </Grid>
+                <Grid item xs={0} md={4} />
             </Grid>
-            <Grid item xs={0} md={4} />
         </Box>
     );
 }

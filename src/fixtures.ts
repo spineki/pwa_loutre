@@ -6,6 +6,7 @@ export const fakeRecipes: Recipe[] = [
     isFavorite: false,
     name: "Savory Sunset Chicken",
     pictures: ["/logo192.png"],
+    steps: [],
     time: {
       preparation: 1,
       baking: 2,
@@ -17,6 +18,7 @@ export const fakeRecipes: Recipe[] = [
     isFavorite: true,
     name: "Tropical Fusion Delight",
     pictures: ["/fake_placeholder.jpg"],
+    steps: [],
     time: {
       preparation: 2,
       baking: 3,
@@ -28,6 +30,12 @@ export const fakeRecipes: Recipe[] = [
     isFavorite: false,
     name: "Cinnamon Spiced Apples",
     pictures: ["/fake_placeholder.jpg"],
+    steps: [
+      "step1",
+      "step2",
+      "a very long step i agree slqdfldsq h ljhfslk jh h jhk jh khk hk hk jhkh kh k hk hlh lig i  hj jhjhljhsql hjljhlkjhlkjh ljkh kjhlkjhlk jh lkhlkjh lkjhl kjh l",
+      "step4",
+    ],
     time: {
       preparation: 5,
       baking: 6,
@@ -39,6 +47,7 @@ export const fakeRecipes: Recipe[] = [
     isFavorite: true,
     name: "Lemon Zest Peach Surprise",
     pictures: ["/fake_placeholder.jpg"],
+    steps: [],
     time: {
       preparation: 3,
       baking: 4,
@@ -50,6 +59,7 @@ export const fakeRecipes: Recipe[] = [
     isFavorite: false,
     name: "Mediterranean Chicken Delight",
     pictures: ["/fake_placeholder.jpg"],
+    steps: [],
     time: {
       preparation: 4,
       baking: 5,
@@ -61,6 +71,7 @@ export const fakeRecipes: Recipe[] = [
     isFavorite: false,
     name: "Exquisite Homemade Spaghetti with Tomato Sauce and Basil Toppings",
     pictures: ["/fake_placeholder.jpg"],
+    steps: [],
     time: {
       preparation: 25,
       baking: 30,
@@ -72,6 +83,7 @@ export const fakeRecipes: Recipe[] = [
     isFavorite: true,
     name: "Deliciously Rich Chocolate Layered Cake with Vanilla Frosting and Berries",
     pictures: ["/fake_placeholder.jpg"],
+    steps: [],
     time: {
       preparation: 40,
       baking: 35,
@@ -83,6 +95,7 @@ export const fakeRecipes: Recipe[] = [
     isFavorite: false,
     name: "Savory Herb-Crusted Grilled Salmon with Lemon Butter Sauce and Roasted Vegetables",
     pictures: ["/fake_placeholder.jpg"],
+    steps: [],
     time: {
       preparation: 20,
       baking: 15,
@@ -94,6 +107,7 @@ export const fakeRecipes: Recipe[] = [
     isFavorite: true,
     name: "Sumptuous Mediterranean-Style Stuffed Bell Peppers with Feta and Spinach",
     pictures: ["/fake_placeholder.jpg"],
+    steps: [],
     time: {
       preparation: 30,
       baking: 45,
@@ -105,6 +119,7 @@ export const fakeRecipes: Recipe[] = [
     isFavorite: false,
     name: "Flavorful",
     pictures: ["/fake_placeholder.jpg"],
+    steps: [],
     time: {
       preparation: 20,
       baking: 180,
