@@ -30,19 +30,25 @@ function getAllRecipesFileName() {
 }
 
 export function useSharing() {
+  const [browserCanImportFiles, setBrowserCanImportFiles] = useState(true);
   const [browserCanShareFiles, setBrowserCanShareFiles] = useState(true);
 
   useEffect(() => {
-    if (!navigator.share || !navigator.canShare) {
-      setBrowserCanShareFiles(false);
-      return;
+    if ("showOpenFilePicker" in window) {
+      setBrowserCanImportFiles(true);
+    } else {
+      setBrowserCanImportFiles(false);
     }
 
-    // Create some test data with a file, to check if the browser supports sharing it.
-    const testFile = createTxtFileFromObject("test", { test: "test" });
-    const data = { files: [testFile] };
+    if (!navigator.share || !navigator.canShare) {
+      setBrowserCanShareFiles(false);
+    } else {
+      // Create some test data with a file, to check if the browser supports sharing it.
+      const testFile = createTxtFileFromObject("test", { test: "test" });
+      const data = { files: [testFile] };
 
-    setBrowserCanShareFiles(navigator.canShare(data));
+      setBrowserCanShareFiles(navigator.canShare(data));
+    }
   }, []);
 
   const shareFile = useCallback(
@@ -115,6 +121,7 @@ export function useSharing() {
   }, []);
 
   return {
+    browserCanImportFiles,
     browserCanShareFiles,
     downloadFile,
     importFile,

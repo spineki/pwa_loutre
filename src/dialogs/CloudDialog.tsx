@@ -25,6 +25,7 @@ export function CloudDialog() {
     const { showDialog, setShowDialog } = useContext(CloudDialogContext);
     const {
         browserCanShareFiles,
+        browserCanImportFiles,
         downloadFile,
         importFile,
         shareFile
@@ -43,6 +44,25 @@ export function CloudDialog() {
 
         //todo, handle error code
         await importRecipesFromFileContent(content);
+        setShowDialog(false);
+    }
+
+    // import files from an input field
+    // This is dirty, and we could only use this instead of the handleImport
+    // However, I wanted to try the nextSharing api, so we will use it on compatible device and the old fashioned way on uncompatible devices
+    const handleImportOldWay = async (event: React.ChangeEvent<HTMLInputElement>) => {
+        const files = event.target.files;
+        if (files == null) {
+            return;
+        }
+
+        for (let i = 0; i < files.length; ++i) {
+            const file = files[0];
+            const content = await file.text();
+
+            await importRecipesFromFileContent(content);
+        }
+
         setShowDialog(false);
     }
 
@@ -67,14 +87,33 @@ export function CloudDialog() {
             <DialogTitle>{t("Saves")}</DialogTitle>
             {browserCanShareFiles ?
                 <List sx={{ pt: 0 }}>
-                    <ListItem disableGutters>
-                        <ListItemButton disabled={!browserCanShareFiles} onClick={() => handleImport()}>
-                            <ListItemIcon>
-                                <CloudDownloadIcon />
-                            </ListItemIcon>
-                            <ListItemText primary={t("Import saved recipes")} />
-                        </ListItemButton>
-                    </ListItem>
+                    {
+                        browserCanImportFiles ?
+                            <ListItem disableGutters>
+                                <ListItemButton onClick={() => handleImport()}>
+                                    <ListItemIcon>
+                                        <CloudDownloadIcon />
+                                    </ListItemIcon>
+                                    <ListItemText primary={t("Import saved recipes")} />
+                                </ListItemButton>
+                            </ListItem>
+                            :
+                            <ListItem disableGutters>
+                                <ListItemButton
+                                    component="label"
+                                >
+                                    <ListItemIcon>
+                                        <CloudDownloadIcon />
+                                    </ListItemIcon>
+                                    <input
+                                        type="file"
+                                        accept="text/plain"
+                                        hidden onChange={handleImportOldWay}
+                                    />
+                                    <ListItemText primary={t("Import saved recipes")} />
+                                </ListItemButton>
+                            </ListItem>
+                    }
                     <ListItem disableGutters>
                         <ListItemButton disabled={!browserCanShareFiles} onClick={() => handleExport()}>
                             <ListItemIcon>
