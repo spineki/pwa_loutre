@@ -44,7 +44,7 @@ export function AllRecipes() {
 
     return (
         <Paper sx={{
-            height: "100%",
+            flex: 1,
             p: 2
         }}>
             {

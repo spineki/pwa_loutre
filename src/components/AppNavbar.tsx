@@ -83,7 +83,7 @@ export function AppNavbar() {
     }
 
     return (
-        <Box sx={{ flexGrow: 1 }}>
+        <Box>
             <AppBar position="fixed">
                 <Toolbar>
                     <IconButton

@@ -22,7 +22,7 @@ export function Changelogs() {
     }, [setCurrentRoute])
 
     return (
-        <Paper sx={{ p: 2, height: "100%" }}>
+        <Paper sx={{ p: 2, flex: 1 }}>
             <Grid container spacing={2}>
                 <Grid item xs={12}>
                     <Typography sx={{ mt: 4, mb: 2 }} variant="h6" component="div">
@@ -31,6 +31,12 @@ export function Changelogs() {
                 </Grid>
                 <Grid item xs={12}>
                     <List>
+                        <ListItem disablePadding>
+                            <ListItemText primary="A single recipe can now be shared" />
+                        </ListItem>
+                        <ListItem disablePadding>
+                            <ListItemText primary="Steps and ingredients are now shown when clicking on a recipe card." />
+                        </ListItem>
                         <ListItem disablePadding>
                             <ListItemText primary="Conversion button now works in top bar." />
                         </ListItem>
