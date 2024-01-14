@@ -13,14 +13,16 @@ import Typography from "@mui/material/Typography";
 import { TimeRow } from "./TimeRow";
 import { Time } from "../models/Recipe";
 import Grid from "@mui/material/Grid";
+import { ColouredNumberText } from "./ColouredNumberText";
 
 interface RecipeRequirementsProps {
     ingredients: string[],
-    time: Time
+    time: Time,
+    multiplicator: number
 }
 
 export function RecipeRequirements(props: RecipeRequirementsProps) {
-    const { ingredients, time } = props;
+    const { ingredients, time, multiplicator } = props;
     const { t } = useTranslation();
 
     return (
@@ -57,13 +59,17 @@ export function RecipeRequirements(props: RecipeRequirementsProps) {
 
                         {
                             ingredients.map((ingredient, index) =>
-                                <ListItem key={index}>
+                                <ListItem key={index} sx={{ paddingTop: 0, paddingBottom: 0 }} >
                                     <ListItemIcon sx={{ minWidth: 16 }}>
                                         <Badge badgeContent="" color="primary" variant="dot" />
                                     </ListItemIcon>
 
-                                    <ListItemText>
-                                        {ingredient}
+                                    <ListItemText >
+                                        <ColouredNumberText
+                                            style={{ fontFamily: "Cookie-Regular", fontSize: "1.5rem", lineHeight: 1 }}
+                                            text={ingredient}
+                                            multiplicator={multiplicator}
+                                        />
                                     </ListItemText>
                                 </ListItem>
                             )
@@ -72,6 +78,6 @@ export function RecipeRequirements(props: RecipeRequirementsProps) {
                 </Grid>
             </Grid>
             <Grid item xs={0} md={4} />
-        </Box>
+        </Box >
     );
 }

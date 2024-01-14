@@ -18,3 +18,14 @@ export function pad(number: number, size: number): string {
   }
   return buff + number;
 }
+
+
+export function pgcd(a: number, b: number) {
+  do {
+    const r = a;
+    a = b;
+    b = r % a;
+  } while (b > 0);
+  
+  return a;
+}

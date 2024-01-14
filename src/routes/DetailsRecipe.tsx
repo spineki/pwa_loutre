@@ -100,7 +100,15 @@ export function DetailsRecipe() {
                 index={currentTabIndex}
                 onChangeIndex={handleTabsChangeIndex}
             >
-                {currentTabIndex == 0 ? <RecipeRequirements ingredients={recipe.ingredients} time={recipe.time} /> : <></>}
+                {currentTabIndex == 0 ?
+                    <RecipeRequirements
+                        ingredients={recipe.ingredients}
+                        time={recipe.time}
+                        multiplicator={portion / recipe.portion}
+                    />
+                    :
+                    <></>
+                }
                 {currentTabIndex == 1 ? <RecipeSteps steps={recipe.steps} /> : <></>}
                 {currentTabIndex == 2 ? <RecipeComments comments={recipe.comments} /> : <></>}
             </SwipeableViews>
