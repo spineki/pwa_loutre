@@ -66,7 +66,6 @@ export function RecipeRequirements(props: RecipeRequirementsProps) {
 
                                     <ListItemText >
                                         <ColouredNumberText
-                                            style={{ fontFamily: "Cookie-Regular", fontSize: "1.5rem", lineHeight: 1 }}
                                             text={ingredient}
                                             multiplicator={multiplicator}
                                         />

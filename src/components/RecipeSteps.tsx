@@ -62,7 +62,7 @@ export function RecipeSteps(props: RecipeStepsProps) {
                                         <Chip
                                             label={index + 1}
                                             color="primary"
-                                            variant="outlined"
+                                            variant="filled"
                                             size="small"
                                         />
                                         {/* vertical bar */}
