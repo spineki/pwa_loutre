@@ -15,6 +15,7 @@ import BreakfastDiningIcon from "@mui/icons-material/BreakfastDining";
 import EditIcon from "@mui/icons-material/Edit";
 import RemoveIcon from '@mui/icons-material/Remove';
 import ReplayIcon from '@mui/icons-material/Replay';
+import ShareIcon from '@mui/icons-material/Share';
 
 import { RouteAllRecipesName } from "./AllRecipes";
 import { getRecipeById } from "../models/controllers";
@@ -24,6 +25,7 @@ import { RecipeSteps } from "../components/RecipeSteps";
 import { RecipeComments } from "../components/RecipeComments";
 import { RouteWorkInProgressName } from "./WorkInProgress";
 import { RecipeTabs } from "../components/RecipeTabs";
+import { useSharing } from "../hooks/useSharing";
 
 export const RouteDetailsRecipesName = RouteAllRecipesName + "/:id";
 
@@ -55,10 +57,10 @@ export function DetailsRecipe() {
 
     const { t } = useTranslation();
     const theme = useTheme();
+    const { shareFile } = useSharing();
 
     const [currentTabIndex, setCurrentTabIndex] = useState<number>(0);
     const [portion, setPortion] = useState<number>(recipe.portion);
-
     const [showPortionSelection, setShowPortionSelection] = useState<boolean>(false);
 
     const handleClickPortionSelection = useCallback(() => {
@@ -84,6 +86,9 @@ export function DetailsRecipe() {
         setCurrentTabIndex(index);
     };
 
+    const shareRecipe = useCallback(() => {
+        shareFile([recipe]);
+    }, [recipe, shareFile]);
 
     return (
         <Paper sx={{ p: 1, width: "100%", height: "100%", display: "flex", flexDirection: "column" }} >
@@ -117,7 +122,7 @@ export function DetailsRecipe() {
                 <Box
                     sx={{
                         position: "fixed",
-                        bottom: 150,
+                        bottom: 212,
                         right: 16,
                         paddingRight: 0.5,
                     }}>
@@ -162,7 +167,7 @@ export function DetailsRecipe() {
                     color="primary"
                     sx={{
                         position: "fixed",
-                        bottom: 80,
+                        bottom: 144,
                         right: 16,
                     }}>
                     <Badge badgeContent={portion} color="secondary" sx={{ p: 0.5 }}>
@@ -172,10 +177,22 @@ export function DetailsRecipe() {
             }
 
             <Fab
+                onClick={() => shareRecipe()}
+                size="medium"
+                color="secondary"
+                sx={{
+                    position: "fixed",
+                    bottom: 80,
+                    right: 16,
+                }}>
+                <ShareIcon />
+            </Fab>
+
+            <Fab
                 component={Link}
                 to={"/" + RouteWorkInProgressName}
                 size="medium"
-                color="secondary"
+                color="info"
                 sx={{
                     position: "fixed",
                     bottom: 16,
