@@ -3,6 +3,16 @@
 import { useCallback, useEffect, useState } from "react";
 
 import { dateToPathCompatibleIsoFormat } from "../utils/time";
+import { importRecipesFromFileContent } from "../models/controllers";
+
+// I was not able to find a typescript type for this, so doing it by hand
+interface LaunchParams {
+  targetUrl: string;
+  files: Array<FileSystemFileHandle>;
+}
+interface LaunchQueue {
+  setConsumer: (consumer: (launchParams: LaunchParams) => void) => void;
+}
 
 function createTxtFileFromObject(fileName: string, object: object): File {
   const jsonContent = JSON.stringify(object, null, 2);
@@ -29,7 +39,7 @@ export function useSharing() {
     }
 
     // Create some test data with a file, to check if the browser supports sharing it.
-    const testFile = createTxtFileFromObject("test", { test: "test" }); //new File(["foo"], "foo.txt", { type: "text/plain" });
+    const testFile = createTxtFileFromObject("test", { test: "test" });
     const data = { files: [testFile] };
 
     setBrowserCanShareFiles(navigator.canShare(data));
@@ -84,5 +94,31 @@ export function useSharing() {
     }
   }, []);
 
-  return { browserCanShareFiles, downloadFile, shareFile, importFile };
+  const receiveFile = useCallback(async () => {
+    if ("launchQueue" in window) {
+      const launchQueue = window.launchQueue as LaunchQueue;
+
+      // adding a consumer to handle file import
+      launchQueue.setConsumer(async (launchParams: LaunchParams) => {
+        if (launchParams.files && launchParams.files.length) {
+          for (const fileHandle of launchParams.files) {
+            // getting file content
+            const file = await fileHandle.getFile();
+            const fileText = await file.text();
+
+            //saving to database
+            await importRecipesFromFileContent(fileText);
+          }
+        }
+      });
+    }
+  }, []);
+
+  return {
+    browserCanShareFiles,
+    downloadFile,
+    importFile,
+    receiveFile,
+    shareFile,
+  };
 }

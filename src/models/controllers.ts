@@ -32,3 +32,26 @@ export async function partialUpdateRecipe(
 ) {
   await database.recipes.update(id, changes);
 }
+
+// Helpers
+
+/**
+ * Import into database recipes from a stringified list of recipes
+ * @param content
+ * @returns
+ */
+export async function importRecipesFromFileContent(content: string) {
+  let recipes;
+  try {
+    recipes = JSON.parse(content);
+  } catch (error: unknown) {
+    console.error("An error occured while parsing files to json");
+    return { error };
+  }
+
+  if (!Array.isArray(recipes)) {
+    return { error: "The provided document does not contain an array" };
+  }
+
+  await bulkUpsertRecipes(recipes);
+}
