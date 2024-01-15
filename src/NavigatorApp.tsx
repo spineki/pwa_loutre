@@ -4,15 +4,26 @@ import {
     RouterProvider,
 } from "react-router-dom";
 
-import { Root } from "./routes/Root";
-import { NotFound } from "./routes/NotFound";
 import { DrawerContextProvider } from "./contexts/DrawerContext";
-import { AllRecipes, RouteAllRecipesName } from "./routes/AllRecipes";
-import { FavoriteRecipes, RouteFavoriteRecipesName } from "./routes/FavoriteRecipes";
-import { WorkInProgress, RouteWorkInProgressName } from "./routes/WorkInProgress";
-import { Changelogs, RouteChangelogsName } from "./routes/Changelogs";
-import { DetailsRecipe, detailsRecipeLoader, RouteDetailsRecipesName } from "./routes/DetailsRecipe";
-import { RouteTagsName, Tags } from "./routes/Tags";
+import { AllRecipes } from "./routes/AllRecipes";
+import { Changelogs } from "./routes/Changelogs";
+import { DetailsRecipe, detailsRecipeLoader } from "./routes/DetailsRecipe";
+import { createRecipeLoader, EditRecipe, editRecipeLoader } from "./routes/EditRecipe";
+import { FavoriteRecipes } from "./routes/FavoriteRecipes";
+import { NotFound } from "./routes/NotFound";
+import { Root } from "./routes/Root";
+import {
+    RouteAllRecipesName,
+    RouteChangelogsName,
+    RouteCreateRecipeName,
+    RouteDetailsRecipesName,
+    RouteEditRecipeName,
+    RouteFavoriteRecipesName,
+    RouteTagsName,
+    RouteWorkInProgressName
+} from "./routes/routes";
+import { Tags } from "./routes/Tags";
+import { WorkInProgress } from "./routes/WorkInProgress";
 
 
 const router = createBrowserRouter([
@@ -31,8 +42,8 @@ const router = createBrowserRouter([
             },
             {
                 path: RouteDetailsRecipesName,
-                loader: detailsRecipeLoader,
                 element: <DetailsRecipe />,
+                loader: detailsRecipeLoader,
                 errorElement: <NotFound />,
             },
             {
@@ -42,6 +53,17 @@ const router = createBrowserRouter([
             {
                 path: RouteTagsName,
                 element: <Tags />,
+            },
+            {
+                path: RouteEditRecipeName,
+                element: <EditRecipe />,
+                loader: editRecipeLoader,
+                errorElement: <NotFound />,
+            },
+            {
+                path: RouteCreateRecipeName,
+                element: <EditRecipe />,
+                loader: createRecipeLoader,
             },
             {
                 path: RouteChangelogsName,

@@ -8,8 +8,8 @@ import ListItemText from "@mui/material/ListItemText";
 import { SvgIconProps } from "@mui/material/SvgIcon";
 import { useTheme } from "@mui/material/styles";
 
-import { RoutesType } from "../routes/types";
 import { DrawerContext } from "../contexts/DrawerContext";
+import { RoutesType } from "../routes/routes";
 
 interface DrawerListItemProps {
     to: RoutesType,

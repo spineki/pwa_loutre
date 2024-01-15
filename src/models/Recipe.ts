@@ -23,3 +23,23 @@ export interface Recipe {
   // category: string;
   // tags: string[];
 }
+
+/**
+ * Create an empty recipe object (could be seen as an empty constructor)
+ */
+export function getEmptyRecipe(): Recipe {
+  return {
+    comments: "",
+    name: "",
+    isFavorite: false,
+    ingredientSections: [],
+    portion: 1,
+    pictures: [],
+    steps: [],
+    time: {
+      preparation: 0,
+      baking: 0,
+      total: 0,
+    },
+  };
+}

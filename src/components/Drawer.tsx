@@ -1,7 +1,6 @@
 import { useContext } from "react";
 import { useTranslation } from 'react-i18next';
 
-import { styled, useTheme } from "@mui/material/styles";
 import Avatar from "@mui/material/Avatar";
 import Box from '@mui/material/Box';
 import Divider from '@mui/material/Divider';
@@ -13,23 +12,21 @@ import ListItemText from '@mui/material/ListItemText';
 import ListSubheader from "@mui/material/ListSubheader";
 import SwipeableDrawer from '@mui/material/SwipeableDrawer';
 import Typography from "@mui/material/Typography";
+import { styled, useTheme } from "@mui/material/styles";
 
-import FavoriteIcon from '@mui/icons-material/Favorite';
 import Brightness5Icon from '@mui/icons-material/Brightness5';
-import DarkModeIcon from '@mui/icons-material/DarkMode';
 import ChecklistIcon from '@mui/icons-material/Checklist';
+import DarkModeIcon from '@mui/icons-material/DarkMode';
+import FavoriteIcon from '@mui/icons-material/Favorite';
 import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
 import TagIcon from '@mui/icons-material/Tag';
-import appLogo from "../icons/loutre.png"
+import appLogo from "../icons/loutre.png";
 
-import { DrawerContext } from "../contexts/DrawerContext";
-import { ColorModeContext } from "../contexts/ColormodeContext";
-import { RouteFavoriteRecipesName } from "../routes/FavoriteRecipes";
-import { RouteAllRecipesName } from "../routes/AllRecipes";
-import { RouteTagsName } from "../routes/Tags";
-import { RouteChangelogsName } from "../routes/Changelogs";
-import { DrawerListItem } from "./DrawerListItem";
 import packageJson from "../../package.json";
+import { ColorModeContext } from "../contexts/ColormodeContext";
+import { DrawerContext } from "../contexts/DrawerContext";
+import { RouteAllRecipesName, RouteChangelogsName, RouteFavoriteRecipesName, RouteTagsName } from "../routes/routes";
+import { DrawerListItem } from "./DrawerListItem";
 
 export function Drawer() {
     const theme = useTheme();

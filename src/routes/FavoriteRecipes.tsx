@@ -1,20 +1,20 @@
-import { useContext, useEffect } from "react";
 import { useLiveQuery } from "dexie-react-hooks";
+import { useContext, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import InfiniteScroll from "react-infinite-scroll-component";
 
-import Paper from "@mui/material/Paper";
 import Box from "@mui/material/Box";
-import Grid from "@mui/material/Grid";
-
-import { DrawerContext } from "../contexts/DrawerContext";
-import { RecipeCard } from "../components/RecipeCard";
 import CircularProgress from "@mui/material/CircularProgress";
-import { database } from "../models/database";
+import Grid from "@mui/material/Grid";
+import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
-import { TagChip } from "../components/TagChip";
-import { useTranslation } from "react-i18next";
 
-export const RouteFavoriteRecipesName = "favorites";
+import { RecipeCard } from "../components/RecipeCard";
+import { TagChip } from "../components/TagChip";
+import { DrawerContext } from "../contexts/DrawerContext";
+import { database } from "../models/database";
+import { RouteFavoriteRecipesName } from "../routes/routes";
+
 
 export function FavoriteRecipes() {
     const { t } = useTranslation();

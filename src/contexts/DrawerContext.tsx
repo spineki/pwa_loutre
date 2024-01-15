@@ -1,6 +1,5 @@
 import { createContext, ReactElement, useCallback, useState } from "react";
-import { RouteRootName } from "../routes/Root";
-import { RoutesType } from "../routes/types";
+import { RouteRootName, RoutesType } from "../routes/routes";
 
 export interface DrawerContextInterface {
     showDrawer: boolean,

@@ -2,15 +2,15 @@ import { useCallback } from "react";
 import { Link } from "react-router-dom";
 
 import Card from "@mui/material/Card";
-import CardContent from "@mui/material/CardContent";
-import Typography from "@mui/material/Typography";
 import CardActionArea from "@mui/material/CardActionArea";
+import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
+import Typography from "@mui/material/Typography";
 
 import { Time } from "../models/Recipe";
-import { CardRow } from "./CardRow";
 import { partialUpdateRecipe } from "../models/controllers";
-import { getDetailsRecipeRoute } from "../routes/DetailsRecipe";
+import { getDetailsRecipeRoute } from "../routes/routes";
+import { CardRow } from "./CardRow";
 
 
 type RecipeCardProps = {

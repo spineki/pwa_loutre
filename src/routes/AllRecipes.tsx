@@ -1,6 +1,7 @@
-import { useCallback, useContext, useEffect } from "react";
 import { useLiveQuery } from "dexie-react-hooks";
+import { useContext, useEffect } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
+import { Link } from "react-router-dom";
 
 import Box from "@mui/material/Box";
 import CircularProgress from "@mui/material/CircularProgress";
@@ -10,11 +11,11 @@ import Paper from "@mui/material/Paper";
 
 import AddIcon from '@mui/icons-material/Add';
 
-import { DrawerContext } from "../contexts/DrawerContext";
 import { RecipeCard } from "../components/RecipeCard";
-import { database } from "../models/database"
+import { DrawerContext } from "../contexts/DrawerContext";
+import { database } from "../models/database";
+import { RouteAllRecipesName, RouteCreateRecipeName } from "../routes/routes";
 
-export const RouteAllRecipesName = "recipes";
 
 export function AllRecipes() {
     const { setCurrentRoute } = useContext(DrawerContext);
@@ -37,10 +38,6 @@ export function AllRecipes() {
     function fetchData() {
         console.log("called", "test");
     }
-
-    const handleFabClicked = useCallback(() => {
-        alert("fab");
-    }, [])
 
     return (
         <Paper sx={{
@@ -77,7 +74,8 @@ export function AllRecipes() {
                     <CircularProgress />
             }
             <Fab
-                onClick={() => handleFabClicked()}
+                component={Link}
+                to={RouteCreateRecipeName}
                 size="medium"
                 color="secondary"
                 sx={{

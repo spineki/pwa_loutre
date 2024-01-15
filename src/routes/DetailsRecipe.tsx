@@ -1,7 +1,7 @@
 import { useCallback, useState } from "react";
-import SwipeableViews from "react-swipeable-views";
 import { useTranslation } from "react-i18next";
 import { ActionFunction, Link, useLoaderData } from "react-router-dom";
+import SwipeableViews from "react-swipeable-views";
 
 import Badge from "@mui/material/Badge";
 import Box from "@mui/material/Box";
@@ -17,27 +17,15 @@ import RemoveIcon from '@mui/icons-material/Remove';
 import ReplayIcon from '@mui/icons-material/Replay';
 import ShareIcon from '@mui/icons-material/Share';
 
-import { RouteAllRecipesName } from "./AllRecipes";
-import { getRecipeById } from "../models/controllers";
-import { Recipe } from "../models/Recipe";
+import { RecipeComments } from "../components/RecipeComments";
 import { RecipeRequirements } from "../components/RecipeRequirements";
 import { RecipeSteps } from "../components/RecipeSteps";
-import { RecipeComments } from "../components/RecipeComments";
-import { RouteWorkInProgressName } from "./WorkInProgress";
 import { RecipeTabs } from "../components/RecipeTabs";
 import { useSharing } from "../hooks/useSharing";
+import { Recipe } from "../models/Recipe";
+import { getRecipeById } from "../models/controllers";
+import { getEditRecipeRoute } from "../routes/routes";
 
-
-/**
- * Create an absolute path for a detail route page for the given recipe id
- * @param id 
- * @returns 
- */
-export function getDetailsRecipeRoute(id: number): string {
-    return `/${RouteAllRecipesName}/${id}`
-}
-
-export const RouteDetailsRecipesName = RouteAllRecipesName + "/:id";
 
 /**
  * A loader used by react router to load recipe before page loads.
@@ -200,7 +188,7 @@ export function DetailsRecipe() {
 
             <Fab
                 component={Link}
-                to={"/" + RouteWorkInProgressName}
+                to={getEditRecipeRoute(recipe.id!)}
                 size="medium"
                 color="info"
                 sx={{

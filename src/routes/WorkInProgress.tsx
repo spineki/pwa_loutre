@@ -1,13 +1,12 @@
 import { useContext, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 
+import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
 
 import { DrawerContext } from "../contexts/DrawerContext";
-import Grid from "@mui/material/Grid";
-
-export const RouteWorkInProgressName = "work-in-progress";
+import { RouteWorkInProgressName } from "../routes/routes";
 
 export function WorkInProgress() {
     const { setCurrentRoute } = useContext(DrawerContext);

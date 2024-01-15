@@ -2,7 +2,7 @@ import { useTranslation } from "react-i18next";
 
 import Avatar from "@mui/material/Avatar";
 import Badge from "@mui/material/Badge";
-import Box from "@mui/material/Box"
+import Box from "@mui/material/Box";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemAvatar from "@mui/material/ListItemAvatar";
@@ -10,10 +10,10 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import Typography from "@mui/material/Typography";
 
-import { TimeRow } from "./TimeRow";
-import { IngredientSection, Time } from "../models/Recipe";
 import Grid from "@mui/material/Grid";
+import { IngredientSection, Time } from "../models/Recipe";
 import { ColouredNumberText } from "./ColouredNumberText";
+import { TimeRow } from "./TimeRow";
 
 interface RecipeRequirementsProps {
     ingredientSections: IngredientSection[],
@@ -59,10 +59,10 @@ export function RecipeRequirements(props: RecipeRequirementsProps) {
 
                         {
                             ingredientSections.map((ingredientSection, sectionIndex) =>
-                                <>
+                                <div key={`${sectionIndex}`} >
                                     {
                                         ingredientSection.title &&
-                                        <ListItem key={`${sectionIndex}`} sx={{ paddingTop: 0, paddingBottom: 0 }} >
+                                        <ListItem sx={{ paddingTop: 0, paddingBottom: 0 }} >
                                             <ListItemIcon sx={{ minWidth: 16 }}>
                                                 <Badge badgeContent="" color="primary" variant="dot" />
                                             </ListItemIcon>
@@ -92,7 +92,7 @@ export function RecipeRequirements(props: RecipeRequirementsProps) {
                                             </ListItem>
                                         )}
                                     </List>
-                                </>
+                                </div>
 
                             )
                         }

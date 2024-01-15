@@ -1,5 +1,5 @@
-import { useContext, useEffect } from "react";
 import { useLiveQuery } from "dexie-react-hooks";
+import { useContext, useEffect } from "react";
 
 import CircularProgress from "@mui/material/CircularProgress";
 import Grid from "@mui/material/Grid";
@@ -8,14 +8,13 @@ import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
 import Paper from "@mui/material/Paper";
 
-
-import { groupBy } from "../utils/dataStructures";
-import { Tag } from "../models/Tag";
 import { TagChip } from "../components/TagChip";
-import { database } from "../models/database";
 import { DrawerContext } from "../contexts/DrawerContext";
+import { Tag } from "../models/Tag";
+import { database } from "../models/database";
+import { RouteTagsName } from "../routes/routes";
+import { groupBy } from "../utils/dataStructures";
 
-export const RouteTagsName = "tags";
 
 export function Tags() {
     const { setCurrentRoute } = useContext(DrawerContext);
