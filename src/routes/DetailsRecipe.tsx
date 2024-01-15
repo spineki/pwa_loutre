@@ -107,7 +107,7 @@ export function DetailsRecipe() {
             >
                 {currentTabIndex == 0 ?
                     <RecipeRequirements
-                        ingredients={recipe.ingredients}
+                        ingredientSections={recipe.ingredientSections}
                         time={recipe.time}
                         multiplicator={portion / recipe.portion}
                     />

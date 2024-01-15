@@ -3,7 +3,9 @@ import { Recipe } from "./models/Recipe";
 export const fakeRecipes: Recipe[] = [
   {
     comments: "",
-    ingredients: ["1 baguette", "1 carotte", "2 oignons"],
+    ingredientSections: [
+      { ingredients: ["1 baguette", "1 carotte", "2 oignons"] },
+    ],
     isFavorite: false,
     name: "Savory Sunset Chicken",
     pictures: ["/logo192.png"],
@@ -17,7 +19,7 @@ export const fakeRecipes: Recipe[] = [
   },
   {
     comments: "",
-    ingredients: [],
+    ingredientSections: [],
     isFavorite: true,
     name: "Tropical Fusion Delight",
     pictures: ["/fake_placeholder.jpg"],
@@ -32,7 +34,16 @@ export const fakeRecipes: Recipe[] = [
   {
     comments:
       "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?",
-    ingredients: ["1 cinnammon", "1 spice", "2 onions"],
+    ingredientSections: [
+      {
+        title: "first section",
+        ingredients: ["1 cinnammon", "1 spice", "2 onions"],
+      },
+      {
+        title: "second section",
+        ingredients: ["1 baguette", "1 / 2 cheese"],
+      },
+    ],
     isFavorite: false,
     name: "Cinnamon Spiced Apples",
     pictures: ["/fake_placeholder.jpg"],
@@ -51,7 +62,7 @@ export const fakeRecipes: Recipe[] = [
   },
   {
     comments: "",
-    ingredients: [],
+    ingredientSections: [],
     isFavorite: true,
     name: "Lemon Zest Peach Surprise",
     pictures: ["/fake_placeholder.jpg"],
@@ -65,7 +76,7 @@ export const fakeRecipes: Recipe[] = [
   },
   {
     comments: "",
-    ingredients: [],
+    ingredientSections: [],
     isFavorite: false,
     name: "Mediterranean Chicken Delight",
     pictures: ["/fake_placeholder.jpg"],
@@ -79,7 +90,7 @@ export const fakeRecipes: Recipe[] = [
   },
   {
     comments: "",
-    ingredients: [],
+    ingredientSections: [],
     isFavorite: false,
     name: "Exquisite Homemade Spaghetti with Tomato Sauce and Basil Toppings",
     pictures: ["/fake_placeholder.jpg"],
@@ -93,7 +104,7 @@ export const fakeRecipes: Recipe[] = [
   },
   {
     comments: "",
-    ingredients: [],
+    ingredientSections: [],
     isFavorite: true,
     name: "Deliciously Rich Chocolate Layered Cake with Vanilla Frosting and Berries",
     pictures: ["/fake_placeholder.jpg"],
@@ -107,7 +118,7 @@ export const fakeRecipes: Recipe[] = [
   },
   {
     comments: "",
-    ingredients: [],
+    ingredientSections: [],
     isFavorite: false,
     name: "Savory Herb-Crusted Grilled Salmon with Lemon Butter Sauce and Roasted Vegetables",
     pictures: ["/fake_placeholder.jpg"],
@@ -121,7 +132,7 @@ export const fakeRecipes: Recipe[] = [
   },
   {
     comments: "",
-    ingredients: [],
+    ingredientSections: [],
     isFavorite: true,
     name: "Sumptuous Mediterranean-Style Stuffed Bell Peppers with Feta and Spinach",
     pictures: ["/fake_placeholder.jpg"],
@@ -135,7 +146,7 @@ export const fakeRecipes: Recipe[] = [
   },
   {
     comments: "",
-    ingredients: [],
+    ingredientSections: [],
     isFavorite: false,
     name: "Flavorful",
     pictures: ["/fake_placeholder.jpg"],

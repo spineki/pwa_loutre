@@ -4,12 +4,17 @@ export type Time = {
   total: number;
 };
 
+export type IngredientSection = {
+  title?: string;
+  ingredients: string[];
+};
+
 export interface Recipe {
   id?: number;
   comments: string;
   name: string;
   isFavorite: boolean;
-  ingredients: string[];
+  ingredientSections: IngredientSection[];
   // source: string;
   portion: number;
   pictures: string[];

@@ -11,18 +11,18 @@ import ListItemText from "@mui/material/ListItemText";
 import Typography from "@mui/material/Typography";
 
 import { TimeRow } from "./TimeRow";
-import { Time } from "../models/Recipe";
+import { IngredientSection, Time } from "../models/Recipe";
 import Grid from "@mui/material/Grid";
 import { ColouredNumberText } from "./ColouredNumberText";
 
 interface RecipeRequirementsProps {
-    ingredients: string[],
+    ingredientSections: IngredientSection[],
     time: Time,
     multiplicator: number
 }
 
 export function RecipeRequirements(props: RecipeRequirementsProps) {
-    const { ingredients, time, multiplicator } = props;
+    const { ingredientSections, time, multiplicator } = props;
     const { t } = useTranslation();
 
     return (
@@ -58,19 +58,42 @@ export function RecipeRequirements(props: RecipeRequirementsProps) {
                         </ListItem>
 
                         {
-                            ingredients.map((ingredient, index) =>
-                                <ListItem key={index} sx={{ paddingTop: 0, paddingBottom: 0 }} >
-                                    <ListItemIcon sx={{ minWidth: 16 }}>
-                                        <Badge badgeContent="" color="primary" variant="dot" />
-                                    </ListItemIcon>
+                            ingredientSections.map((ingredientSection, sectionIndex) =>
+                                <>
+                                    {
+                                        ingredientSection.title &&
+                                        <ListItem key={`${sectionIndex}`} sx={{ paddingTop: 0, paddingBottom: 0 }} >
+                                            <ListItemIcon sx={{ minWidth: 16 }}>
+                                                <Badge badgeContent="" color="primary" variant="dot" />
+                                            </ListItemIcon>
 
-                                    <ListItemText >
-                                        <ColouredNumberText
-                                            text={ingredient}
-                                            multiplicator={multiplicator}
-                                        />
-                                    </ListItemText>
-                                </ListItem>
+                                            <ListItemText >
+                                                <ColouredNumberText
+                                                    text={ingredientSection.title}
+                                                    multiplicator={multiplicator}
+                                                />
+                                            </ListItemText>
+                                        </ListItem>
+                                    }
+
+                                    <List sx={{ paddingLeft: ingredientSection.title ? 2 : 0 }}>
+                                        {ingredientSection.ingredients.map((ingredient, recipeIndex) =>
+                                            <ListItem key={`${sectionIndex}_${recipeIndex}`} sx={{ paddingTop: 0, paddingBottom: 0 }} >
+                                                <ListItemIcon sx={{ minWidth: 16 }}>
+                                                    <Badge badgeContent="" color="primary" variant="dot" />
+                                                </ListItemIcon>
+
+                                                <ListItemText >
+                                                    <ColouredNumberText
+                                                        text={ingredient}
+                                                        multiplicator={multiplicator}
+                                                    />
+                                                </ListItemText>
+                                            </ListItem>
+                                        )}
+                                    </List>
+                                </>
+
                             )
                         }
                     </List>
