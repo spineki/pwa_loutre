@@ -1,5 +1,7 @@
+import { useContext, useEffect } from "react";
 import { useLiveQuery } from "dexie-react-hooks";
 
+import CircularProgress from "@mui/material/CircularProgress";
 import Grid from "@mui/material/Grid";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
@@ -11,11 +13,17 @@ import { groupBy } from "../utils/dataStructures";
 import { Tag } from "../models/Tag";
 import { TagChip } from "../components/TagChip";
 import { database } from "../models/database";
-import CircularProgress from "@mui/material/CircularProgress";
+import { DrawerContext } from "../contexts/DrawerContext";
 
 export const RouteTagsName = "tags";
 
 export function Tags() {
+    const { setCurrentRoute } = useContext(DrawerContext);
+    useEffect(() => {
+        setCurrentRoute(RouteTagsName);
+    }, [setCurrentRoute])
+
+
     const groupedTags = useLiveQuery(
         async () => {
             const tags = await database.tags.toArray();
