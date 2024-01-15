@@ -20,7 +20,6 @@ import DarkModeIcon from '@mui/icons-material/DarkMode';
 import ChecklistIcon from '@mui/icons-material/Checklist';
 import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
 import TagIcon from '@mui/icons-material/Tag';
-import TapasIcon from '@mui/icons-material/Tapas';
 import appLogo from "../icons/loutre.png"
 
 import { DrawerContext } from "../contexts/DrawerContext";
@@ -89,7 +88,6 @@ export function Drawer() {
                 >
                     <DrawerListItem to={RouteFavoriteRecipesName} CustomIcon={FavoriteIcon} iconColor="red" text={t("Favorites")} />
                     <DrawerListItem to={RouteAllRecipesName} CustomIcon={FormatListBulletedIcon} text={t("Recipes")} />
-                    <DrawerListItem to={RouteWorkInProgressName} CustomIcon={TapasIcon} text={t("Categories")} />
                     <DrawerListItem to={RouteWorkInProgressName} CustomIcon={TagIcon} text={t("Tags")} />
                 </StyledList>
                 <Divider />
