@@ -100,15 +100,28 @@ export function ColouredNumberText(props: ColouredNumberTextProps) {
                     numerator = (numerator / myPGCD).toFixed(0);
                     denominator = (denominator / myPGCD).toFixed(0);
 
-                    return (
-                        <span
-                            key={index.toString()}
-                            style={{ color: accentColor, flexShrink: 1 }}
-                        >
-                            {" "}
-                            {numerator} / {denominator}
-                        </span>
-                    );
+                    if (denominator === "1") {
+                        return (
+                            <span
+                                key={index.toString()}
+                                style={{ color: accentColor, flexShrink: 1 }}
+                            >
+                                {" "}
+                                {numerator}
+                            </span>
+                        );
+                    } else {
+                        return (
+                            <span
+                                key={index.toString()}
+                                style={{ color: accentColor, flexShrink: 1 }}
+                            >
+                                {" "}
+                                {numerator} / {denominator}
+                            </span>
+                        );
+                    }
+
                 } else {
                     return (
                         <span
