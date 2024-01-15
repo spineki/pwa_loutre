@@ -10,10 +10,14 @@ import { DrawerContext } from "../contexts/DrawerContext";
 import { RecipeCard } from "../components/RecipeCard";
 import CircularProgress from "@mui/material/CircularProgress";
 import { database } from "../models/database";
+import Typography from "@mui/material/Typography";
+import { TagChip } from "../components/TagChip";
+import { useTranslation } from "react-i18next";
 
 export const RouteFavoriteRecipesName = "favorites";
 
 export function FavoriteRecipes() {
+    const { t } = useTranslation();
     const { setCurrentRoute } = useContext(DrawerContext);
     useEffect(() => {
         setCurrentRoute(RouteFavoriteRecipesName);
@@ -30,6 +34,16 @@ export function FavoriteRecipes() {
         },
         []
     );
+    const tags = useLiveQuery(
+        async () => {
+            const tags = await database.tags
+                .orderBy("name")
+                .filter(tag => tag.isFavorite)
+                .toArray();
+            return tags;
+        },
+        []
+    );
 
     function fetchData() {
         console.log("called", "test");
@@ -38,8 +52,26 @@ export function FavoriteRecipes() {
     return (
         <Paper sx={{
             height: "100%",
-            p: 2
+            p: 2,
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            gap: 2
         }}>
+            <Typography variant={"h4"} fontFamily={"Cookie-Regular"} sx={{ alignSelf: "center" }} >
+                {t("FavoriteTags")}
+            </Typography>
+            {
+                tags ?
+                    <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1 }}>
+                        {tags.map(tag => <TagChip key={tag.id!} tag={tag} />)}
+                    </Box>
+                    :
+                    <CircularProgress />
+            }
+            <Typography variant={"h4"} fontFamily={"Cookie-Regular"} sx={{ alignSelf: "center" }} >
+                {t("FavoriteRecipes")}
+            </Typography>
             {
                 recipes ?
                     <InfiniteScroll

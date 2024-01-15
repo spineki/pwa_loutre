@@ -1,14 +1,14 @@
 import { useContext, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 
+import Grid from "@mui/material/Grid";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
+import Paper from "@mui/material/Paper";
+import Typography from "@mui/material/Typography";
 
 import { DrawerContext } from "../contexts/DrawerContext";
-import Grid from "@mui/material/Grid";
-import { useTranslation } from "react-i18next";
-import Typography from "@mui/material/Typography";
-import { Paper } from "@mui/material";
 
 export const RouteChangelogsName = "changelogs";
 

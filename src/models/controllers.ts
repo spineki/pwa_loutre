@@ -1,6 +1,19 @@
 import { Recipe } from "./Recipe";
+import { Tag } from "./Tag";
 import { database } from "./database";
 
+// TAGS -----------------------------------------
+
+/**
+ * Partially update an existing tags
+ * @param id
+ * @param changes
+ */
+export async function partialUpdateTag(id: number, changes: Partial<Tag>) {
+  await database.tags.update(id, changes);
+}
+
+// RECIPES --------------------------------------
 export async function getRecipeById(id: number) {
   return await database.recipes.get({ id });
 }

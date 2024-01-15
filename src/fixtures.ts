@@ -1,4 +1,5 @@
 import { Recipe } from "./models/Recipe";
+import { Tag } from "./models/Tag";
 
 export const fakeRecipes: Recipe[] = [
   {
@@ -157,5 +158,68 @@ export const fakeRecipes: Recipe[] = [
       baking: 180,
       total: 200,
     },
+  },
+];
+
+export const fakeTags: Tag[] = [
+  {
+    isFavorite: false,
+    name: "sweet",
+  },
+  {
+    isFavorite: false,
+    name: "fish",
+  },
+  {
+    isFavorite: false,
+    name: "beverage",
+  },
+  {
+    isFavorite: true,
+    name: "spicy",
+  },
+  {
+    isFavorite: false,
+    name: "fruit",
+  },
+  {
+    isFavorite: false,
+    name: "vegetarian",
+  },
+  {
+    isFavorite: false,
+    name: "dessert",
+  },
+  {
+    isFavorite: false,
+    name: "coffee",
+  },
+  {
+    isFavorite: false,
+    name: "grilled",
+  },
+  {
+    isFavorite: true,
+    name: "italian",
+  },
+  {
+    isFavorite: false,
+    name: "saucy",
+  },
+  {
+    isFavorite: false,
+    name: "juicy",
+  },
+  {
+    isFavorite: false,
+    name: "refreshing",
+  },
+  {
+    isFavorite: false,
+    name: "nutty",
+  },
+  {
+    isFavorite: false,
+    name: "spicy-sweet",
   },
 ];

@@ -26,9 +26,9 @@ import { DrawerContext } from "../contexts/DrawerContext";
 import { ColorModeContext } from "../contexts/ColormodeContext";
 import { RouteFavoriteRecipesName } from "../routes/FavoriteRecipes";
 import { RouteAllRecipesName } from "../routes/AllRecipes";
-import { DrawerListItem } from "./DrawerListItem";
-import { RouteWorkInProgressName } from "../routes/WorkInProgress";
+import { RouteTagsName } from "../routes/Tags";
 import { RouteChangelogsName } from "../routes/Changelogs";
+import { DrawerListItem } from "./DrawerListItem";
 import packageJson from "../../package.json";
 
 export function Drawer() {
@@ -88,7 +88,7 @@ export function Drawer() {
                 >
                     <DrawerListItem to={RouteFavoriteRecipesName} CustomIcon={FavoriteIcon} iconColor="red" text={t("Favorites")} />
                     <DrawerListItem to={RouteAllRecipesName} CustomIcon={FormatListBulletedIcon} text={t("Recipes")} />
-                    <DrawerListItem to={RouteWorkInProgressName} CustomIcon={TagIcon} text={t("Tags")} />
+                    <DrawerListItem to={RouteTagsName} CustomIcon={TagIcon} text={t("Tags")} />
                 </StyledList>
                 <Divider />
                 <StyledList
