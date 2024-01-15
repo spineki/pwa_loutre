@@ -27,6 +27,16 @@ import { RouteWorkInProgressName } from "./WorkInProgress";
 import { RecipeTabs } from "../components/RecipeTabs";
 import { useSharing } from "../hooks/useSharing";
 
+
+/**
+ * Create an absolute path for a detail route page for the given recipe id
+ * @param id 
+ * @returns 
+ */
+export function getDetailsRecipeRoute(id: number): string {
+    return `/${RouteAllRecipesName}/${id}`
+}
+
 export const RouteDetailsRecipesName = RouteAllRecipesName + "/:id";
 
 /**

@@ -1,15 +1,16 @@
 import { useCallback } from "react";
+import { Link } from "react-router-dom";
 
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
 import CardActionArea from "@mui/material/CardActionArea";
+import CardMedia from "@mui/material/CardMedia";
 
 import { Time } from "../models/Recipe";
 import { CardRow } from "./CardRow";
 import { partialUpdateRecipe } from "../models/controllers";
-import { CardMedia } from "@mui/material";
-import { Link } from "react-router-dom";
+import { getDetailsRecipeRoute } from "../routes/DetailsRecipe";
 
 
 type RecipeCardProps = {
@@ -35,7 +36,7 @@ export function RecipeCard(props: RecipeCardProps) {
 
     return (
         <Card elevation={2}>
-            <CardActionArea component={Link} to={`${id}`}>
+            <CardActionArea component={Link} to={getDetailsRecipeRoute(id)}>
                 <CardContent sx={{ paddingBottom: 0, paddingTop: 1 }}>
                     <Typography
                         gutterBottom
