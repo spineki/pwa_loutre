@@ -15,9 +15,9 @@ import BackupIcon from '@mui/icons-material/Backup';
 import CloudDownloadIcon from '@mui/icons-material/CloudDownload';
 import DownloadIcon from '@mui/icons-material/Download';
 
+import { CloudDialogContext } from "../contexts/CloudDialogContext";
 import { useSharing } from "../hooks/useSharing";
 import { getAllRecipes, importRecipesFromFileContent } from "../models/controllers";
-import { CloudDialogContext } from "../contexts/CloudDialogContext";
 
 
 export function CloudDialog() {
@@ -56,10 +56,8 @@ export function CloudDialog() {
             return;
         }
 
-        for (let i = 0; i < files.length; ++i) {
-            const file = files[0];
+        for (const file of files) {
             const content = await file.text();
-
             await importRecipesFromFileContent(content);
         }
 
