@@ -5,25 +5,24 @@ import { useTranslation } from "react-i18next";
 import { ActionFunction, useLoaderData, useNavigate } from "react-router-dom";
 
 import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
 import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
 import SpeedDial from "@mui/material/SpeedDial";
 import SpeedDialAction from "@mui/material/SpeedDialAction";
 import SpeedDialIcon from "@mui/material/SpeedDialIcon";
-import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 
 import CloseIcon from '@mui/icons-material/Close';
-import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import DriveFileRenameOutlineIcon from '@mui/icons-material/DriveFileRenameOutline';
 import EggIcon from '@mui/icons-material/Egg';
 import MicrowaveIcon from '@mui/icons-material/Microwave';
 import SaveIcon from "@mui/icons-material/Save";
 import ShortTextIcon from '@mui/icons-material/ShortText';
 import TuneIcon from '@mui/icons-material/Tune';
-import { DesktopTimePicker } from "@mui/x-date-pickers/DesktopTimePicker";
 
+import { FormImageInputField } from "../components/FormImageInputField";
+import { FormTextField } from "../components/FormTextField";
+import { FormTimePicker } from "../components/FormTimePicker";
 import { Recipe, getEmptyRecipe } from "../models/Recipe";
 import { getRecipeById, insertRecipe, upsertRecipe } from "../models/controllers";
 import { getDetailsRecipeRoute } from "./routes";
@@ -76,7 +75,6 @@ interface EditRecipeFormInput {
 
 
 export function EditRecipe() {
-    // const { recipe } = props;
     const { t } = useTranslation();
     const recipe = useLoaderData() as Recipe;
     const navigate = useNavigate();
@@ -101,6 +99,11 @@ export function EditRecipe() {
             picture: undefined
         },
     });
+
+    // const { fields, append, prepend, remove, swap, move, insert } = useFieldArray({
+    //     control,
+    //     name: "steps",
+    // });
 
     const onSubmit = async (data: EditRecipeFormInput) => {
         const recipeToSave: Recipe = {
@@ -146,152 +149,48 @@ export function EditRecipe() {
                         {
                             currentTabIndex == 0 ?
                                 <>
-                                    <Controller
-                                        name={"name"}
+                                    <FormTextField
                                         control={control}
-                                        render={({
-                                            field: { onChange, value },
-                                            fieldState: { error },
-                                        }) => (
-                                            <TextField
-                                                helperText={error ? error.message : null}
-                                                error={!!error}
-                                                onChange={onChange}
-                                                value={value}
-                                                fullWidth
-                                                label={t("RecipeName")}
-                                                variant="outlined"
-                                            />
-                                        )}
+                                        name="name"
+                                        label={t("RecipeName")}
                                     />
 
-                                    <Controller
-                                        name={"portion"}
+                                    <FormTextField
                                         control={control}
-                                        render={({
-                                            field: { onChange, value },
-                                            fieldState: { error },
-                                        }) => (
-                                            <TextField
-                                                type="number"
-                                                helperText={error ? error.message : null}
-                                                error={!!error}
-                                                onChange={onChange}
-                                                value={value}
-                                                fullWidth
-                                                label={t("Portions")}
-                                                variant="outlined"
-                                            />
-                                        )}
+                                        name="portion"
+                                        label={t("Portions")}
+                                        type="number"
                                     />
 
                                     <Grid container spacing={1}>
                                         <Grid item xs={4} >
-                                            <Controller
-                                                name={"time.preparation"}
+                                            <FormTimePicker
                                                 control={control}
-                                                render={({
-                                                    field: { onChange, value },
-                                                    fieldState: { error },
-                                                }) => (
-                                                    <DesktopTimePicker
-                                                        onChange={onChange}
-                                                        label={t("Preparation")}
-                                                        value={value}
-                                                        views={["hours", "minutes"]}
-                                                        ampm={false}
-                                                        slotProps={{
-                                                            textField: {
-                                                                error: !!error,
-                                                                helperText: error ? error.message : null
-                                                            },
-                                                        }}
-                                                    />
-                                                )}
+                                                name="time.preparation"
+                                                label={t("Preparation")}
                                             />
                                         </Grid>
                                         <Grid item xs={4}>
-                                            <Controller
-                                                name={"time.baking"}
+                                            <FormTimePicker
                                                 control={control}
-                                                render={({
-                                                    field: { onChange, value },
-                                                    fieldState: { error },
-                                                }) => (
-                                                    <DesktopTimePicker
-                                                        onChange={onChange}
-                                                        label={t("Baking")}
-                                                        value={value}
-                                                        views={["hours", "minutes"]}
-                                                        ampm={false}
-                                                        slotProps={{
-                                                            textField: {
-                                                                error: !!error,
-                                                                helperText: error ? error.message : null
-                                                            },
-                                                        }}
-                                                    />
-                                                )}
+                                                name="time.baking"
+                                                label={t("Baking")}
                                             />
                                         </Grid>
                                         <Grid item xs={4}>
-                                            <Controller
-                                                name={"time.total"}
+                                            <FormTimePicker
                                                 control={control}
-                                                render={({
-                                                    field: { onChange, value },
-                                                    fieldState: { error },
-                                                }) => (
-                                                    <DesktopTimePicker
-                                                        onChange={onChange}
-                                                        label={t("Total")}
-                                                        value={value}
-                                                        views={["hours", "minutes"]}
-                                                        ampm={false}
-                                                        slotProps={{
-                                                            textField: {
-                                                                error: !!error,
-                                                                helperText: error ? error.message : null
-                                                            },
-                                                        }}
-                                                    />
-                                                )}
+                                                name="time.total"
+                                                label={t("Total")}
                                             />
                                         </Grid>
                                     </Grid>
 
-                                    <Controller
-                                        name={"picture"}
+                                    <FormImageInputField
                                         control={control}
-                                        render={(
-                                            {
-                                                fieldState: { error },
-                                            }
-                                        ) => (
-                                            <Button
-                                                component="label"
-                                                variant="contained"
-                                                color={error ? "error" : "secondary"}
-                                                endIcon={<CloudUploadIcon />}
-                                            >
-                                                <input
-                                                    type="file"
-                                                    accept="image/*"
-                                                    hidden
-                                                    onChange={async (event) => {
-                                                        const files = event.target.files;
-                                                        if (files == null || files.length == 0) {
-                                                            return;
-                                                        }
-
-                                                        // ignore other pictures for now
-                                                        const file = files[0];
-                                                        setValue("picture", file);
-                                                    }}
-                                                />
-                                                {t("PickImage")}
-                                            </Button>
-                                        )}
+                                        name="picture"
+                                        label={t("PickImage")}
+                                        setValue={setValue}
                                     />
 
                                     <Controller
@@ -320,25 +219,12 @@ export function EditRecipe() {
                                         <>
                                         </> :
                                         <>
-                                            <Controller
-                                                name={"comments"}
+                                            <FormTextField
                                                 control={control}
-                                                render={({
-                                                    field: { onChange, value },
-                                                    fieldState: { error },
-                                                }) => (
-                                                    <TextField
-                                                        helperText={error ? error.message : null}
-                                                        error={!!error}
-                                                        onChange={onChange}
-                                                        value={value}
-                                                        fullWidth
-                                                        label={t("Comments")}
-                                                        variant="outlined"
-                                                        multiline
-                                                        minRows={10}
-                                                    />
-                                                )}
+                                                name="comments"
+                                                label={t("Comments")}
+                                                multiline
+                                                minRows={10}
                                             />
                                         </>
                         }
