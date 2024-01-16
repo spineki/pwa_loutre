@@ -1,5 +1,7 @@
+import { DragDropContext, Droppable, OnDragEndResponder } from "@hello-pangea/dnd";
 import moment from "moment";
 import { useState } from "react";
+
 import { Controller, useFieldArray, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { ActionFunction, useLoaderData, useNavigate } from "react-router-dom";
@@ -104,12 +106,18 @@ export function EditRecipe() {
         },
     });
 
-
-    // , , prepend, , swap, move, insert 
-    const { fields, append, remove } = useFieldArray({
+    //  prepend, , swap, insert 
+    const { fields, append, remove, move } = useFieldArray({
         control,
         name: "steps",
     });
+
+    const handleDrag: OnDragEndResponder = ({ source, destination }) => {
+        if (destination) {
+            move(source.index, destination.index);
+        }
+    };
+
 
     const onSubmit = async (data: EditRecipeFormInput) => {
         const recipeToSave: Recipe = {
@@ -224,19 +232,35 @@ export function EditRecipe() {
 
                                     : currentTabIndex == 2 ?
                                         <>
-                                            {fields.map((step, index) => (
-                                                <FormStepField
-                                                    key={step.id}
-                                                    index={index}
-                                                    control={control}
-                                                    remove={remove}
-                                                    label={`${t("Step")} ${index}`}
-                                                    name={`steps.${index}.text`}
-                                                    minRows={2}
-                                                    multiline
-                                                />
-                                            ))}
+                                            <DragDropContext onDragEnd={handleDrag}>
+                                                <Droppable droppableId="steps-items">
+                                                    {(provided) => (
+                                                        <Box
+                                                            ref={provided.innerRef}
+                                                            {...provided.droppableProps}
+                                                            sx={{ display: "flex", flexDirection: "column", gap: 8 }}
+                                                        >
+                                                            {fields.map((step, index) => (
+                                                                <FormStepField
+                                                                    key={`test[${index}]`}
+                                                                    id={step.id}
+                                                                    index={index}
+                                                                    control={control}
+                                                                    remove={remove}
+                                                                    label={`${t("Step")} ${index + 1}`}
+                                                                    name={`steps.${index}.text`}
+                                                                    minRows={2}
+                                                                    multiline
+                                                                />
 
+                                                            ))}
+
+                                                            {provided.placeholder}
+                                                        </Box>
+                                                    )}
+                                                </Droppable>
+
+                                            </DragDropContext>
                                             <IconButton
                                                 sx={{ alignSelf: "center" }}
                                                 color="primary"
