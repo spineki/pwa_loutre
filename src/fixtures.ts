@@ -11,7 +11,7 @@ export const fakeRecipes: Recipe[] = [
     name: "Savory Sunset Chicken",
     pictures: [],
     portion: 1,
-    steps: [],
+    stepSections: [],
     time: {
       preparation: 1,
       baking: 2,
@@ -25,7 +25,7 @@ export const fakeRecipes: Recipe[] = [
     name: "Tropical Fusion Delight",
     pictures: [],
     portion: 1,
-    steps: [],
+    stepSections: [],
     time: {
       preparation: 2,
       baking: 3,
@@ -49,11 +49,25 @@ export const fakeRecipes: Recipe[] = [
     name: "Cinnamon Spiced Apples",
     pictures: [],
     portion: 1,
-    steps: [
-      "step1",
-      "step2",
-      "a very long step i agree slqdfldsq h ljhfslk jh h jhk jh khk hk hk jhkh kh k hk hlh lig i  hj jhjhljhsql hjljhlkjhlkjh ljkh kjhlkjhlk jh lkhlkjh lkjhl kjh l",
-      "step4",
+    stepSections: [
+      {
+        title: "section 1",
+        steps: [
+          "step1",
+          "step2",
+          "a very long step i agree slqdfldsq h ljhfslk jh h jhk jh khk hk hk jhkh kh k hk hlh lig i  hj jhjhljhsql hjljhlkjhlkjh ljkh kjhlkjhlk jh lkhlkjh lkjhl kjh l",
+          "step4",
+        ],
+      },
+      {
+        title: "section 2",
+        steps: [
+          "step1",
+          "step2",
+          "a very long step i agree slqdfldsq h ljhfslk jh h jhk jh khk hk hk jhkh kh k hk hlh lig i  hj jhjhljhsql hjljhlkjhlkjh ljkh kjhlkjhlk jh lkhlkjh lkjhl kjh l",
+          "step4",
+        ],
+      },
     ],
     time: {
       preparation: 5,
@@ -68,7 +82,7 @@ export const fakeRecipes: Recipe[] = [
     name: "Lemon Zest Peach Surprise",
     pictures: [],
     portion: 1,
-    steps: [],
+    stepSections: [],
     time: {
       preparation: 3,
       baking: 4,
@@ -82,7 +96,7 @@ export const fakeRecipes: Recipe[] = [
     name: "Mediterranean Chicken Delight",
     pictures: [],
     portion: 1,
-    steps: [],
+    stepSections: [],
     time: {
       preparation: 4,
       baking: 5,
@@ -96,7 +110,7 @@ export const fakeRecipes: Recipe[] = [
     name: "Exquisite Homemade Spaghetti with Tomato Sauce and Basil Toppings",
     pictures: [],
     portion: 1,
-    steps: [],
+    stepSections: [],
     time: {
       preparation: 25,
       baking: 30,
@@ -110,7 +124,7 @@ export const fakeRecipes: Recipe[] = [
     name: "Deliciously Rich Chocolate Layered Cake with Vanilla Frosting and Berries",
     pictures: [],
     portion: 1,
-    steps: [],
+    stepSections: [],
     time: {
       preparation: 40,
       baking: 35,
@@ -124,7 +138,7 @@ export const fakeRecipes: Recipe[] = [
     name: "Savory Herb-Crusted Grilled Salmon with Lemon Butter Sauce and Roasted Vegetables",
     pictures: [],
     portion: 1,
-    steps: [],
+    stepSections: [],
     time: {
       preparation: 20,
       baking: 15,
@@ -138,7 +152,7 @@ export const fakeRecipes: Recipe[] = [
     name: "Sumptuous Mediterranean-Style Stuffed Bell Peppers with Feta and Spinach",
     pictures: [],
     portion: 1,
-    steps: [],
+    stepSections: [],
     time: {
       preparation: 30,
       baking: 45,
@@ -152,7 +166,7 @@ export const fakeRecipes: Recipe[] = [
     name: "Flavorful",
     pictures: [],
     portion: 1,
-    steps: [],
+    stepSections: [],
     time: {
       preparation: 20,
       baking: 180,

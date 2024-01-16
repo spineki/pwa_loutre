@@ -28,7 +28,7 @@ import { FormImageInputField } from "../components/FormImageInputField";
 import { FormStepField } from "../components/FormStepField";
 import { FormTextField } from "../components/FormTextField";
 import { FormTimePicker } from "../components/FormTimePicker";
-import { Recipe, getEmptyRecipe } from "../models/Recipe";
+import { Recipe, StepSection, getEmptyRecipe } from "../models/Recipe";
 import { getRecipeById, insertRecipe, upsertRecipe } from "../models/controllers";
 import { getDetailsRecipeRoute } from "./routes";
 
@@ -75,7 +75,7 @@ interface EditRecipeFormInput {
         baking: moment.Moment,
         total: moment.Moment,
     },
-    steps: Array<{ text: string }>
+    steps: Array<{ text: string, isSection: boolean }>
 }
 
 
@@ -93,7 +93,7 @@ export function EditRecipe() {
         { icon: <ShortTextIcon />, name: t("Comments") },
     ];
 
-    const { control, handleSubmit, setValue } = useForm<EditRecipeFormInput>({
+    const { control, handleSubmit, setValue, watch } = useForm<EditRecipeFormInput>({
         defaultValues: {
             ...recipe,
             time: {
@@ -102,7 +102,12 @@ export function EditRecipe() {
                 total: moment.utc(recipe.time.total, "minute"),
             },
             picture: undefined,
-            steps: recipe.steps.map((step) => ({ text: step }))
+            steps: recipe.stepSections
+                .map((section) => [
+                    ...(section.title ? [{ text: section.title, isSection: true }] : []),
+                    ...section.steps.map((text) => ({ text, isSection: false }))])
+                .flat()
+
         },
     });
 
@@ -118,8 +123,26 @@ export function EditRecipe() {
         }
     };
 
-
     const onSubmit = async (data: EditRecipeFormInput) => {
+        const stepSections: StepSection[] = [];
+
+        let currentSection: StepSection = { steps: [] };
+        for (const step of data.steps) {
+            if (step.isSection) {
+                // saving previous section
+                if (!(currentSection.title === undefined && currentSection.steps.length == 0)) {
+                    stepSections.push(currentSection);
+                }
+                currentSection = { steps: [], title: step.text };
+            } else {
+                currentSection.steps.push(step.text);
+            }
+        }
+        // if ending by a section
+        if (!(currentSection.title === undefined && currentSection.steps.length == 0)) {
+            stepSections.push(currentSection);
+        }
+
         const recipeToSave: Recipe = {
             comments: data.comments,
             ingredientSections: [],
@@ -127,7 +150,7 @@ export function EditRecipe() {
             name: data.name,
             pictures: data.picture ? [data.picture] : [],
             portion: data.portion,
-            steps: data.steps.map((step) => step.text),
+            stepSections: stepSections,
             time: {
                 preparation: moment.duration(data.time.preparation.format("HH:mm")).asMinutes(),
                 baking: moment.duration(data.time.baking.format("HH:mm")).asMinutes(),
@@ -137,7 +160,7 @@ export function EditRecipe() {
 
         let id = recipe.id;
         // if creating a new recipe
-        if (id == null) {
+        if (id === undefined) {
             id = await insertRecipe(recipeToSave);
         } else {
             recipeToSave.id = id;
@@ -238,7 +261,7 @@ export function EditRecipe() {
                                                         <Box
                                                             ref={provided.innerRef}
                                                             {...provided.droppableProps}
-                                                            sx={{ display: "flex", flexDirection: "column", gap: 8 }}
+                                                            sx={{ display: "flex", flexDirection: "column", gap: 2 }}
                                                         >
                                                             {fields.map((step, index) => (
                                                                 <FormStepField
@@ -246,15 +269,13 @@ export function EditRecipe() {
                                                                     id={step.id}
                                                                     index={index}
                                                                     control={control}
+                                                                    watch={watch}
                                                                     remove={remove}
-                                                                    label={`${t("Step")} ${index + 1}`}
-                                                                    name={`steps.${index}.text`}
                                                                     minRows={2}
-                                                                    multiline
+                                                                    textName={`steps.${index}.text`}
+                                                                    isSectionName={`steps.${index}.isSection`}
                                                                 />
-
                                                             ))}
-
                                                             {provided.placeholder}
                                                         </Box>
                                                     )}
@@ -264,7 +285,7 @@ export function EditRecipe() {
                                             <IconButton
                                                 sx={{ alignSelf: "center" }}
                                                 color="primary"
-                                                onClick={() => append({ text: "" })}
+                                                onClick={() => append({ text: "", isSection: false })}
                                             >
                                                 <AddIcon />
                                             </IconButton>
@@ -286,15 +307,10 @@ export function EditRecipe() {
                 <Grid item xs={0} md={4} />
             </Grid>
 
-
-
             <SpeedDial
                 ariaLabel="SpeedDial tooltip example"
                 sx={{ position: "fixed", bottom: 16, right: 16 }}
                 icon={<SpeedDialIcon openIcon={<CloseIcon />} icon={<TuneIcon />} />}
-            // onClose={handleClose}
-            // onOpen={handleOpen}
-            // open={true}
             >
                 {actions.map((action, index) => (
                     <SpeedDialAction

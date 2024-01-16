@@ -9,6 +9,11 @@ export type IngredientSection = {
   ingredients: string[];
 };
 
+export type StepSection = {
+  title?: string;
+  steps: string[];
+};
+
 export interface Recipe {
   id?: number;
   comments: string;
@@ -18,9 +23,8 @@ export interface Recipe {
   // source: string;
   portion: number;
   pictures: Blob[];
-  steps: string[];
+  stepSections: StepSection[];
   time: Time;
-  // category: string;
   // tags: string[];
 }
 
@@ -35,7 +39,7 @@ export function getEmptyRecipe(): Recipe {
     ingredientSections: [],
     portion: 1,
     pictures: [],
-    steps: [],
+    stepSections: [],
     time: {
       preparation: 0,
       baking: 0,
