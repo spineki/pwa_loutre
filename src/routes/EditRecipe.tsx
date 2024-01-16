@@ -1,6 +1,6 @@
 import moment from "moment";
 import { useState } from "react";
-import { Controller, useForm } from "react-hook-form";
+import { Controller, useFieldArray, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { ActionFunction, useLoaderData, useNavigate } from "react-router-dom";
 
@@ -12,6 +12,7 @@ import SpeedDialAction from "@mui/material/SpeedDialAction";
 import SpeedDialIcon from "@mui/material/SpeedDialIcon";
 import Typography from "@mui/material/Typography";
 
+import AddIcon from '@mui/icons-material/Add';
 import CloseIcon from '@mui/icons-material/Close';
 import DriveFileRenameOutlineIcon from '@mui/icons-material/DriveFileRenameOutline';
 import EggIcon from '@mui/icons-material/Egg';
@@ -20,7 +21,9 @@ import SaveIcon from "@mui/icons-material/Save";
 import ShortTextIcon from '@mui/icons-material/ShortText';
 import TuneIcon from '@mui/icons-material/Tune';
 
+import IconButton from "@mui/material/IconButton";
 import { FormImageInputField } from "../components/FormImageInputField";
+import { FormStepField } from "../components/FormStepField";
 import { FormTextField } from "../components/FormTextField";
 import { FormTimePicker } from "../components/FormTimePicker";
 import { Recipe, getEmptyRecipe } from "../models/Recipe";
@@ -70,7 +73,7 @@ interface EditRecipeFormInput {
         baking: moment.Moment,
         total: moment.Moment,
     },
-    steps: string[]
+    steps: Array<{ text: string }>
 }
 
 
@@ -79,7 +82,7 @@ export function EditRecipe() {
     const recipe = useLoaderData() as Recipe;
     const navigate = useNavigate();
 
-    const [currentTabIndex, setCurrentTabIndex] = useState(0);
+    const [currentTabIndex, setCurrentTabIndex] = useState(2);
 
     const actions = [
         { icon: <DriveFileRenameOutlineIcon />, name: t("Miscellaneous") },
@@ -96,14 +99,17 @@ export function EditRecipe() {
                 baking: moment.utc(recipe.time.baking, "minute"),
                 total: moment.utc(recipe.time.total, "minute"),
             },
-            picture: undefined
+            picture: undefined,
+            steps: recipe.steps.map((step) => ({ text: step }))
         },
     });
 
-    // const { fields, append, prepend, remove, swap, move, insert } = useFieldArray({
-    //     control,
-    //     name: "steps",
-    // });
+
+    // , , prepend, , swap, move, insert 
+    const { fields, append, remove } = useFieldArray({
+        control,
+        name: "steps",
+    });
 
     const onSubmit = async (data: EditRecipeFormInput) => {
         const recipeToSave: Recipe = {
@@ -113,7 +119,7 @@ export function EditRecipe() {
             name: data.name,
             pictures: data.picture ? [data.picture] : [],
             portion: data.portion,
-            steps: data.steps,
+            steps: data.steps.map((step) => step.text),
             time: {
                 preparation: moment.duration(data.time.preparation.format("HH:mm")).asMinutes(),
                 baking: moment.duration(data.time.baking.format("HH:mm")).asMinutes(),
@@ -213,11 +219,33 @@ export function EditRecipe() {
 
                                 : currentTabIndex == 1 ?
                                     <>
+
                                     </>
 
                                     : currentTabIndex == 2 ?
                                         <>
-                                        </> :
+                                            {fields.map((step, index) => (
+                                                <FormStepField
+                                                    key={step.id}
+                                                    index={index}
+                                                    control={control}
+                                                    remove={remove}
+                                                    label={`${t("Step")} ${index}`}
+                                                    name={`steps.${index}.text`}
+                                                    minRows={2}
+                                                    multiline
+                                                />
+                                            ))}
+
+                                            <IconButton
+                                                sx={{ alignSelf: "center" }}
+                                                color="primary"
+                                                onClick={() => append({ text: "" })}
+                                            >
+                                                <AddIcon />
+                                            </IconButton>
+                                        </>
+                                        :
                                         <>
                                             <FormTextField
                                                 control={control}
@@ -238,7 +266,7 @@ export function EditRecipe() {
 
             <SpeedDial
                 ariaLabel="SpeedDial tooltip example"
-                sx={{ position: 'absolute', bottom: 16, right: 16 }}
+                sx={{ position: "fixed", bottom: 16, right: 16 }}
                 icon={<SpeedDialIcon openIcon={<CloseIcon />} icon={<TuneIcon />} />}
             // onClose={handleClose}
             // onOpen={handleOpen}
