@@ -27,11 +27,20 @@ export async function bulkUpsertRecipes(recipes: Recipe[]) {
 }
 
 /**
+ * Add a recipe if it does not exist, else do nothing
+ * @param recipe
+ * @returns
+ */
+export async function insertRecipe(recipe: Recipe) {
+  return (await database.recipes.add(recipe)) as number;
+}
+
+/**
  * Add a recipe if it does not exist, else overwrite existing recipe
  * @param recipe
  */
 export async function upsertRecipe(recipe: Recipe) {
-  await database.recipes.put(recipe);
+  return await database.recipes.put(recipe);
 }
 
 /**

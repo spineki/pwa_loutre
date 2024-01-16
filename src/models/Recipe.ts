@@ -17,7 +17,7 @@ export interface Recipe {
   ingredientSections: IngredientSection[];
   // source: string;
   portion: number;
-  pictures: string[];
+  pictures: Blob[];
   steps: string[];
   time: Time;
   // category: string;

@@ -1,12 +1,16 @@
 import moment from "moment";
+import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
-import { ActionFunction, useLoaderData } from "react-router-dom";
+import { ActionFunction, useLoaderData, useNavigate } from "react-router-dom";
 
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
+import SpeedDial from "@mui/material/SpeedDial";
+import SpeedDialAction from "@mui/material/SpeedDialAction";
+import SpeedDialIcon from "@mui/material/SpeedDialIcon";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 
@@ -20,12 +24,9 @@ import ShortTextIcon from '@mui/icons-material/ShortText';
 import TuneIcon from '@mui/icons-material/Tune';
 import { DesktopTimePicker } from "@mui/x-date-pickers/DesktopTimePicker";
 
-import SpeedDial from "@mui/material/SpeedDial";
-import SpeedDialAction from "@mui/material/SpeedDialAction";
-import SpeedDialIcon from "@mui/material/SpeedDialIcon";
-import { useState } from "react";
 import { Recipe, getEmptyRecipe } from "../models/Recipe";
-import { getRecipeById } from "../models/controllers";
+import { getRecipeById, insertRecipe, upsertRecipe } from "../models/controllers";
+import { getDetailsRecipeRoute } from "./routes";
 
 /**
  * While using the create route, giving an empty recipe as a placeholder for future filling
@@ -60,15 +61,17 @@ export const editRecipeLoader: ActionFunction = async ({ params }) => {
 
 
 interface EditRecipeFormInput {
+    isFavorite: boolean,
     comments: string,
     name: string,
     portion: number,
     picture?: Blob
     time: {
-        preparation: moment.Duration,
-        baking: moment.Duration,
-        total: moment.Duration,
-    }
+        preparation: moment.Moment,
+        baking: moment.Moment,
+        total: moment.Moment,
+    },
+    steps: string[]
 }
 
 
@@ -76,6 +79,7 @@ export function EditRecipe() {
     // const { recipe } = props;
     const { t } = useTranslation();
     const recipe = useLoaderData() as Recipe;
+    const navigate = useNavigate();
 
     const [currentTabIndex, setCurrentTabIndex] = useState(0);
 
@@ -98,7 +102,32 @@ export function EditRecipe() {
         },
     });
 
-    const onSubmit = (data: EditRecipeFormInput) => console.log(data);
+    const onSubmit = async (data: EditRecipeFormInput) => {
+        const recipeToSave: Recipe = {
+            comments: data.comments,
+            ingredientSections: [],
+            isFavorite: data.isFavorite,
+            name: data.name,
+            pictures: data.picture ? [data.picture] : [],
+            portion: data.portion,
+            steps: data.steps,
+            time: {
+                preparation: moment.duration(data.time.preparation.format("HH:mm")).asMinutes(),
+                baking: moment.duration(data.time.baking.format("HH:mm")).asMinutes(),
+                total: moment.duration(data.time.total.format("HH:mm")).asMinutes(),
+            },
+        };
+
+        let id = recipe.id;
+        // if creating a new recipe
+        if (id == null) {
+            id = await insertRecipe(recipeToSave);
+        } else {
+            recipeToSave.id = id;
+            await upsertRecipe(recipeToSave);
+        }
+        navigate(getDetailsRecipeRoute(id));
+    };
 
     return (
         <Paper sx={{ p: 2, flex: 1, display: "flex", flexDirection: "column" }}>
@@ -287,7 +316,7 @@ export function EditRecipe() {
                                     <>
                                     </>
 
-                                    : currentTabIndex == 1 ?
+                                    : currentTabIndex == 2 ?
                                         <>
                                         </> :
                                         <>
@@ -307,6 +336,7 @@ export function EditRecipe() {
                                                         label={t("Comments")}
                                                         variant="outlined"
                                                         multiline
+                                                        minRows={10}
                                                     />
                                                 )}
                                             />
@@ -319,40 +349,40 @@ export function EditRecipe() {
             </Grid>
 
 
-            <Box sx={{}}>
-                <SpeedDial
-                    ariaLabel="SpeedDial tooltip example"
-                    sx={{ position: 'absolute', bottom: 16, right: 16 }}
-                    icon={<SpeedDialIcon openIcon={<CloseIcon />} icon={<TuneIcon />} />}
-                // onClose={handleClose}
-                // onOpen={handleOpen}
-                // open={true}
-                >
-                    {actions.map((action, index) => (
-                        <SpeedDialAction
-                            key={action.name}
-                            icon={action.icon}
-                            tooltipTitle={action.name}
-                            tooltipOpen
-                            color="success"
-                            FabProps={{
-                                sx: {
-                                    border: index == currentTabIndex ? "solid 1px" : "inherit",
-                                    borderColor: index == currentTabIndex ? "secondary.main" : "inherit",
-                                }
-                            }}
-                            onClick={() => setCurrentTabIndex(index)}
-                        />
-                    ))}
+
+            <SpeedDial
+                ariaLabel="SpeedDial tooltip example"
+                sx={{ position: 'absolute', bottom: 16, right: 16 }}
+                icon={<SpeedDialIcon openIcon={<CloseIcon />} icon={<TuneIcon />} />}
+            // onClose={handleClose}
+            // onOpen={handleOpen}
+            // open={true}
+            >
+                {actions.map((action, index) => (
                     <SpeedDialAction
-                        key={t("Save")}
-                        icon={<SaveIcon />}
-                        tooltipTitle={t("Save")}
+                        key={action.name}
+                        icon={action.icon}
+                        tooltipTitle={action.name}
                         tooltipOpen
-                        onClick={handleSubmit(onSubmit)}
+                        color="success"
+                        FabProps={{
+                            sx: {
+                                border: index == currentTabIndex ? "solid 1px" : "inherit",
+                                borderColor: index == currentTabIndex ? "secondary.main" : "inherit",
+                            }
+                        }}
+                        onClick={() => setCurrentTabIndex(index)}
                     />
-                </SpeedDial>
-            </Box>
+                ))}
+                <SpeedDialAction
+                    key={t("Save")}
+                    icon={<SaveIcon />}
+                    tooltipTitle={t("Save")}
+                    tooltipOpen
+                    onClick={handleSubmit(onSubmit)}
+                />
+            </SpeedDial>
+
         </Paper>
     )
 

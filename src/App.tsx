@@ -19,12 +19,12 @@ function App() {
         await database.recipes.bulkAdd(fakeRecipes);
         await database.tags.bulkAdd(fakeTags);
       }
-      // else {
-      //   await database.recipes.clear();
-      //   await database.recipes.bulkAdd(fakeRecipes);
-      //   await database.tags.clear();
-      //   await database.tags.bulkAdd(fakeTags);
-      // }
+      else {
+        await database.recipes.clear();
+        await database.recipes.bulkAdd(fakeRecipes);
+        await database.tags.clear();
+        await database.tags.bulkAdd(fakeTags);
+      }
     }
     fillFixturesInDatabase()
   }, [])

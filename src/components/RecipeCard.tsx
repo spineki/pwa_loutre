@@ -17,7 +17,7 @@ type RecipeCardProps = {
     id: number,
     isFavorite: boolean
     name: string,
-    picture: string,
+    picture?: string,
     time: Time,
 }
 
@@ -54,7 +54,7 @@ export function RecipeCard(props: RecipeCardProps) {
                     </Typography>
                 </CardContent>
                 <CardMedia
-                    image={picture}
+                    image={picture ?? "/fake_placeholder.jpg"}
                     style={{
                         objectFit: "contain",
                         width: "100%",

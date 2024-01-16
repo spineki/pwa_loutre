@@ -62,7 +62,7 @@ export function AllRecipes() {
                                             id={recipe.id!}
                                             isFavorite={recipe.isFavorite}
                                             name={recipe.name}
-                                            picture={recipe.pictures[0]}
+                                            picture={recipe.pictures.length > 0 ? URL.createObjectURL(recipe.pictures[0]) : undefined}
                                             time={recipe.time}
                                         />
                                     </Grid>
