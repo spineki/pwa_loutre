@@ -34,6 +34,9 @@ export function Changelogs() {
                         <Grid item xs={12}>
                             <List>
                                 <ListItem disablePadding>
+                                    <ListItemText primary="Quick access through search bar is now available." />
+                                </ListItem>
+                                <ListItem disablePadding>
                                     <ListItemText primary="Ingredients and steps can now be edited." />
                                 </ListItem>
                                 <ListItem disablePadding>
