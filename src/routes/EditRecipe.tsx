@@ -25,10 +25,11 @@ import TuneIcon from '@mui/icons-material/Tune';
 
 import IconButton from "@mui/material/IconButton";
 import { FormImageInputField } from "../components/FormImageInputField";
+import { FormIngredientField } from "../components/FormIngredientField";
 import { FormStepField } from "../components/FormStepField";
 import { FormTextField } from "../components/FormTextField";
 import { FormTimePicker } from "../components/FormTimePicker";
-import { Recipe, StepSection, getEmptyRecipe } from "../models/Recipe";
+import { IngredientSection, Recipe, StepSection, getEmptyRecipe } from "../models/Recipe";
 import { getRecipeById, insertRecipe, upsertRecipe } from "../models/controllers";
 import { getDetailsRecipeRoute } from "./routes";
 
@@ -64,6 +65,54 @@ export const editRecipeLoader: ActionFunction = async ({ params }) => {
 }
 
 
+// convertion helpers
+function convertStepsToStepSections(steps: Array<{ text: string, isSection: boolean }>): StepSection[] {
+    const stepSections: StepSection[] = [];
+
+    let currentSection: StepSection = { steps: [] };
+    for (const step of steps) {
+        if (step.isSection) {
+            // saving previous section
+            if (!(currentSection.title === undefined && currentSection.steps.length == 0)) {
+                stepSections.push(currentSection);
+            }
+            currentSection = { steps: [], title: step.text };
+        } else {
+            currentSection.steps.push(step.text);
+        }
+    }
+    // if ending by a section
+    if (!(currentSection.title === undefined && currentSection.steps.length == 0)) {
+        stepSections.push(currentSection);
+    }
+    return stepSections;
+}
+
+function convertIngredientsToIngredientSections(ingredients: Array<{ text: string, isSection: boolean }>): IngredientSection[] {
+    const ingredientSections: IngredientSection[] = [];
+
+    let currentSection: IngredientSection = { ingredients: [] };
+    for (const ingredient of ingredients) {
+        if (ingredient.isSection) {
+            // saving previous section
+            if (!(currentSection.title === undefined && currentSection.ingredients.length == 0)) {
+                ingredientSections.push(currentSection);
+            }
+            currentSection = { ingredients: [], title: ingredient.text };
+        } else {
+            currentSection.ingredients.push(ingredient.text);
+        }
+    }
+    // if ending by a section
+    if (!(currentSection.title === undefined && currentSection.ingredients.length == 0)) {
+        ingredientSections.push(currentSection);
+    }
+    return ingredientSections;
+}
+
+
+
+
 interface EditRecipeFormInput {
     isFavorite: boolean,
     comments: string,
@@ -76,6 +125,7 @@ interface EditRecipeFormInput {
         total: moment.Moment,
     },
     steps: Array<{ text: string, isSection: boolean }>
+    ingredients: Array<{ text: string, isSection: boolean }>
 }
 
 
@@ -84,7 +134,7 @@ export function EditRecipe() {
     const recipe = useLoaderData() as Recipe;
     const navigate = useNavigate();
 
-    const [currentTabIndex, setCurrentTabIndex] = useState(2);
+    const [currentTabIndex, setCurrentTabIndex] = useState(0);
 
     const actions = [
         { icon: <DriveFileRenameOutlineIcon />, name: t("Miscellaneous") },
@@ -106,46 +156,48 @@ export function EditRecipe() {
                 .map((section) => [
                     ...(section.title ? [{ text: section.title, isSection: true }] : []),
                     ...section.steps.map((text) => ({ text, isSection: false }))])
+                .flat(),
+            ingredients: recipe.ingredientSections
+                .map((section) => [
+                    ...(section.title ? [{ text: section.title, isSection: true }] : []),
+                    ...section.ingredients.map((text) => ({ text, isSection: false }))])
                 .flat()
-
         },
     });
 
     //  prepend, , swap, insert 
-    const { fields, append, remove, move } = useFieldArray({
+    const { fields: stepsFields, append: stepsAppend, remove: stepsRemove, move: stepsMove } = useFieldArray({
         control,
         name: "steps",
     });
 
-    const handleDrag: OnDragEndResponder = ({ source, destination }) => {
+    const { fields: ingredientsFields, append: ingredientsAppend, remove: ingredientsRemove, move: ingredientsMove } = useFieldArray({
+        control,
+        name: "ingredients",
+    });
+
+    const handleStepsDrag: OnDragEndResponder = ({ source, destination }) => {
         if (destination) {
-            move(source.index, destination.index);
+            stepsMove(source.index, destination.index);
         }
     };
 
-    const onSubmit = async (data: EditRecipeFormInput) => {
-        const stepSections: StepSection[] = [];
+    const handleIngredientsDrag: OnDragEndResponder = ({ source, destination }) => {
+        if (destination) {
+            ingredientsMove(source.index, destination.index);
+        }
+    };
 
-        let currentSection: StepSection = { steps: [] };
-        for (const step of data.steps) {
-            if (step.isSection) {
-                // saving previous section
-                if (!(currentSection.title === undefined && currentSection.steps.length == 0)) {
-                    stepSections.push(currentSection);
-                }
-                currentSection = { steps: [], title: step.text };
-            } else {
-                currentSection.steps.push(step.text);
-            }
-        }
-        // if ending by a section
-        if (!(currentSection.title === undefined && currentSection.steps.length == 0)) {
-            stepSections.push(currentSection);
-        }
+
+    const onSubmit = async (data: EditRecipeFormInput) => {
+
+        const stepSections = convertStepsToStepSections(data.steps);
+        const ingredientSections = convertIngredientsToIngredientSections(data.ingredients);
+
 
         const recipeToSave: Recipe = {
             comments: data.comments,
-            ingredientSections: [],
+            ingredientSections: ingredientSections,
             isFavorite: data.isFavorite,
             name: data.name,
             pictures: data.picture ? [data.picture] : [],
@@ -250,12 +302,45 @@ export function EditRecipe() {
 
                                 : currentTabIndex == 1 ?
                                     <>
+                                        <DragDropContext onDragEnd={handleIngredientsDrag}>
+                                            <Droppable droppableId="ingredients-items">
+                                                {(provided) => (
+                                                    <Box
+                                                        ref={provided.innerRef}
+                                                        {...provided.droppableProps}
+                                                        sx={{ display: "flex", flexDirection: "column", gap: 2 }}
+                                                    >
+                                                        {ingredientsFields.map((step, index) => (
+                                                            <FormIngredientField
+                                                                key={`test[${index}]`}
+                                                                id={step.id}
+                                                                index={index}
+                                                                control={control}
+                                                                watch={watch}
+                                                                remove={ingredientsRemove}
+                                                                minRows={2}
+                                                                textName={`ingredients.${index}.text`}
+                                                                isSectionName={`ingredients.${index}.isSection`}
+                                                            />
+                                                        ))}
+                                                        {provided.placeholder}
+                                                    </Box>
+                                                )}
+                                            </Droppable>
 
+                                        </DragDropContext>
+                                        <IconButton
+                                            sx={{ alignSelf: "center" }}
+                                            color="primary"
+                                            onClick={() => ingredientsAppend({ text: "", isSection: false })}
+                                        >
+                                            <AddIcon />
+                                        </IconButton>
                                     </>
 
                                     : currentTabIndex == 2 ?
                                         <>
-                                            <DragDropContext onDragEnd={handleDrag}>
+                                            <DragDropContext onDragEnd={handleStepsDrag}>
                                                 <Droppable droppableId="steps-items">
                                                     {(provided) => (
                                                         <Box
@@ -263,14 +348,14 @@ export function EditRecipe() {
                                                             {...provided.droppableProps}
                                                             sx={{ display: "flex", flexDirection: "column", gap: 2 }}
                                                         >
-                                                            {fields.map((step, index) => (
+                                                            {stepsFields.map((step, index) => (
                                                                 <FormStepField
                                                                     key={`test[${index}]`}
                                                                     id={step.id}
                                                                     index={index}
                                                                     control={control}
                                                                     watch={watch}
-                                                                    remove={remove}
+                                                                    remove={stepsRemove}
                                                                     minRows={2}
                                                                     textName={`steps.${index}.text`}
                                                                     isSectionName={`steps.${index}.isSection`}
@@ -285,7 +370,7 @@ export function EditRecipe() {
                                             <IconButton
                                                 sx={{ alignSelf: "center" }}
                                                 color="primary"
-                                                onClick={() => append({ text: "", isSection: false })}
+                                                onClick={() => stepsAppend({ text: "", isSection: false })}
                                             >
                                                 <AddIcon />
                                             </IconButton>

@@ -34,7 +34,10 @@ export function Changelogs() {
                         <Grid item xs={12}>
                             <List>
                                 <ListItem disablePadding>
-                                    <ListItemText primary="A single recipe can now be shared" />
+                                    <ListItemText primary="Ingredients and steps can now be edited." />
+                                </ListItem>
+                                <ListItem disablePadding>
+                                    <ListItemText primary="A single recipe can now be shared." />
                                 </ListItem>
                                 <ListItem disablePadding>
                                     <ListItemText primary="Steps and ingredients are now shown when clicking on a recipe card." />
