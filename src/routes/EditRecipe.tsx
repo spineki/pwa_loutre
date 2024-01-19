@@ -111,21 +111,20 @@ function convertIngredientsToIngredientSections(ingredients: Array<{ text: strin
 }
 
 
-
-
 interface EditRecipeFormInput {
-    isFavorite: boolean,
     comments: string,
+    isFavorite: boolean,
+    ingredients: Array<{ text: string, isSection: boolean }>
     name: string,
     portion: number,
-    picture?: Blob
+    picture?: Blob,
+    source: string,
+    steps: Array<{ text: string, isSection: boolean }>
     time: {
         preparation: moment.Moment,
         baking: moment.Moment,
         total: moment.Moment,
     },
-    steps: Array<{ text: string, isSection: boolean }>
-    ingredients: Array<{ text: string, isSection: boolean }>
 }
 
 
@@ -202,6 +201,7 @@ export function EditRecipe() {
             name: data.name,
             pictures: data.picture ? [data.picture] : [],
             portion: data.portion,
+            source: data.source,
             stepSections: stepSections,
             time: {
                 preparation: moment.duration(data.time.preparation.format("HH:mm")).asMinutes(),
@@ -242,6 +242,12 @@ export function EditRecipe() {
                                         control={control}
                                         name="name"
                                         label={t("RecipeName")}
+                                    />
+
+                                    <FormTextField
+                                        control={control}
+                                        name="source"
+                                        label={t("Source")}
                                     />
 
                                     <FormTextField

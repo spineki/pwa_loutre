@@ -12,6 +12,7 @@ export const fakeRecipes: Recipe[] = [
     pictures: [],
     portion: 1,
     stepSections: [],
+    source: "",
     time: {
       preparation: 1,
       baking: 2,
@@ -26,6 +27,7 @@ export const fakeRecipes: Recipe[] = [
     pictures: [],
     portion: 1,
     stepSections: [],
+    source: "",
     time: {
       preparation: 2,
       baking: 3,
@@ -49,6 +51,7 @@ export const fakeRecipes: Recipe[] = [
     name: "Cinnamon Spiced Apples",
     pictures: [],
     portion: 1,
+    source: "",
     stepSections: [
       {
         title: "section 1",
@@ -83,6 +86,7 @@ export const fakeRecipes: Recipe[] = [
     pictures: [],
     portion: 1,
     stepSections: [],
+    source: "",
     time: {
       preparation: 3,
       baking: 4,
@@ -97,6 +101,7 @@ export const fakeRecipes: Recipe[] = [
     pictures: [],
     portion: 1,
     stepSections: [],
+    source: "",
     time: {
       preparation: 4,
       baking: 5,
@@ -111,6 +116,7 @@ export const fakeRecipes: Recipe[] = [
     pictures: [],
     portion: 1,
     stepSections: [],
+    source: "",
     time: {
       preparation: 25,
       baking: 30,
@@ -125,6 +131,7 @@ export const fakeRecipes: Recipe[] = [
     pictures: [],
     portion: 1,
     stepSections: [],
+    source: "",
     time: {
       preparation: 40,
       baking: 35,
@@ -139,6 +146,7 @@ export const fakeRecipes: Recipe[] = [
     pictures: [],
     portion: 1,
     stepSections: [],
+    source: "",
     time: {
       preparation: 20,
       baking: 15,
@@ -153,6 +161,7 @@ export const fakeRecipes: Recipe[] = [
     pictures: [],
     portion: 1,
     stepSections: [],
+    source: "",
     time: {
       preparation: 30,
       baking: 45,
@@ -167,6 +176,7 @@ export const fakeRecipes: Recipe[] = [
     pictures: [],
     portion: 1,
     stepSections: [],
+    source: "",
     time: {
       preparation: 20,
       baking: 180,

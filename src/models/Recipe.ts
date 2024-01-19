@@ -20,9 +20,9 @@ export interface Recipe {
   name: string;
   isFavorite: boolean;
   ingredientSections: IngredientSection[];
-  // source: string;
   portion: number;
   pictures: Blob[];
+  source: string;
   stepSections: StepSection[];
   time: Time;
   // tags: string[];
@@ -39,6 +39,7 @@ export function getEmptyRecipe(): Recipe {
     ingredientSections: [],
     portion: 1,
     pictures: [],
+    source: "",
     stepSections: [],
     time: {
       preparation: 0,
