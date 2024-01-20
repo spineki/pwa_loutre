@@ -341,7 +341,7 @@ export function EditRecipe() {
                                                         // new value can be an object (selection of an option)
                                                         // or a string (freeSolo)
                                                         // we convert everything to object before updating state
-                                                        const newValueObjects = newValues.map((value) => typeof value === "string" ? ({ name: value }) : value);
+                                                        const newValueObjects = newValues.map((value) => typeof value === "string" ? ({ name: value.trim().replaceAll(" ", "-") }) : value);
                                                         tagsReplace(newValueObjects);
                                                     }}
 

@@ -112,7 +112,7 @@ export function DetailsRecipe() {
                     :
                     <></>
                 }
-                {currentTabIndex == 1 ? <RecipeSteps stepSections={recipe.stepSections} /> : <></>}
+                {currentTabIndex == 1 ? <RecipeSteps stepSections={recipe.stepSections} tagIds={recipe.tagIds} /> : <></>}
                 {currentTabIndex == 2 ? <RecipeComments comments={recipe.comments} /> : <></>}
             </SwipeableViews>
 
