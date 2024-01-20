@@ -11,7 +11,7 @@ import Paper from "@mui/material/Paper";
 import { TagChip } from "../components/TagChip";
 import { DrawerContext } from "../contexts/DrawerContext";
 import { Tag } from "../models/Tag";
-import { database } from "../models/database";
+import { getAllTags } from "../models/controllers";
 import { RouteTagsName } from "../routes/routes";
 import { groupBy } from "../utils/dataStructures";
 
@@ -25,8 +25,7 @@ export function Tags() {
 
     const groupedTags = useLiveQuery(
         async () => {
-            const tags = await database.tags.toArray();
-
+            const tags = await getAllTags();
 
             const groupedTags = groupBy(tags, (tag: Tag) => tag.name.charAt(0));
             const groupedTagEntries: Array<[string, Tag[]]> = [];

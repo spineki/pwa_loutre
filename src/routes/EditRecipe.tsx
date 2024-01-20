@@ -1,4 +1,5 @@
 import { DragDropContext, Droppable, OnDragEndResponder } from "@hello-pangea/dnd";
+import { useLiveQuery } from "dexie-react-hooks";
 import moment from "moment";
 import { useState } from "react";
 
@@ -6,12 +7,15 @@ import { Controller, useFieldArray, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { ActionFunction, useLoaderData, useNavigate } from "react-router-dom";
 
+import Autocomplete from "@mui/material/Autocomplete";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
+import IconButton from "@mui/material/IconButton";
 import Paper from "@mui/material/Paper";
 import SpeedDial from "@mui/material/SpeedDial";
 import SpeedDialAction from "@mui/material/SpeedDialAction";
 import SpeedDialIcon from "@mui/material/SpeedDialIcon";
+import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 
 import AddIcon from '@mui/icons-material/Add';
@@ -23,14 +27,14 @@ import SaveIcon from "@mui/icons-material/Save";
 import ShortTextIcon from '@mui/icons-material/ShortText';
 import TuneIcon from '@mui/icons-material/Tune';
 
-import IconButton from "@mui/material/IconButton";
 import { FormImageInputField } from "../components/FormImageInputField";
 import { FormIngredientField } from "../components/FormIngredientField";
 import { FormStepField } from "../components/FormStepField";
 import { FormTextField } from "../components/FormTextField";
 import { FormTimePicker } from "../components/FormTimePicker";
 import { IngredientSection, Recipe, StepSection, getEmptyRecipe } from "../models/Recipe";
-import { getRecipeById, insertRecipe, upsertRecipe } from "../models/controllers";
+import { Tag } from "../models/Tag";
+import { findTagByName, getAllTags, getRecipeById, getTagsByIds, insertRecipe, upsertRecipe, upsertTag } from "../models/controllers";
 import { getDetailsRecipeRoute } from "./routes";
 
 /**
@@ -120,6 +124,7 @@ interface EditRecipeFormInput {
     picture?: Blob,
     source: string,
     steps: Array<{ text: string, isSection: boolean }>
+    tags: Array<{ name: string }>,
     time: {
         preparation: moment.Moment,
         baking: moment.Moment,
@@ -133,6 +138,10 @@ export function EditRecipe() {
     const recipe = useLoaderData() as Recipe;
     const navigate = useNavigate();
 
+    const tags = useLiveQuery(async () => {
+        return await getAllTags();
+    }, []);
+
     const [currentTabIndex, setCurrentTabIndex] = useState(0);
 
     const actions = [
@@ -143,25 +152,32 @@ export function EditRecipe() {
     ];
 
     const { control, handleSubmit, setValue, watch } = useForm<EditRecipeFormInput>({
-        defaultValues: {
-            ...recipe,
-            time: {
-                preparation: moment.utc(recipe.time.preparation, "minute"),
-                baking: moment.utc(recipe.time.baking, "minute"),
-                total: moment.utc(recipe.time.total, "minute"),
-            },
-            picture: undefined,
+        defaultValues: async () => ({
+            comments: recipe.comments,
+            ingredients: recipe.ingredientSections
+                .map((section) => [
+                    ...(section.title ? [{ text: section.title, isSection: true }] : []),
+                    ...section.ingredients.map((text) => ({ text, isSection: false }))])
+                .flat(),
+            isFavorite: recipe.isFavorite,
+            name: recipe.name,
+            picture: recipe.pictures.at(0),
+            portion: recipe.portion,
+            source: recipe.source,
             steps: recipe.stepSections
                 .map((section) => [
                     ...(section.title ? [{ text: section.title, isSection: true }] : []),
                     ...section.steps.map((text) => ({ text, isSection: false }))])
                 .flat(),
-            ingredients: recipe.ingredientSections
-                .map((section) => [
-                    ...(section.title ? [{ text: section.title, isSection: true }] : []),
-                    ...section.ingredients.map((text) => ({ text, isSection: false }))])
-                .flat()
-        },
+            tags: (await getTagsByIds(recipe.tagIds))
+                .filter((tag): tag is Tag => tag !== undefined)
+                .map(tag => ({ name: tag.name })),
+            time: {
+                preparation: moment.utc(recipe.time.preparation, "minute"),
+                baking: moment.utc(recipe.time.baking, "minute"),
+                total: moment.utc(recipe.time.total, "minute"),
+            },
+        })
     });
 
     //  prepend, , swap, insert 
@@ -173,6 +189,12 @@ export function EditRecipe() {
     const { fields: ingredientsFields, append: ingredientsAppend, remove: ingredientsRemove, move: ingredientsMove } = useFieldArray({
         control,
         name: "ingredients",
+    });
+
+    // ,  remove: tagsRemove, move: tagsMove 
+    const { fields: tagsFields, replace: tagsReplace } = useFieldArray({
+        control,
+        name: "tags",
     });
 
     const handleStepsDrag: OnDragEndResponder = ({ source, destination }) => {
@@ -193,6 +215,22 @@ export function EditRecipe() {
         const stepSections = convertStepsToStepSections(data.steps);
         const ingredientSections = convertIngredientsToIngredientSections(data.ingredients);
 
+        // in order to save a recipe, we need to create the associated tags beforehand
+        const tagIds = await Promise.all(
+            data.tags.map(async (tag) => {
+                const existingTag = await findTagByName(tag.name);
+
+                let tagId: number;
+                if (existingTag == undefined) {
+                    const newTag: Tag = { name: tag.name, isFavorite: false };
+                    tagId = await upsertTag(newTag)
+                } else {
+                    tagId = existingTag.id!;
+                }
+
+                return tagId;
+            })
+        );
 
         const recipeToSave: Recipe = {
             comments: data.comments,
@@ -208,6 +246,7 @@ export function EditRecipe() {
                 baking: moment.duration(data.time.baking.format("HH:mm")).asMinutes(),
                 total: moment.duration(data.time.total.format("HH:mm")).asMinutes(),
             },
+            tagIds
         };
 
         let id = recipe.id;
@@ -280,6 +319,37 @@ export function EditRecipe() {
                                             />
                                         </Grid>
                                     </Grid>
+
+
+                                    <Autocomplete
+                                        sx={{
+                                            mr: 2, width: "100%"
+                                        }}
+                                        size="small"
+                                        multiple
+                                        freeSolo
+                                        disablePortal
+                                        filterSelectedOptions
+                                        value={tagsFields.map((field, index) => ({ name: watch(`tags.${index}`).name }))}
+                                        options={tags?.map(tag => ({ name: tag.name })) ?? []}
+                                        getOptionLabel={option => (option as { name: string }).name} // strange behaviour with typescript
+                                        onChange={(event, newValues) => {
+                                            // new value can be an object (selection of an option)
+                                            // or a string (freeSolo)
+                                            // we convert everything to object before updating state
+                                            const newValueObjects = newValues.map((value) => typeof value === "string" ? ({ name: value }) : value);
+                                            tagsReplace(newValueObjects);
+                                        }}
+
+
+                                        renderInput={(params) => (
+                                            <TextField
+                                                {...params}
+                                                placeholder={`${t("Tags")}...`}
+                                                fullWidth
+                                            />
+                                        )}
+                                    />
 
                                     <FormImageInputField
                                         control={control}

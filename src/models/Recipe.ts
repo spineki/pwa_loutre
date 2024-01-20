@@ -24,8 +24,8 @@ export interface Recipe {
   pictures: Blob[];
   source: string;
   stepSections: StepSection[];
+  tagIds: number[]; // foreignkey for tags
   time: Time;
-  // tags: string[];
 }
 
 /**
@@ -41,6 +41,7 @@ export function getEmptyRecipe(): Recipe {
     pictures: [],
     source: "",
     stepSections: [],
+    tagIds: [],
     time: {
       preparation: 0,
       baking: 0,

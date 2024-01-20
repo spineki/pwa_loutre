@@ -80,7 +80,7 @@ export function SearchBar() {
                             placeholder={`${t("Search")}...`}
                             fullWidth
                             InputProps={{
-                                // we need this, otherwise no opion will be displayed https://stackoverflow.com/questions/72854517/applying-inputadornment-to-mui-autocomplete-removes-the-options-list
+                                // we need this, otherwise no option will be displayed https://stackoverflow.com/questions/72854517/applying-inputadornment-to-mui-autocomplete-removes-the-options-list
                                 ...params.InputProps,
                                 startAdornment: (
                                     <InputAdornment position="start">
