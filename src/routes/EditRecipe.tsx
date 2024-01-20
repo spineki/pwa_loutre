@@ -35,7 +35,7 @@ import { FormTextField } from "../components/FormTextField";
 import { FormTimePicker } from "../components/FormTimePicker";
 import { IngredientSection, Recipe, StepSection, getEmptyRecipe } from "../models/Recipe";
 import { Tag } from "../models/Tag";
-import { findTagByName, getAllTags, getRecipeById, getTagsByIds, insertRecipe, upsertRecipe, upsertTag } from "../models/controllers";
+import { getAllTags, getRecipeById, getTagByName, getTagsByIds, insertRecipe, upsertRecipe, upsertTag } from "../models/controllers";
 import { getDetailsRecipeRoute } from "./routes";
 
 /**
@@ -219,7 +219,7 @@ export function EditRecipe() {
         // in order to save a recipe, we need to create the associated tags beforehand
         const tagIds = await Promise.all(
             data.tags.map(async (tag) => {
-                const existingTag = await findTagByName(tag.name);
+                const existingTag = await getTagByName(tag.name);
 
                 let tagId: number;
                 if (existingTag == undefined) {

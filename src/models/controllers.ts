@@ -12,7 +12,7 @@ export async function getTagsByIds(ids: number[]) {
   return await database.tags.bulkGet(ids);
 }
 
-export async function findTagByName(name: string) {
+export async function getTagByName(name: string) {
   return await database.tags.get({ name });
 }
 

@@ -23,15 +23,39 @@ export function SearchBar() {
             return [];
         }
 
-        if (currentSearch.startsWith("#")) {
-            console.log("tags");
-            alert(t("WIP"))
-            // const keyword = currentSearch.substring(1);
-            // const recipes = await database.recipes
-            //     .orderBy("name")
-            //     .filter(recipe =>  recipe.tags.includes(keyword))
-            //     .toArray();
-            return [];
+        if (currentSearch.startsWith("#") && currentSearch.length > 1) {
+            const tagSearch = currentSearch.substring(1).replace(" ", "-");
+
+            const matchingTagIds =
+                (await database.tags
+                    .filter(tag => tag.name.includes(tagSearch))
+                    .toArray()
+                ).map(tag => tag.id!);
+
+
+            const recipeNames = (await database.recipes
+                .orderBy("name")
+                .filter(recipe => {
+                    let matchFound = false;
+                    for (const matchingTagId of matchingTagIds) {
+                        matchFound = false;
+                        for (const recipeTagId of recipe.tagIds) {
+                            if (recipeTagId === matchingTagId) {
+                                matchFound = true;
+                                break;
+                            }
+                        }
+                        if (matchFound) {
+                            break;
+                        }
+                    }
+                    return matchFound;
+                })
+                .limit(20)
+                .toArray()
+            ).map((recipe) => ({ id: recipe.id, name: recipe.name }));
+            return recipeNames;
+
         } else {
             const recipeNames = (
                 await database.recipes
@@ -40,6 +64,7 @@ export function SearchBar() {
                     .limit(20)
                     .toArray()
             ).map((recipe) => ({ id: recipe.id, name: recipe.name }));
+
             return recipeNames;
         }
     }, [currentSearch]);
@@ -55,7 +80,8 @@ export function SearchBar() {
                     size="small"
                     disablePortal
                     includeInputInList
-                    filterSelectedOptions
+                    filterSelectedOptions={false}
+                    filterOptions={(option) => option}
                     options={matches ?? []}
                     getOptionLabel={option => option.name}
                     noOptionsText={currentSearch === "" ? t("HelpSearch") : t("NoResult")}
@@ -68,7 +94,6 @@ export function SearchBar() {
                     onInputChange={(event, newValue) => {
                         setCurrentSearch(newValue.toLocaleLowerCase().trim());
                     }}
-
                     renderOption={(props, item) => (
                         <li {...props} key={item.id}>
                             <ListItemText>{item.name}</ListItemText>
