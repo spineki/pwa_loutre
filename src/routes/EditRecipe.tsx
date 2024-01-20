@@ -9,6 +9,7 @@ import { ActionFunction, useLoaderData, useNavigate } from "react-router-dom";
 
 import Autocomplete from "@mui/material/Autocomplete";
 import Box from "@mui/material/Box";
+import CircularProgress from "@mui/material/CircularProgress";
 import Grid from "@mui/material/Grid";
 import IconButton from "@mui/material/IconButton";
 import Paper from "@mui/material/Paper";
@@ -151,7 +152,7 @@ export function EditRecipe() {
         { icon: <ShortTextIcon />, name: t("Comments") },
     ];
 
-    const { control, handleSubmit, setValue, watch } = useForm<EditRecipeFormInput>({
+    const { formState, control, handleSubmit, setValue, watch } = useForm<EditRecipeFormInput>({
         defaultValues: async () => ({
             comments: recipe.comments,
             ingredients: recipe.ingredientSections
@@ -261,242 +262,247 @@ export function EditRecipe() {
     };
 
     return (
-        <Paper sx={{ p: 2, flex: 1, display: "flex", flexDirection: "column" }}>
-            <Grid container sx={{ display: "flex", flex: 1 }}>
-                <Grid item xs={0} md={4} />
-                <Grid item xs={12} md={4} sx={{ display: "flex", flex: 1 }}>
-                    <Box
-                        component="form"
-                        noValidate
-                        autoComplete="off"
-                        style={{ display: "flex", flexDirection: "column", flex: 1, gap: 16 }}
-                    >
-                        <Typography variant="h5">
-                            {recipe.id == null ? t("NewRecipe") : t("Edit")}
-                        </Typography>
-                        {
-                            currentTabIndex == 0 ?
-                                <>
-                                    <FormTextField
-                                        control={control}
-                                        name="name"
-                                        label={t("RecipeName")}
-                                    />
+        <Paper sx={{ p: 2, flex: 1, display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
+            {
+                formState.isLoading ? <CircularProgress /> :
+                    <>
+                        <Grid container sx={{ display: "flex", flex: 1 }}>
+                            <Grid item xs={0} md={4} />
+                            <Grid item xs={12} md={4} sx={{ display: "flex", flex: 1 }}>
+                                <Box
+                                    component="form"
+                                    noValidate
+                                    autoComplete="off"
+                                    style={{ display: "flex", flexDirection: "column", flex: 1, gap: 16 }}
+                                >
+                                    <Typography variant="h5">
+                                        {recipe.id == null ? t("NewRecipe") : t("Edit")}
+                                    </Typography>
+                                    {
+                                        currentTabIndex == 0 ?
+                                            <>
+                                                <FormTextField
+                                                    control={control}
+                                                    name="name"
+                                                    label={t("RecipeName")}
+                                                />
 
-                                    <FormTextField
-                                        control={control}
-                                        name="source"
-                                        label={t("Source")}
-                                    />
+                                                <FormTextField
+                                                    control={control}
+                                                    name="source"
+                                                    label={t("Source")}
+                                                />
 
-                                    <FormTextField
-                                        control={control}
-                                        name="portion"
-                                        label={t("Portions")}
-                                        type="number"
-                                    />
+                                                <FormTextField
+                                                    control={control}
+                                                    name="portion"
+                                                    label={t("Portions")}
+                                                    type="number"
+                                                />
 
-                                    <Grid container spacing={1}>
-                                        <Grid item xs={4} >
-                                            <FormTimePicker
-                                                control={control}
-                                                name="time.preparation"
-                                                label={t("Preparation")}
-                                            />
-                                        </Grid>
-                                        <Grid item xs={4}>
-                                            <FormTimePicker
-                                                control={control}
-                                                name="time.baking"
-                                                label={t("Baking")}
-                                            />
-                                        </Grid>
-                                        <Grid item xs={4}>
-                                            <FormTimePicker
-                                                control={control}
-                                                name="time.total"
-                                                label={t("Total")}
-                                            />
-                                        </Grid>
-                                    </Grid>
-
-
-                                    <Autocomplete
-                                        sx={{
-                                            mr: 2, width: "100%"
-                                        }}
-                                        size="small"
-                                        multiple
-                                        freeSolo
-                                        disablePortal
-                                        filterSelectedOptions
-                                        value={tagsFields.map((field, index) => ({ name: watch(`tags.${index}`).name }))}
-                                        options={tags?.map(tag => ({ name: tag.name })) ?? []}
-                                        getOptionLabel={option => (option as { name: string }).name} // strange behaviour with typescript
-                                        onChange={(event, newValues) => {
-                                            // new value can be an object (selection of an option)
-                                            // or a string (freeSolo)
-                                            // we convert everything to object before updating state
-                                            const newValueObjects = newValues.map((value) => typeof value === "string" ? ({ name: value }) : value);
-                                            tagsReplace(newValueObjects);
-                                        }}
+                                                <Grid container spacing={1}>
+                                                    <Grid item xs={4} >
+                                                        <FormTimePicker
+                                                            control={control}
+                                                            name="time.preparation"
+                                                            label={t("Preparation")}
+                                                        />
+                                                    </Grid>
+                                                    <Grid item xs={4}>
+                                                        <FormTimePicker
+                                                            control={control}
+                                                            name="time.baking"
+                                                            label={t("Baking")}
+                                                        />
+                                                    </Grid>
+                                                    <Grid item xs={4}>
+                                                        <FormTimePicker
+                                                            control={control}
+                                                            name="time.total"
+                                                            label={t("Total")}
+                                                        />
+                                                    </Grid>
+                                                </Grid>
 
 
-                                        renderInput={(params) => (
-                                            <TextField
-                                                {...params}
-                                                placeholder={`${t("Tags")}...`}
-                                                fullWidth
-                                            />
-                                        )}
-                                    />
+                                                <Autocomplete
+                                                    sx={{
+                                                        mr: 2, width: "100%"
+                                                    }}
+                                                    size="small"
+                                                    multiple
+                                                    freeSolo
+                                                    disablePortal
+                                                    filterSelectedOptions
+                                                    value={tagsFields.map((field, index) => ({ name: watch(`tags.${index}`).name }))}
+                                                    options={tags?.map(tag => ({ name: tag.name })) ?? []}
+                                                    getOptionLabel={option => (option as { name: string }).name} // strange behaviour with typescript
+                                                    onChange={(event, newValues) => {
+                                                        // new value can be an object (selection of an option)
+                                                        // or a string (freeSolo)
+                                                        // we convert everything to object before updating state
+                                                        const newValueObjects = newValues.map((value) => typeof value === "string" ? ({ name: value }) : value);
+                                                        tagsReplace(newValueObjects);
+                                                    }}
 
-                                    <FormImageInputField
-                                        control={control}
-                                        name="picture"
-                                        label={t("PickImage")}
-                                        setValue={setValue}
-                                    />
 
-                                    <Controller
-                                        name={"picture"}
-                                        control={control}
-                                        render={({
-                                            field: { value },
-                                        }) => (
-                                            value
-                                                ?
-                                                <Box
-                                                    sx={{ width: "100%" }}
-                                                    component="img"
-                                                    src={URL.createObjectURL(value)} />
-                                                : <></>
-                                        )}
-                                    />
-
-                                </>
-
-                                : currentTabIndex == 1 ?
-                                    <>
-                                        <DragDropContext onDragEnd={handleIngredientsDrag}>
-                                            <Droppable droppableId="ingredients-items">
-                                                {(provided) => (
-                                                    <Box
-                                                        ref={provided.innerRef}
-                                                        {...provided.droppableProps}
-                                                        sx={{ display: "flex", flexDirection: "column", gap: 2 }}
-                                                    >
-                                                        {ingredientsFields.map((step, index) => (
-                                                            <FormIngredientField
-                                                                key={`test[${index}]`}
-                                                                id={step.id}
-                                                                index={index}
-                                                                control={control}
-                                                                watch={watch}
-                                                                remove={ingredientsRemove}
-                                                                minRows={2}
-                                                                textName={`ingredients.${index}.text`}
-                                                                isSectionName={`ingredients.${index}.isSection`}
-                                                            />
-                                                        ))}
-                                                        {provided.placeholder}
-                                                    </Box>
-                                                )}
-                                            </Droppable>
-
-                                        </DragDropContext>
-                                        <IconButton
-                                            sx={{ alignSelf: "center" }}
-                                            color="primary"
-                                            onClick={() => ingredientsAppend({ text: "", isSection: false })}
-                                        >
-                                            <AddIcon />
-                                        </IconButton>
-                                    </>
-
-                                    : currentTabIndex == 2 ?
-                                        <>
-                                            <DragDropContext onDragEnd={handleStepsDrag}>
-                                                <Droppable droppableId="steps-items">
-                                                    {(provided) => (
-                                                        <Box
-                                                            ref={provided.innerRef}
-                                                            {...provided.droppableProps}
-                                                            sx={{ display: "flex", flexDirection: "column", gap: 2 }}
-                                                        >
-                                                            {stepsFields.map((step, index) => (
-                                                                <FormStepField
-                                                                    key={`test[${index}]`}
-                                                                    id={step.id}
-                                                                    index={index}
-                                                                    control={control}
-                                                                    watch={watch}
-                                                                    remove={stepsRemove}
-                                                                    minRows={2}
-                                                                    textName={`steps.${index}.text`}
-                                                                    isSectionName={`steps.${index}.isSection`}
-                                                                />
-                                                            ))}
-                                                            {provided.placeholder}
-                                                        </Box>
+                                                    renderInput={(params) => (
+                                                        <TextField
+                                                            {...params}
+                                                            placeholder={`${t("Tags")}...`}
+                                                            fullWidth
+                                                        />
                                                     )}
-                                                </Droppable>
+                                                />
 
-                                            </DragDropContext>
-                                            <IconButton
-                                                sx={{ alignSelf: "center" }}
-                                                color="primary"
-                                                onClick={() => stepsAppend({ text: "", isSection: false })}
-                                            >
-                                                <AddIcon />
-                                            </IconButton>
-                                        </>
-                                        :
-                                        <>
-                                            <FormTextField
-                                                control={control}
-                                                name="comments"
-                                                label={t("Comments")}
-                                                multiline
-                                                minRows={10}
-                                            />
-                                        </>
-                        }
+                                                <FormImageInputField
+                                                    control={control}
+                                                    name="picture"
+                                                    label={t("PickImage")}
+                                                    setValue={setValue}
+                                                />
 
-                    </Box>
-                </Grid>
-                <Grid item xs={0} md={4} />
-            </Grid>
+                                                <Controller
+                                                    name={"picture"}
+                                                    control={control}
+                                                    render={({
+                                                        field: { value },
+                                                    }) => (
+                                                        value
+                                                            ?
+                                                            <Box
+                                                                sx={{ width: "100%" }}
+                                                                component="img"
+                                                                src={URL.createObjectURL(value)} />
+                                                            : <></>
+                                                    )}
+                                                />
 
-            <SpeedDial
-                ariaLabel="SpeedDial tooltip example"
-                sx={{ position: "fixed", bottom: 16, right: 16 }}
-                icon={<SpeedDialIcon openIcon={<CloseIcon />} icon={<TuneIcon />} />}
-            >
-                {actions.map((action, index) => (
-                    <SpeedDialAction
-                        key={action.name}
-                        icon={action.icon}
-                        tooltipTitle={action.name}
-                        tooltipOpen
-                        color="success"
-                        FabProps={{
-                            sx: {
-                                border: index == currentTabIndex ? "solid 1px" : "inherit",
-                                borderColor: index == currentTabIndex ? "secondary.main" : "inherit",
-                            }
-                        }}
-                        onClick={() => setCurrentTabIndex(index)}
-                    />
-                ))}
-                <SpeedDialAction
-                    key={t("Save")}
-                    icon={<SaveIcon />}
-                    tooltipTitle={t("Save")}
-                    tooltipOpen
-                    onClick={handleSubmit(onSubmit)}
-                />
-            </SpeedDial>
+                                            </>
+
+                                            : currentTabIndex == 1 ?
+                                                <>
+                                                    <DragDropContext onDragEnd={handleIngredientsDrag}>
+                                                        <Droppable droppableId="ingredients-items">
+                                                            {(provided) => (
+                                                                <Box
+                                                                    ref={provided.innerRef}
+                                                                    {...provided.droppableProps}
+                                                                    sx={{ display: "flex", flexDirection: "column", gap: 2 }}
+                                                                >
+                                                                    {ingredientsFields.map((step, index) => (
+                                                                        <FormIngredientField
+                                                                            key={`test[${index}]`}
+                                                                            id={step.id}
+                                                                            index={index}
+                                                                            control={control}
+                                                                            watch={watch}
+                                                                            remove={ingredientsRemove}
+                                                                            minRows={2}
+                                                                            textName={`ingredients.${index}.text`}
+                                                                            isSectionName={`ingredients.${index}.isSection`}
+                                                                        />
+                                                                    ))}
+                                                                    {provided.placeholder}
+                                                                </Box>
+                                                            )}
+                                                        </Droppable>
+
+                                                    </DragDropContext>
+                                                    <IconButton
+                                                        sx={{ alignSelf: "center" }}
+                                                        color="primary"
+                                                        onClick={() => ingredientsAppend({ text: "", isSection: false })}
+                                                    >
+                                                        <AddIcon />
+                                                    </IconButton>
+                                                </>
+
+                                                : currentTabIndex == 2 ?
+                                                    <>
+                                                        <DragDropContext onDragEnd={handleStepsDrag}>
+                                                            <Droppable droppableId="steps-items">
+                                                                {(provided) => (
+                                                                    <Box
+                                                                        ref={provided.innerRef}
+                                                                        {...provided.droppableProps}
+                                                                        sx={{ display: "flex", flexDirection: "column", gap: 2 }}
+                                                                    >
+                                                                        {stepsFields.map((step, index) => (
+                                                                            <FormStepField
+                                                                                key={`test[${index}]`}
+                                                                                id={step.id}
+                                                                                index={index}
+                                                                                control={control}
+                                                                                watch={watch}
+                                                                                remove={stepsRemove}
+                                                                                minRows={2}
+                                                                                textName={`steps.${index}.text`}
+                                                                                isSectionName={`steps.${index}.isSection`}
+                                                                            />
+                                                                        ))}
+                                                                        {provided.placeholder}
+                                                                    </Box>
+                                                                )}
+                                                            </Droppable>
+
+                                                        </DragDropContext>
+                                                        <IconButton
+                                                            sx={{ alignSelf: "center" }}
+                                                            color="primary"
+                                                            onClick={() => stepsAppend({ text: "", isSection: false })}
+                                                        >
+                                                            <AddIcon />
+                                                        </IconButton>
+                                                    </>
+                                                    :
+                                                    <>
+                                                        <FormTextField
+                                                            control={control}
+                                                            name="comments"
+                                                            label={t("Comments")}
+                                                            multiline
+                                                            minRows={10}
+                                                        />
+                                                    </>
+                                    }
+
+                                </Box>
+                            </Grid>
+                            <Grid item xs={0} md={4} />
+                        </Grid>
+
+                        <SpeedDial
+                            ariaLabel="SpeedDial tooltip example"
+                            sx={{ position: "fixed", bottom: 16, right: 16 }}
+                            icon={<SpeedDialIcon openIcon={<CloseIcon />} icon={<TuneIcon />} />}
+                        >
+                            {actions.map((action, index) => (
+                                <SpeedDialAction
+                                    key={action.name}
+                                    icon={action.icon}
+                                    tooltipTitle={action.name}
+                                    tooltipOpen
+                                    color="success"
+                                    FabProps={{
+                                        sx: {
+                                            border: index == currentTabIndex ? "solid 1px" : "inherit",
+                                            borderColor: index == currentTabIndex ? "secondary.main" : "inherit",
+                                        }
+                                    }}
+                                    onClick={() => setCurrentTabIndex(index)}
+                                />
+                            ))}
+                            <SpeedDialAction
+                                key={t("Save")}
+                                icon={<SaveIcon />}
+                                tooltipTitle={t("Save")}
+                                tooltipOpen
+                                onClick={handleSubmit(onSubmit)}
+                            />
+                        </SpeedDial>
+                    </>
+            }
 
         </Paper>
     )

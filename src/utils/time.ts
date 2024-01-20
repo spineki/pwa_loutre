@@ -1,6 +1,15 @@
 import { pad } from "./numbers";
 
 /**
+ * Sleep for a provided amount of time current thread
+ * @param ms
+ * @returns
+ */
+export function sleep(ms: number) {
+  return new Promise((r) => setTimeout(r, ms));
+}
+
+/**
  * turns minutes into 3h40 format
  * @param minutes - minutes to format
  * @returns hours-minutes formated time
