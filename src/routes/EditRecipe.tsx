@@ -173,9 +173,9 @@ export function EditRecipe() {
                 .filter((tag): tag is Tag => tag !== undefined)
                 .map(tag => ({ name: tag.name })),
             time: {
-                preparation: moment.utc(recipe.time.preparation, "minute"),
-                baking: moment.utc(recipe.time.baking, "minute"),
-                total: moment.utc(recipe.time.total, "minute"),
+                preparation: moment.utc(`${(Math.floor(recipe.time.preparation / 60))}:${(recipe.time.preparation % 60)}`, "HH:mm"),
+                baking: moment.utc(`${(Math.floor(recipe.time.baking / 60))}:${(recipe.time.baking % 60)}`, "HH:mm"),
+                total: moment.utc(`${(Math.floor(recipe.time.total / 60))}:${(recipe.time.total % 60)}`, "HH:mm"),
             },
         })
     });
