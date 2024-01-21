@@ -1,9 +1,14 @@
-import Chip from "@mui/material/Chip";
-import FavoriteIcon from '@mui/icons-material/Favorite';
-import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import { useCallback } from "react";
-import { partialUpdateTag } from "../models/controllers";
+import { createSearchParams, useNavigate } from "react-router-dom";
+
+import Chip from "@mui/material/Chip";
+
+import FavoriteIcon from "@mui/icons-material/Favorite";
+import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
+
 import { Tag } from "../models/Tag";
+import { partialUpdateTag } from "../models/controllers";
+import { RouteAllRecipesName } from "../routes/routes";
 
 interface TagChipProps {
     tag: Tag
@@ -12,6 +17,7 @@ interface TagChipProps {
 export function TagChip(props: TagChipProps) {
     const { id, isFavorite, name } = props.tag;
 
+    const navigate = useNavigate();
 
     const handleLike = useCallback(async () => {
         await partialUpdateTag(id!, { isFavorite: true });
@@ -26,12 +32,28 @@ export function TagChip(props: TagChipProps) {
         <Chip
             icon={
                 isFavorite ?
-                    <FavoriteIcon style={{ color: "red" }} onClick={() => handleUnlike()} />
+                    <FavoriteIcon style={{ color: "red" }} onClick={(event) => {
+                        event.stopPropagation();
+                        handleUnlike();
+                    }} />
                     :
-                    <FavoriteBorderIcon onClick={() => handleLike()} />
+                    <FavoriteBorderIcon onClick={(event) => {
+                        event.stopPropagation();
+                        handleLike();
+                    }} />
             }
+
+            onClick={() => {
+                navigate(
+                    {
+                        pathname: RouteAllRecipesName,
+                        search: createSearchParams({
+                            "tag-name": name
+                        }).toString()
+                    }
+                )
+            }}
             label={name}
             variant={"filled"}
         />);
 }
-

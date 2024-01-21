@@ -1,7 +1,7 @@
 import { useLiveQuery } from "dexie-react-hooks";
 import { useContext, useEffect } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 
 import Box from "@mui/material/Box";
 import CircularProgress from "@mui/material/CircularProgress";
@@ -13,6 +13,7 @@ import AddIcon from '@mui/icons-material/Add';
 
 import { RecipeCard } from "../components/RecipeCard";
 import { DrawerContext } from "../contexts/DrawerContext";
+import { getAllRecipes, getTagByName } from "../models/controllers";
 import { database } from "../models/database";
 import { RouteAllRecipesName, RouteCreateRecipeName } from "../routes/routes";
 
@@ -23,16 +24,74 @@ export function AllRecipes() {
         setCurrentRoute(RouteAllRecipesName);
     }, [setCurrentRoute])
 
+    // using url as a source to know which filters to apply to grid
+    const [searchParams,] = useSearchParams();
+
     // todo: implement proper pagination to only load a subset into memory
     const recipes = useLiveQuery(
         async () => {
-            const recipes = await database.recipes
-                .orderBy("name")
-                .toArray();
-            return recipes;
+
+            // if we are currently filtering recipes by name, only showing those containing a name that contains this string
+            if (searchParams.has("recipe-name")) {
+                const searchedRecipeName = searchParams.get("recipe-name")!.trim().toLowerCase();
+                // if search is empty, returning all recipes
+                // todo! add pagination to this
+                if (searchedRecipeName == "") {
+                    return await getAllRecipes();
+                }
+
+                const recipes = await database.recipes
+                    .orderBy("name")
+                    .filter(recipe => recipe.name.toLowerCase().includes(searchedRecipeName))
+                    .toArray();
+                return recipes;
+            }
+
+            if (searchParams.has("tag-name")) {
+                const searchedTagName = searchParams.get("tag-name")!.trim().toLowerCase();
+                // if search is empty, returning all recipes
+                // todo! add pagination to this
+                if (searchedTagName == "") {
+                    return await getAllRecipes();
+                }
+
+                const searchedTagId =
+                    (await getTagByName(searchedTagName)
+                    )?.id;
+
+                if (searchedTagId == null) {
+                    return await getAllRecipes();
+                }
+
+                const recipes = (
+                    await database.recipes
+                        .orderBy("name")
+                        .filter(recipe => {
+                            let matchFound = false;
+
+                            for (const recipeTagId of recipe.tagIds) {
+                                if (recipeTagId === searchedTagId) {
+                                    matchFound = true;
+                                    break;
+                                }
+                            }
+
+                            return matchFound;
+                        })
+                        .toArray()
+                );
+
+                return recipes;
+            }
+
+            // if we are currently filtering recipes by tag, only showing those that contains exactly this tag
+
+            // if no filter is given, defaulting to returning all recipes
+            // todo! add pagination to this
+            return await getAllRecipes();
         },
         // specify vars that affect query:
-        [] // dependencies
+        [searchParams] // dependencies
     );
 
     function fetchData() {

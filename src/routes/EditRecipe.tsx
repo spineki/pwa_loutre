@@ -2,7 +2,6 @@ import { DragDropContext, Droppable, OnDragEndResponder } from "@hello-pangea/dn
 import { useLiveQuery } from "dexie-react-hooks";
 import moment from "moment";
 import { useState } from "react";
-
 import { Controller, useFieldArray, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { ActionFunction, useLoaderData, useNavigate } from "react-router-dom";
@@ -34,7 +33,7 @@ import { FormStepField } from "../components/FormStepField";
 import { FormTextField } from "../components/FormTextField";
 import { FormTimePicker } from "../components/FormTimePicker";
 import { IngredientSection, Recipe, StepSection, getEmptyRecipe } from "../models/Recipe";
-import { Tag } from "../models/Tag";
+import { Tag, sanitizeTagName } from "../models/Tag";
 import { getAllTags, getRecipeById, getTagByName, getTagsByIds, insertRecipe, upsertRecipe, upsertTag } from "../models/controllers";
 import { getDetailsRecipeRoute } from "./routes";
 
@@ -341,7 +340,7 @@ export function EditRecipe() {
                                                         // new value can be an object (selection of an option)
                                                         // or a string (freeSolo)
                                                         // we convert everything to object before updating state
-                                                        const newValueObjects = newValues.map((value) => typeof value === "string" ? ({ name: value.trim().replaceAll(" ", "-") }) : value);
+                                                        const newValueObjects = newValues.map((value) => typeof value === "string" ? ({ name: sanitizeTagName(value) }) : value);
                                                         tagsReplace(newValueObjects);
                                                     }}
 

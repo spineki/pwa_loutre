@@ -39,7 +39,7 @@ export async function getRecipeById(id: number) {
 }
 
 export async function getAllRecipes() {
-  return await database.recipes.toArray();
+  return await database.recipes.orderBy("name").toArray();
 }
 
 export async function bulkUpsertRecipes(recipes: Recipe[]) {

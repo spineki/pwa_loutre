@@ -1,72 +1,59 @@
 import { useLiveQuery } from "dexie-react-hooks";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { useSearchParams } from "react-router-dom";
 
 import SearchIcon from "@mui/icons-material/Search";
 import Autocomplete from "@mui/material/Autocomplete";
+import Chip from "@mui/material/Chip";
+import Grid from "@mui/material/Grid";
 import InputAdornment from "@mui/material/InputAdornment";
 import TextField from "@mui/material/TextField";
+import { debounce } from "@mui/material/utils";
 
-import Grid from "@mui/material/Grid";
-import ListItemText from "@mui/material/ListItemText";
-import { useNavigate } from "react-router-dom";
+import TagIcon from '@mui/icons-material/Tag';
+
+import { sanitizeTagName } from "../models/Tag";
 import { database } from "../models/database";
-import { getDetailsRecipeRoute } from "../routes/routes";
+
 
 export function SearchBar() {
     const { t } = useTranslation();
-    const navigate = useNavigate();
+
+    const [searchParams, setSearchParams] = useSearchParams();
+
     const [currentSearch, setCurrentSearch] = useState<string>("");
 
-    const matches = useLiveQuery(async () => {
-        if (currentSearch === "") {
-            return [];
+    // executing this once to local state from url state
+    useEffect(() => {
+        if (searchParams.has("recipe-name")) {
+            setCurrentSearch(searchParams.get("recipe-name")!);
+        } else if (searchParams.has("tag-name")) {
+            setCurrentSearch("#" + searchParams.get("tag-name")!);
         }
+    }, [])
 
-        if (currentSearch.startsWith("#") && currentSearch.length > 1) {
-            const tagSearch = currentSearch.substring(1).replace(" ", "-");
 
-            const matchingTagIds =
-                (await database.tags
+    // displaying tags that match the currentSearch if it stars with # symbol
+    // filtering is done by name, a tag is kept if its name includes the search string
+    // so no fuzzy search for now...
+    const options = useLiveQuery(async () => {
+        if (currentSearch.startsWith("#")) {
+            const tagSearch = sanitizeTagName(currentSearch.substring(1));
+            if (tagSearch === "") {
+                return [];
+            }
+
+            const matchingTags =
+                (await database.tags.orderBy("name")
                     .filter(tag => tag.name.includes(tagSearch))
                     .toArray()
-                ).map(tag => tag.id!);
+                );
 
-
-            const recipeNames = (await database.recipes
-                .orderBy("name")
-                .filter(recipe => {
-                    let matchFound = false;
-                    for (const matchingTagId of matchingTagIds) {
-                        matchFound = false;
-                        for (const recipeTagId of recipe.tagIds) {
-                            if (recipeTagId === matchingTagId) {
-                                matchFound = true;
-                                break;
-                            }
-                        }
-                        if (matchFound) {
-                            break;
-                        }
-                    }
-                    return matchFound;
-                })
-                .limit(20)
-                .toArray()
-            ).map((recipe) => ({ id: recipe.id, name: recipe.name }));
-            return recipeNames;
-
-        } else {
-            const recipeNames = (
-                await database.recipes
-                    .orderBy("name")
-                    .filter(recipe => recipe.name.toLowerCase().includes(currentSearch))
-                    .limit(20)
-                    .toArray()
-            ).map((recipe) => ({ id: recipe.id, name: recipe.name }));
-
-            return recipeNames;
+            return matchingTags;
         }
+
+        return [];
     }, [currentSearch]);
 
     return (
@@ -82,27 +69,42 @@ export function SearchBar() {
                     includeInputInList
                     filterSelectedOptions={false}
                     filterOptions={(option) => option}
-                    options={matches ?? []}
-                    getOptionLabel={option => option.name}
-                    noOptionsText={currentSearch === "" ? t("HelpSearch") : t("NoResult")}
-                    onChange={(event, newValue: { id: undefined | number, name: string } | null) => {
-                        setCurrentSearch(newValue?.name.toLocaleLowerCase().trim() ?? "");
-                        if (newValue?.id != null) {
-                            navigate(getDetailsRecipeRoute(newValue.id));
+                    options={options ?? []}
+                    getOptionLabel={option => "#" + option.name}
+                    noOptionsText={t("HelpSearch")}
+                    onChange={(event, newValue) => {
+                        console.log("called on change", newValue);
+                        if (newValue == null) {
+                            setCurrentSearch("");
+                        } else {
+                            setSearchParams({ "tag-name": sanitizeTagName(newValue.name) })
                         }
                     }}
-                    onInputChange={(event, newValue) => {
-                        setCurrentSearch(newValue.toLocaleLowerCase().trim());
-                    }}
+                    onInputChange={debounce((event, newValue: string) => {
+                        const searchText = newValue.toLocaleLowerCase().trim();
+                        // saving text to keep track of what is currently typed (to tell appart partial recipe name and tag search)
+                        setCurrentSearch(searchText);
+
+                        // only updating current recipe name search we are not typing the name of tag
+                        if (!searchText.startsWith("#")) {
+                            console.log("called setSearchParam recipe-names")
+                            setSearchParams({ "recipe-name": searchText })
+                        }
+
+                    }, 400)}
                     renderOption={(props, item) => (
                         <li {...props} key={item.id}>
-                            <ListItemText>{item.name}</ListItemText>
+                            <Chip label={item.name} icon={<TagIcon />} />
                         </li>
                     )}
                     renderInput={(params) => (
                         <TextField
                             {...params}
-                            placeholder={`${t("Search")}...`}
+                            placeholder={
+                                searchParams.has("recipe-name") ? searchParams.get("recipe-name")!
+                                    : searchParams.has("tag-name") ? ("#" + searchParams.get("tag-name")!) :
+                                        `${t("Search")}...`
+                            }
                             fullWidth
                             InputProps={{
                                 // we need this, otherwise no option will be displayed https://stackoverflow.com/questions/72854517/applying-inputadornment-to-mui-autocomplete-removes-the-options-list
