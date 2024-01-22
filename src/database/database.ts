@@ -1,8 +1,8 @@
 import Dexie, { Table } from "dexie";
 
-import { Preferences } from "./Preferences";
-import { Recipe } from "./Recipe";
-import { Tag } from "./Tag";
+import { Preferences } from "./models/Preferences";
+import { Recipe } from "./models/Recipe";
+import { Tag } from "./models/Tag";
 
 export class MySubClassedDexie extends Dexie {
   recipes!: Table<Recipe>;

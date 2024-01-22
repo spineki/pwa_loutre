@@ -14,9 +14,9 @@ import { debounce } from "@mui/material/utils";
 
 import TagIcon from '@mui/icons-material/Tag';
 
-import { Recipe } from "../models/Recipe";
-import { Tag, sanitizeTagName } from "../models/Tag";
-import { database } from "../models/database";
+import { database } from "../database/database";
+import { Recipe } from "../database/models/Recipe";
+import { Tag, sanitizeTagName } from "../database/models/Tag";
 import { RouteAllRecipesName, getDetailsRecipeRoute } from "../routes/routes";
 
 type Option = { kind: "recipe", payload: Recipe } | { kind: "tag", payload: Tag };

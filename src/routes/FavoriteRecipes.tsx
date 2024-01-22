@@ -12,7 +12,7 @@ import Typography from "@mui/material/Typography";
 import { RecipeCard } from "../components/RecipeCard";
 import { TagChip } from "../components/TagChip";
 import { DrawerContext } from "../contexts/DrawerContext";
-import { database } from "../models/database";
+import { database } from "../database/database";
 import { RouteFavoriteRecipesName } from "../routes/routes";
 
 

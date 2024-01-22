@@ -10,8 +10,8 @@ import Paper from "@mui/material/Paper";
 
 import { TagChip } from "../components/TagChip";
 import { DrawerContext } from "../contexts/DrawerContext";
-import { Tag } from "../models/Tag";
-import { getAllTags } from "../models/controllers";
+import { getAllTags } from "../database/controllers/tagController";
+import { Tag } from "../database/models/Tag";
 import { RouteTagsName } from "../routes/routes";
 import { groupBy } from "../utils/dataStructures";
 

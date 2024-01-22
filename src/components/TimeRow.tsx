@@ -1,11 +1,11 @@
-import { useTranslation } from "react-i18next";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import { styled } from "@mui/material/styles";
+import { useTranslation } from "react-i18next";
 
 import RestoreIcon from '@mui/icons-material/Restore';
 
-import { Time } from "../models/Recipe";
+import { Time } from "../database/models/Recipe";
 import { formatTime } from "../utils/time";
 
 const VerticalBox = styled(Box)(() => ({

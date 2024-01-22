@@ -13,8 +13,8 @@ import { debounce } from "@mui/material/utils";
 
 import TagIcon from '@mui/icons-material/Tag';
 
-import { sanitizeTagName } from "../models/Tag";
-import { database } from "../models/database";
+import { database } from "../database/database";
+import { sanitizeTagName } from "../database/models/Tag";
 
 
 export function SearchBar() {

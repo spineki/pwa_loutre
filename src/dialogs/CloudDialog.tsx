@@ -16,8 +16,8 @@ import CloudDownloadIcon from '@mui/icons-material/CloudDownload';
 import DownloadIcon from '@mui/icons-material/Download';
 
 import { CloudDialogContext } from "../contexts/CloudDialogContext";
+import { getAllRecipes, importRecipesFromFileContent } from "../database/controllers/recipeController";
 import { useSharing } from "../hooks/useSharing";
-import { getAllRecipes, importRecipesFromFileContent } from "../models/controllers";
 
 
 export function CloudDialog() {

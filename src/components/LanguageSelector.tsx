@@ -4,8 +4,8 @@ import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
 
 import { useEffect } from "react";
+import { getUserPreferedLanguage, saveUserPreferedLanguage } from "../database/controllers/preferencesController";
 import { resources } from "../locales/languages";
-import { getUserPreferedLanguage, saveUserPreferedLanguage } from "../models/controllers";
 
 const languages = Object.keys(resources).toSorted();
 

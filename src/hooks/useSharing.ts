@@ -2,8 +2,8 @@
 
 import { useCallback, useEffect, useState } from "react";
 
+import { importRecipesFromFileContent } from "../database/controllers/recipeController";
 import { dateToPathCompatibleIsoFormat } from "../utils/time";
-import { importRecipesFromFileContent } from "../models/controllers";
 
 // I was not able to find a typescript type for this, so doing it by hand
 interface LaunchParams {

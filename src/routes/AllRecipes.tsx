@@ -13,8 +13,9 @@ import AddIcon from '@mui/icons-material/Add';
 
 import { RecipeCard } from "../components/RecipeCard";
 import { DrawerContext } from "../contexts/DrawerContext";
-import { getAllRecipes, getTagByName } from "../models/controllers";
-import { database } from "../models/database";
+import { getAllRecipes } from "../database/controllers/recipeController";
+import { getTagByName } from "../database/controllers/tagController";
+import { database } from "../database/database";
 import { RouteAllRecipesName, RouteCreateRecipeName } from "../routes/routes";
 
 

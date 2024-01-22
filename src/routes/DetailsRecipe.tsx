@@ -22,9 +22,9 @@ import { RecipeRequirements } from "../components/RecipeRequirements";
 import { RecipeSteps } from "../components/RecipeSteps";
 import { RecipeTabs } from "../components/RecipeTabs";
 import { DrawerContext } from "../contexts/DrawerContext";
+import { getRecipeById } from "../database/controllers/recipeController";
+import { Recipe } from "../database/models/Recipe";
 import { useSharing } from "../hooks/useSharing";
-import { Recipe } from "../models/Recipe";
-import { getRecipeById } from "../models/controllers";
 import { RouteDetailsRecipesName, getEditRecipeRoute } from "../routes/routes";
 
 

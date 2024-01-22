@@ -6,8 +6,8 @@ import Chip from "@mui/material/Chip";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 
-import { Tag } from "../models/Tag";
-import { partialUpdateTag } from "../models/controllers";
+import { partialUpdateTag } from "../database/controllers/tagController";
+import { Tag } from "../database/models/Tag";
 import { RouteAllRecipesName } from "../routes/routes";
 
 interface TagChipProps {

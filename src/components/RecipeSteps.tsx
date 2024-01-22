@@ -13,9 +13,9 @@ import ListItemText from "@mui/material/ListItemText";
 import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
 
-import { StepSection } from "../models/Recipe";
-import { Tag } from "../models/Tag";
-import { getTagsByIds } from "../models/controllers";
+import { getTagsByIds } from "../database/controllers/tagController";
+import { StepSection } from "../database/models/Recipe";
+import { Tag } from "../database/models/Tag";
 
 
 interface RecipeStepsProps {
@@ -26,7 +26,6 @@ interface RecipeStepsProps {
 export function RecipeSteps(props: RecipeStepsProps) {
     const { stepSections, tagIds } = props;
     const { t } = useTranslation();
-
 
     const tags = useLiveQuery(async () => {
         const tags =

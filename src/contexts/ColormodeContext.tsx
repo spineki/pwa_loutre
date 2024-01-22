@@ -4,7 +4,7 @@ import { PaletteMode } from "@mui/material";
 import { createTheme, Theme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
 
-import { getUserPreferedColorMode, saveUserPreferedColorMode } from "../models/controllers";
+import { getUserPreferedColorMode, saveUserPreferedColorMode } from "../database/controllers/preferencesController";
 
 export interface ColorModeContextInterface {
     theme: Theme,

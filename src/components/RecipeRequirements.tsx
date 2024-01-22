@@ -11,7 +11,7 @@ import ListItemText from "@mui/material/ListItemText";
 import Typography from "@mui/material/Typography";
 
 import Grid from "@mui/material/Grid";
-import { IngredientSection, Time } from "../models/Recipe";
+import { IngredientSection, Time } from "../database/models/Recipe";
 import { ColouredNumberText } from "./ColouredNumberText";
 import { TimeRow } from "./TimeRow";
 

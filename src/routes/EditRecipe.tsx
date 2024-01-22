@@ -33,9 +33,10 @@ import { FormStepField } from "../components/FormStepField";
 import { FormTextField } from "../components/FormTextField";
 import { FormTimePicker } from "../components/FormTimePicker";
 import { DrawerContext } from "../contexts/DrawerContext";
-import { IngredientSection, Recipe, StepSection, getEmptyRecipe } from "../models/Recipe";
-import { Tag, sanitizeTagName } from "../models/Tag";
-import { getAllTags, getRecipeById, getTagByName, getTagsByIds, insertRecipe, upsertRecipe, upsertTag } from "../models/controllers";
+import { getRecipeById, insertRecipe, upsertRecipe } from "../database/controllers/recipeController";
+import { getAllTags, getTagByName, getTagsByIds, upsertTag } from "../database/controllers/tagController";
+import { IngredientSection, Recipe, StepSection, getEmptyRecipe } from "../database/models/Recipe";
+import { Tag, sanitizeTagName } from "../database/models/Tag";
 import { RouteEditRecipeName, getDetailsRecipeRoute } from "./routes";
 
 /**

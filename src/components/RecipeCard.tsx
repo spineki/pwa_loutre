@@ -7,8 +7,8 @@ import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
 
-import { Time } from "../models/Recipe";
-import { partialUpdateRecipe } from "../models/controllers";
+import { partialUpdateRecipe } from "../database/controllers/recipeController";
+import { Time } from "../database/models/Recipe";
 import { getDetailsRecipeRoute } from "../routes/routes";
 import { CardRow } from "./CardRow";
 
