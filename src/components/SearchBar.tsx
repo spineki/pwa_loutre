@@ -24,14 +24,22 @@ export function SearchBar() {
 
     const [currentSearch, setCurrentSearch] = useState<string>("");
 
+    // using a flag to make following useEffect only run once
+    const [didLoad, setDidLoad] = useState(false);
+
     // executing this once to local state from url state
     useEffect(() => {
+        if (didLoad) {
+            return;
+        }
+
         if (searchParams.has("recipe-name")) {
             setCurrentSearch(searchParams.get("recipe-name")!);
         } else if (searchParams.has("tag-name")) {
             setCurrentSearch("#" + searchParams.get("tag-name")!);
         }
-    }, [])
+        setDidLoad(true);
+    }, [didLoad, searchParams])
 
 
     // displaying tags that match the currentSearch if it stars with # symbol
