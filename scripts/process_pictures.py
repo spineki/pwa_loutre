@@ -26,7 +26,7 @@ class Task():
 
     # Copy a file from last temporary location
     def copy_file(self):
-        with open(self.last_file_location, 'rb') as src, open(self.output_path, 'wb') as dst:
+        with open(self.last_file_path, 'rb') as src, open(self.output_path, 'wb') as dst:
             dst.write(src.read())
 
     def remove_background(self):
@@ -39,7 +39,7 @@ class Task():
             input_file = input_file.read()
             output = remove(input_file)
             output_file.write(output)
-        self.last_file_location = temp_output_path
+        self.last_file_path = temp_output_path
 
     def resize_picture(self):
         if self.resize is None:
@@ -47,10 +47,10 @@ class Task():
         
         temp_output_path = tmp_folder / "resize_picture.png"
     
-        image = Image.open(self.last_file_location)
+        image = Image.open(self.last_file_path)
         image.thumbnail((self.resize[0], self.resize[0]))
         image.save(temp_output_path)
-        self.last_file_location = temp_output_path
+        self.last_file_path = temp_output_path
 
     def execute(self):
         print(f"> {Path(self.input_path).stem}:")
@@ -65,7 +65,8 @@ class Task():
 tasks: List[Task] = [
     Task( "../heavy_assets/ingredients.jpeg", "../public/ingredients.png", True, (64, 64)),
     Task( "../heavy_assets/cooking_book.jpeg", "../public/cooking_book.png", True, (64, 64)),
-    Task( "../heavy_assets/comments.jpeg", "../public/comments.png", True, (64, 64))
+    Task( "../heavy_assets/comments.jpeg", "../public/comments.png", True, (64, 64)),
+    Task( "../heavy_assets/tutorial_picture.jpeg", "../public/tutorial_picture.png", False, (300, 300)),
 ]
 
 for task in tasks:
