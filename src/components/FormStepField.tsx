@@ -1,4 +1,5 @@
 import { Draggable } from "@hello-pangea/dnd";
+import { useState } from "react";
 import { Control, Controller, FieldValues, Path, UseFieldArrayRemove, UseFormWatch } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 
@@ -6,12 +7,20 @@ import Box from "@mui/material/Box";
 import Divider from "@mui/material/Divider";
 import IconButton from "@mui/material/IconButton";
 import InputAdornment from "@mui/material/InputAdornment";
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
+import MenuList from "@mui/material/MenuList";
 import TextField from "@mui/material/TextField";
 
 import DeleteIcon from "@mui/icons-material/Delete";
 import DragIndicatorIcon from "@mui/icons-material/DragIndicator";
+import MoreVertIcon from "@mui/icons-material/MoreVert";
+import SplitscreenIcon from "@mui/icons-material/Splitscreen";
 import StarIcon from "@mui/icons-material/Star";
 import StarBorderIcon from "@mui/icons-material/StarBorder";
+import ListItemIcon from "@mui/material/ListItemIcon";
+import ListItemText from "@mui/material/ListItemText";
+
 
 
 
@@ -20,7 +29,8 @@ interface FormStepFieldProps<T extends FieldValues> {
     index: number,
     control: Control<T, unknown>,
     watch: UseFormWatch<T>,
-    remove: UseFieldArrayRemove
+    remove: UseFieldArrayRemove,
+    split: (index: number) => void,
     textName: Path<T>,
     isSectionName: Path<T>,
     minRows?: number,
@@ -30,7 +40,17 @@ export function FormStepField<T extends FieldValues>(props: FormStepFieldProps<T
 
     const { t } = useTranslation();
 
-    const { id, index, control, remove, isSectionName, minRows, textName, watch } = props;
+    const { id, index, control, remove, split, isSectionName, minRows, textName, watch } = props;
+    const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+    const open = Boolean(anchorEl);
+
+    const handleMoreOptionsClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+        setAnchorEl(event.currentTarget);
+
+    }
+    const handleMoreOptionsClose = () => {
+        setAnchorEl(null);
+    };
 
     return (
         <Draggable
@@ -68,7 +88,6 @@ export function FormStepField<T extends FieldValues>(props: FormStepFieldProps<T
                             >
                                 <DragIndicatorIcon />
                             </IconButton>
-
                         </Box>
                         <Controller
                             name={textName}
@@ -90,11 +109,40 @@ export function FormStepField<T extends FieldValues>(props: FormStepFieldProps<T
                                     InputProps={{
                                         sx: { alignItems: "flex-start", paddingTop: 1 },
                                         endAdornment:
-                                            <InputAdornment position="end" sx={{ paddingTop: 2 }}>
-                                                <IconButton onClick={() => remove(index)}>
-                                                    <DeleteIcon />
-                                                </IconButton>
-                                            </InputAdornment>,
+                                            <>
+                                                <InputAdornment position="end" sx={{ paddingTop: 2 }}>
+                                                    <IconButton onClick={handleMoreOptionsClick}>
+                                                        <MoreVertIcon />
+                                                    </IconButton>
+                                                </InputAdornment>
+                                                <Menu
+                                                    anchorEl={anchorEl}
+                                                    open={open}
+                                                    onClose={handleMoreOptionsClose}
+                                                >
+                                                    <MenuList>
+                                                        <MenuItem onClick={() => {
+                                                            remove(index);
+                                                            handleMoreOptionsClose();
+                                                        }}>
+                                                            <ListItemIcon>
+                                                                <DeleteIcon fontSize="small" />
+                                                            </ListItemIcon>
+                                                            <ListItemText>{t("Delete")}</ListItemText>
+                                                        </MenuItem>
+                                                        <MenuItem onClick={() => {
+                                                            split(index);
+                                                            handleMoreOptionsClose();
+                                                        }}>
+                                                            <ListItemIcon>
+                                                                <SplitscreenIcon fontSize="small" />
+                                                            </ListItemIcon>
+                                                            <ListItemText>Split</ListItemText>
+                                                        </MenuItem>
+                                                    </MenuList>
+                                                </Menu>
+                                            </>
+
                                     }}
                                 />
                             )}
@@ -102,8 +150,9 @@ export function FormStepField<T extends FieldValues>(props: FormStepFieldProps<T
                     </Box>
 
                 </div>
-            )}
-        </Draggable>
+            )
+            }
+        </Draggable >
     )
 
 }

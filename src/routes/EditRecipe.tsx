@@ -1,7 +1,7 @@
 import { DragDropContext, Droppable, OnDragEndResponder } from "@hello-pangea/dnd";
 import { useLiveQuery } from "dexie-react-hooks";
 import moment from "moment";
-import { useContext, useEffect, useState } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
 import { Controller, useFieldArray, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { ActionFunction, useLoaderData, useNavigate } from "react-router-dom";
@@ -157,7 +157,7 @@ export function EditRecipe() {
         { icon: <ShortTextIcon />, name: t("Comments") },
     ];
 
-    const { formState, control, handleSubmit, setValue, watch } = useForm<EditRecipeFormInput>({
+    const { formState, control, handleSubmit, getValues, setValue, watch } = useForm<EditRecipeFormInput>({
         defaultValues: async () => ({
             comments: recipe.comments,
             ingredients: recipe.ingredientSections
@@ -186,13 +186,45 @@ export function EditRecipe() {
         })
     });
 
-    //  prepend, , swap, insert 
-    const { fields: stepsFields, append: stepsAppend, remove: stepsRemove, move: stepsMove } = useFieldArray({
+    const {
+        fields: stepsFields,
+        append: stepsAppend,
+        insert: stepsInsert,
+        move: stepsMove,
+        remove: stepsRemove,
+    } = useFieldArray({
         control,
         name: "steps",
     });
 
-    const { fields: ingredientsFields, append: ingredientsAppend, remove: ingredientsRemove, move: ingredientsMove } = useFieldArray({
+    // split a field into multiple fields based on 
+    const splitSteps = useCallback((index: number) => {
+        const field = getValues(`steps.${index}`);
+        const isSection = field.isSection;
+        const fieldText = field.text;
+        const chunks = fieldText.split("\n\n").map(chunk => chunk.trim()).filter(chunk => chunk.length > 0);
+        if (chunks.length <= 1) {
+            return; // no extra work if there is no such double splits
+        }
+
+        stepsRemove(index);
+        chunks.reverse().forEach((chunk, chunkIndex) => {
+            // not changing section state of first split element
+            if (chunkIndex == 0) {
+                stepsInsert(index, { text: chunk, isSection })
+            } else {
+                // but created splits should be promoted by the user if necessary
+                stepsInsert(index, { text: chunk, isSection: false })
+            }
+        })
+    }, [getValues, stepsInsert, stepsRemove]);
+
+    const {
+        fields: ingredientsFields,
+        append: ingredientsAppend,
+        move: ingredientsMove,
+        remove: ingredientsRemove,
+    } = useFieldArray({
         control,
         name: "ingredients",
     });
@@ -440,6 +472,7 @@ export function EditRecipe() {
                                                                                 index={index}
                                                                                 control={control}
                                                                                 watch={watch}
+                                                                                split={splitSteps}
                                                                                 remove={stepsRemove}
                                                                                 minRows={2}
                                                                                 textName={`steps.${index}.text`}
