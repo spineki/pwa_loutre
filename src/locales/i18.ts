@@ -5,7 +5,7 @@ import { resources } from "./languages";
 i18n
   .use(initReactI18next) // passes i18n down to react-i18next
   .init({
-    lng: "fr",
+    lng: "en",
     resources,
     interpolation: {
       escapeValue: false, // react already safes from xss

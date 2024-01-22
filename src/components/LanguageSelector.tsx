@@ -3,12 +3,30 @@ import { useTranslation } from "react-i18next";
 import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
 
+import { useEffect } from "react";
 import { resources } from "../locales/languages";
+import { getUserPreferedLanguage, saveUserPreferedLanguage } from "../models/controllers";
 
 const languages = Object.keys(resources).toSorted();
 
 export function LanguageSelector() {
     const { i18n, t } = useTranslation();
+
+    // updating language preferences
+    useEffect(() => {
+        async function getInitialLanguage() {
+            const preferedLangaguage = await getUserPreferedLanguage();
+            if (preferedLangaguage === undefined) {
+                await saveUserPreferedLanguage(i18n.language);
+            } else {
+                if (preferedLangaguage !== i18n.language) {
+                    await i18n.changeLanguage(preferedLangaguage);
+                }
+            }
+        }
+        getInitialLanguage()
+
+    }, [i18n])
 
     return (
         <Select
@@ -16,7 +34,8 @@ export function LanguageSelector() {
             label={t("Language")}
             variant="standard"
             onChange={async (selection) => {
-                await i18n.changeLanguage(selection.target.value)
+                await i18n.changeLanguage(selection.target.value);
+                await saveUserPreferedLanguage(selection.target.value);
             }}
         >
             {

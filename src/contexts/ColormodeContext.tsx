@@ -1,14 +1,15 @@
+import React, { createContext, ReactElement, useCallback, useEffect, useState } from "react";
+
+import { PaletteMode } from "@mui/material";
 import { createTheme, Theme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
-import { createContext, ReactElement, useCallback, useState } from "react";
-import React from "react";
 
-export type PaletteMode = "light" | "dark";
+import { getUserPreferedColorMode, saveUserPreferedColorMode } from "../models/controllers";
 
 export interface ColorModeContextInterface {
     theme: Theme,
     colorMode: PaletteMode
-    toggleColorMode: () => void;
+    toggleColorMode: () => Promise<void>;
 }
 
 export const ColorModeContext = createContext<ColorModeContextInterface>({} as ColorModeContextInterface);
@@ -27,6 +28,8 @@ const getDesignTokens = (mode: PaletteMode) => ({
 });
 
 
+
+
 /**
  * A theme to apply color mode (dark, light)
  * @param children
@@ -37,11 +40,37 @@ export function ColorModeProvider({
 }: {
     children: ReactElement;
 }): ReactElement {
+
     const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
     const [colorMode, _setColorMode] = useState<PaletteMode>(prefersDarkMode ? "dark" : "light");
 
-    const toggleColorMode = useCallback(() => {
-        _setColorMode(colorMode === "light" ? "dark" : "light");
+    useEffect(() => {
+        async function getInitialColorMode() {
+
+            const preferedColorMode = await getUserPreferedColorMode();
+
+            // if no preferences saved, using system ones and saving this as default configuration
+            if (preferedColorMode === undefined) {
+                const systemColorMode = prefersDarkMode ? "dark" : "light";
+                await saveUserPreferedColorMode(systemColorMode);
+                _setColorMode(systemColorMode);
+
+            } else {
+                // else, using user configuration
+                _setColorMode(preferedColorMode);
+            }
+
+        }
+        getInitialColorMode()
+    }, [prefersDarkMode])
+
+
+
+    const toggleColorMode = useCallback(async () => {
+        const newColorMode = colorMode === "light" ? "dark" : "light";
+        _setColorMode(newColorMode);
+        // saving toggled color to database
+        await saveUserPreferedColorMode(newColorMode);
     }, [colorMode]);
 
     const theme = React.useMemo(

@@ -97,7 +97,7 @@ export function Drawer() {
                     }
                 >
                     <ListItem disablePadding style={{ background: theme.palette.background.paper }}>
-                        < ListItemButton onClick={() => toggleColorMode()}>
+                        < ListItemButton onClick={async () => await toggleColorMode()}>
                             {
                                 colorMode === "light" ?
                                     <>
