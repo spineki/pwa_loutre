@@ -197,7 +197,7 @@ export function EditRecipe() {
         name: "steps",
     });
 
-    // split a field into multiple fields based on 
+    // split a step field into multiple fields based on linebreaks
     const splitSteps = useCallback((index: number) => {
         const field = getValues(`steps.${index}`);
         const isSection = field.isSection;
@@ -222,6 +222,7 @@ export function EditRecipe() {
     const {
         fields: ingredientsFields,
         append: ingredientsAppend,
+        insert: ingredientsInsert,
         move: ingredientsMove,
         remove: ingredientsRemove,
     } = useFieldArray({
@@ -229,7 +230,30 @@ export function EditRecipe() {
         name: "ingredients",
     });
 
-    // ,  remove: tagsRemove, move: tagsMove 
+    // split a step field into multiple fields based on linebreaks
+    const splitIngredients = useCallback((index: number) => {
+        const field = getValues(`ingredients.${index}`);
+        const isSection = field.isSection;
+        const fieldText = field.text;
+        const chunks = fieldText.split("\n\n").map(chunk => chunk.trim()).filter(chunk => chunk.length > 0);
+        if (chunks.length <= 1) {
+            return; // no extra work if there is no such double splits
+        }
+
+        ingredientsRemove(index);
+        chunks.reverse().forEach((chunk, chunkIndex) => {
+            // not changing section state of first split element
+            if (chunkIndex == 0) {
+                ingredientsInsert(index, { text: chunk, isSection })
+            } else {
+                // but created splits should be promoted by the user if necessary
+                ingredientsInsert(index, { text: chunk, isSection: false })
+            }
+        })
+    }, [getValues, ingredientsInsert, ingredientsRemove]);
+
+
+
     const { fields: tagsFields, replace: tagsReplace } = useFieldArray({
         control,
         name: "tags",
@@ -434,6 +458,7 @@ export function EditRecipe() {
                                                                             index={index}
                                                                             control={control}
                                                                             watch={watch}
+                                                                            split={splitIngredients}
                                                                             remove={ingredientsRemove}
                                                                             minRows={2}
                                                                             textName={`ingredients.${index}.text`}

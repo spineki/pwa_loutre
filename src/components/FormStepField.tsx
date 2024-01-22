@@ -42,7 +42,7 @@ export function FormStepField<T extends FieldValues>(props: FormStepFieldProps<T
 
     const { id, index, control, remove, split, isSectionName, minRows, textName, watch } = props;
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-    const open = Boolean(anchorEl);
+    const openMoreOptionMenu = Boolean(anchorEl);
 
     const handleMoreOptionsClick = (event: React.MouseEvent<HTMLButtonElement>) => {
         setAnchorEl(event.currentTarget);
@@ -117,7 +117,7 @@ export function FormStepField<T extends FieldValues>(props: FormStepFieldProps<T
                                                 </InputAdornment>
                                                 <Menu
                                                     anchorEl={anchorEl}
-                                                    open={open}
+                                                    open={openMoreOptionMenu}
                                                     onClose={handleMoreOptionsClose}
                                                 >
                                                     <MenuList>
@@ -137,7 +137,7 @@ export function FormStepField<T extends FieldValues>(props: FormStepFieldProps<T
                                                             <ListItemIcon>
                                                                 <SplitscreenIcon fontSize="small" />
                                                             </ListItemIcon>
-                                                            <ListItemText>Split</ListItemText>
+                                                            <ListItemText>{t("Split")}</ListItemText>
                                                         </MenuItem>
                                                     </MenuList>
                                                 </Menu>
