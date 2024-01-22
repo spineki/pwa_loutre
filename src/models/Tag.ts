@@ -1,6 +1,7 @@
 export function sanitizeTagName(rawName: string): string {
   return rawName
     .trim()
+    .toLowerCase()
     .replaceAll(" ", "-")
     .replaceAll(".", "-")
     .replaceAll("_", "-");

@@ -24,7 +24,9 @@ export function getEditRecipeRoute(id: number): string {
 export type RoutesType =
     | typeof RouteRootName
     | typeof RouteAllRecipesName
+    | typeof RouteDetailsRecipesName
+    | typeof RouteEditRecipeName
     | typeof RouteFavoriteRecipesName
-    | typeof RouteChangelogsName
+    | typeof RouteWorkInProgressName
     | typeof RouteTagsName
-    | typeof RouteWorkInProgressName;
+    | typeof RouteChangelogsName;

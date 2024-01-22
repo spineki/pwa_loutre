@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { ActionFunction, Link, useLoaderData } from "react-router-dom";
 import SwipeableViews from "react-swipeable-views";
@@ -21,10 +21,11 @@ import { RecipeComments } from "../components/RecipeComments";
 import { RecipeRequirements } from "../components/RecipeRequirements";
 import { RecipeSteps } from "../components/RecipeSteps";
 import { RecipeTabs } from "../components/RecipeTabs";
+import { DrawerContext } from "../contexts/DrawerContext";
 import { useSharing } from "../hooks/useSharing";
 import { Recipe } from "../models/Recipe";
 import { getRecipeById } from "../models/controllers";
-import { getEditRecipeRoute } from "../routes/routes";
+import { RouteDetailsRecipesName, getEditRecipeRoute } from "../routes/routes";
 
 
 /**
@@ -50,6 +51,10 @@ export const detailsRecipeLoader: ActionFunction = async ({ params }) => {
 }
 
 export function DetailsRecipe() {
+    const { setCurrentRoute } = useContext(DrawerContext);
+    useEffect(() => {
+        setCurrentRoute(RouteDetailsRecipesName);
+    }, [setCurrentRoute])
 
     const recipe = useLoaderData() as Recipe;
 

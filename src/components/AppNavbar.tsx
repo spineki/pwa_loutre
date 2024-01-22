@@ -13,6 +13,8 @@ import ScaleIcon from "@mui/icons-material/Scale";
 import { CloudDialogContext } from "../contexts/CloudDialogContext";
 import { ConversionDialogContext } from "../contexts/ConversionDialogContext";
 import { DrawerContext } from "../contexts/DrawerContext";
+import { RouteAllRecipesName } from "../routes/routes";
+import { QuickAccessSearchBar } from "./QuickAccessSearchBar";
 import { SearchBar } from "./SearchBar";
 
 
@@ -22,6 +24,7 @@ const Offset = styled("div")(({ theme }) => theme.mixins.toolbar);
 export function AppNavbar() {
 
     const {
+        currentRoute,
         toggleDrawer
     } = useContext(DrawerContext);
 
@@ -54,7 +57,10 @@ export function AppNavbar() {
                         <MenuIcon />
                     </IconButton>
 
-                    <SearchBar />
+                    {
+                        currentRoute === RouteAllRecipesName ? <SearchBar /> : <QuickAccessSearchBar />
+                    }
+
                     <Box sx={{ flexGrow: 1 }} />
                     <IconButton
                         size="medium"
