@@ -17,12 +17,13 @@ import { TimeRow } from "./TimeRow";
 
 interface RecipeRequirementsProps {
     ingredientSections: IngredientSection[],
+    multiplicator: number,
+    name: string,
     time: Time,
-    multiplicator: number
 }
 
 export function RecipeRequirements(props: RecipeRequirementsProps) {
-    const { ingredientSections, time, multiplicator } = props;
+    const { ingredientSections, multiplicator, name, time } = props;
     const { t } = useTranslation();
 
     return (
@@ -51,6 +52,12 @@ export function RecipeRequirements(props: RecipeRequirementsProps) {
 
                             </ListItemText>
 
+                        </ListItem>
+
+                        <ListItem sx={{ display: "flex", justifyContent: "center" }}>
+                            <Typography>
+                                {name}
+                            </Typography>
                         </ListItem>
 
                         <ListItem>

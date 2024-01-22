@@ -95,6 +95,7 @@ export function DetailsRecipe() {
 
     return (
         <Paper sx={{ p: 1, width: "100%", height: "100%", display: "flex", flexDirection: "column" }} >
+
             <Box sx={{ width: "100%", position: "fixed", zIndex: 1, }}>
                 <RecipeTabs currentTabIndex={currentTabIndex} handleTabsChange={handleTabsChangeIndex} />
             </Box>
@@ -111,8 +112,9 @@ export function DetailsRecipe() {
                 {currentTabIndex == 0 ?
                     <RecipeRequirements
                         ingredientSections={recipe.ingredientSections}
-                        time={recipe.time}
                         multiplicator={portion / recipe.portion}
+                        name={recipe.name}
+                        time={recipe.time}
                     />
                     :
                     <></>
