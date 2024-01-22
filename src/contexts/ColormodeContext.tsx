@@ -61,8 +61,8 @@ export function ColorModeProvider({
             }
 
         }
-        getInitialColorMode()
-    }, [prefersDarkMode])
+        getInitialColorMode();
+    }, [prefersDarkMode]);
 
 
 

@@ -31,8 +31,8 @@ function App() {
       //   await database.tags.bulkAdd(fakeTags);
       // }
     }
-    setupDatabase()
-  }, [])
+    setupDatabase();
+  }, []);
 
 
   const { receiveFile } = useSharing();
@@ -43,7 +43,7 @@ function App() {
     }
     checkReceivedFiles();
 
-  }, [receiveFile])
+  }, [receiveFile]);
 
   return (
     <ColorModeProvider >

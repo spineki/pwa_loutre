@@ -39,7 +39,7 @@ export function SearchBar() {
             setCurrentSearch("#" + searchParams.get("tag-name")!);
         }
         setDidLoad(true);
-    }, [didLoad, searchParams])
+    }, [didLoad, searchParams]);
 
 
     // displaying tags that match the currentSearch if it stars with # symbol
@@ -84,7 +84,7 @@ export function SearchBar() {
                         if (newValue == null) {
                             setCurrentSearch("");
                         } else {
-                            setSearchParams({ "tag-name": sanitizeTagName(newValue.name) })
+                            setSearchParams({ "tag-name": sanitizeTagName(newValue.name) });
                         }
                     }}
                     onInputChange={debounce((event, newValue: string) => {
@@ -94,7 +94,7 @@ export function SearchBar() {
 
                         // only updating current recipe name search we are not typing the name of tag
                         if (!searchText.startsWith("#")) {
-                            setSearchParams({ "recipe-name": searchText })
+                            setSearchParams({ "recipe-name": searchText });
                         }
 
                     }, 400)}
@@ -128,7 +128,7 @@ export function SearchBar() {
             </Grid >
             <Grid item xs={1} md={4} />
         </Grid>
-    )
+    );
 
 }
 

@@ -21,7 +21,7 @@ export function DrawerContextProvider({
     children: ReactElement;
 }): ReactElement {
     const [showDrawer, _setShowDrawer] = useState<boolean>(false);
-    const [currentRoute, setCurrentRoute] = useState<RoutesType>(RouteRootName)
+    const [currentRoute, setCurrentRoute] = useState<RoutesType>(RouteRootName);
 
     const toggleDrawer = useCallback(
         () => _setShowDrawer(!showDrawer),

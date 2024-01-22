@@ -45,7 +45,7 @@ import { RouteEditRecipeName, getDetailsRecipeRoute } from "./routes";
  */
 export const createRecipeLoader: ActionFunction = () => {
     return getEmptyRecipe();
-}
+};
 
 /**
  * A loader used by react router to load recipe before page loads.
@@ -54,7 +54,7 @@ export const createRecipeLoader: ActionFunction = () => {
 export const editRecipeLoader: ActionFunction = async ({ params }) => {
     const { id } = params;
     if (id === undefined) {
-        return undefined
+        return undefined;
     }
 
     const numberId = parseInt(id);
@@ -67,7 +67,7 @@ export const editRecipeLoader: ActionFunction = async ({ params }) => {
         return undefined;
     }
     return recipe;
-}
+};
 
 
 // convertion helpers
@@ -138,7 +138,7 @@ export function EditRecipe() {
     const { setCurrentRoute } = useContext(DrawerContext);
     useEffect(() => {
         setCurrentRoute(RouteEditRecipeName);
-    }, [setCurrentRoute])
+    }, [setCurrentRoute]);
 
     const { t } = useTranslation();
     const recipe = useLoaderData() as Recipe;
@@ -211,12 +211,12 @@ export function EditRecipe() {
         chunks.reverse().forEach((chunk, chunkIndex) => {
             // not changing section state of first split element
             if (chunkIndex == 0) {
-                stepsInsert(index, { text: chunk, isSection })
+                stepsInsert(index, { text: chunk, isSection });
             } else {
                 // but created splits should be promoted by the user if necessary
-                stepsInsert(index, { text: chunk, isSection: false })
+                stepsInsert(index, { text: chunk, isSection: false });
             }
-        })
+        });
     }, [getValues, stepsInsert, stepsRemove]);
 
     const {
@@ -244,12 +244,12 @@ export function EditRecipe() {
         chunks.reverse().forEach((chunk, chunkIndex) => {
             // not changing section state of first split element
             if (chunkIndex == 0) {
-                ingredientsInsert(index, { text: chunk, isSection })
+                ingredientsInsert(index, { text: chunk, isSection });
             } else {
                 // but created splits should be promoted by the user if necessary
-                ingredientsInsert(index, { text: chunk, isSection: false })
+                ingredientsInsert(index, { text: chunk, isSection: false });
             }
-        })
+        });
     }, [getValues, ingredientsInsert, ingredientsRemove]);
 
 
@@ -285,7 +285,7 @@ export function EditRecipe() {
                 let tagId: number;
                 if (existingTag == undefined) {
                     const newTag: Tag = { name: tag.name, isFavorite: false };
-                    tagId = await upsertTag(newTag)
+                    tagId = await upsertTag(newTag);
                 } else {
                     tagId = existingTag.id!;
                 }
@@ -568,6 +568,6 @@ export function EditRecipe() {
             }
 
         </Paper>
-    )
+    );
 
 }

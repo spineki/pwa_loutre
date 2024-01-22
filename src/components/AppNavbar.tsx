@@ -38,10 +38,10 @@ export function AppNavbar() {
 
     const openCloudDialog = () => {
         setShowCloudDialog(true);
-    }
+    };
     const openConversionDialog = () => {
         setShowConversionDialog(true);
-    }
+    };
 
     return (
         <Box>

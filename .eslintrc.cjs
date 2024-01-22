@@ -18,6 +18,7 @@ module.exports = {
         patterns: ["@mui/*/*/*"],
       },
     ],
+    semi: [2, "always"],
   },
   env: {
     browser: true,

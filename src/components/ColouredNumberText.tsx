@@ -68,7 +68,7 @@ interface ColouredNumberTextProps {
  */
 export function ColouredNumberText(props: ColouredNumberTextProps) {
     const { multiplicator, style } = props;
-    const theme = useTheme()
+    const theme = useTheme();
 
     const tokens: ExtractedToken[] = extractNumberFromString(props.text);
 

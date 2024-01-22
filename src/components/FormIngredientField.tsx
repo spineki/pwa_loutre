@@ -46,7 +46,7 @@ export function FormIngredientField<T extends FieldValues>(props: FormIngredient
     const handleMoreOptionsClick = (event: React.MouseEvent<HTMLButtonElement>) => {
         setAnchorEl(event.currentTarget);
 
-    }
+    };
     const handleMoreOptionsClose = () => {
         setAnchorEl(null);
     };
@@ -151,6 +151,6 @@ export function FormIngredientField<T extends FieldValues>(props: FormIngredient
                 </div>
             )}
         </Draggable>
-    )
+    );
 
 }

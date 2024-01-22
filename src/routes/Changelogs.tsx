@@ -18,7 +18,7 @@ export function Changelogs() {
 
     useEffect(() => {
         setCurrentRoute(RouteChangelogsName);
-    }, [setCurrentRoute])
+    }, [setCurrentRoute]);
 
     return (
         <Paper sx={{ p: 2, flex: 1 }}>

@@ -85,7 +85,7 @@ export function QuickAccessSearchBar() {
                             setCurrentSearch("");
                         } else {
                             if (newValue.kind === "recipe") {
-                                navigate(getDetailsRecipeRoute(newValue.payload.id!))
+                                navigate(getDetailsRecipeRoute(newValue.payload.id!));
                             } else {
                                 navigate(
                                     {
@@ -94,7 +94,7 @@ export function QuickAccessSearchBar() {
                                             "tag-name": newValue.payload.name
                                         }).toString()
                                     }
-                                )
+                                );
                             }
                         }
                     }}
@@ -135,6 +135,6 @@ export function QuickAccessSearchBar() {
             </Grid >
             <Grid item xs={1} md={4} />
         </Grid>
-    )
+    );
 
 }

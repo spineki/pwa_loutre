@@ -20,7 +20,7 @@ export function Tags() {
     const { setCurrentRoute } = useContext(DrawerContext);
     useEffect(() => {
         setCurrentRoute(RouteTagsName);
-    }, [setCurrentRoute])
+    }, [setCurrentRoute]);
 
 
     const groupedTags = useLiveQuery(
@@ -33,7 +33,7 @@ export function Tags() {
                 groupedTagEntries.push(entry);
             }
 
-            const sortedGroupedTags = groupedTagEntries.sort((a, b) => a[0] > b[0] ? 1 : -1)
+            const sortedGroupedTags = groupedTagEntries.sort((a, b) => a[0] > b[0] ? 1 : -1);
             return sortedGroupedTags;
         },
         // specify vars that affect query:
@@ -75,5 +75,5 @@ export function Tags() {
                 <Grid item xs={0} md={4} />
             </Grid>
         </Paper>
-    )
+    );
 }

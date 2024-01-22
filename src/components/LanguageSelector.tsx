@@ -24,9 +24,9 @@ export function LanguageSelector() {
                 }
             }
         }
-        getInitialLanguage()
+        getInitialLanguage();
 
-    }, [i18n])
+    }, [i18n]);
 
     return (
         <Select
@@ -43,7 +43,7 @@ export function LanguageSelector() {
             }
         </Select>
 
-    )
+    );
 
 
 }

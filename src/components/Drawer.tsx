@@ -33,7 +33,7 @@ export function Drawer() {
     const theme = useTheme();
     const { t } = useTranslation();
     const { showDrawer, toggleDrawer } = useContext(DrawerContext);
-    const { colorMode, toggleColorMode } = useContext(ColorModeContext)
+    const { colorMode, toggleColorMode } = useContext(ColorModeContext);
 
     const StyledList = styled(List)<ListProps>(({ theme }) => ({
         background: theme.palette.background.paper

@@ -22,7 +22,7 @@ export function AllRecipes() {
     const { setCurrentRoute } = useContext(DrawerContext);
     useEffect(() => {
         setCurrentRoute(RouteAllRecipesName);
-    }, [setCurrentRoute])
+    }, [setCurrentRoute]);
 
     // using url as a source to know which filters to apply to grid
     const [searchParams,] = useSearchParams();

@@ -31,9 +31,9 @@ export function RecipeSteps(props: RecipeStepsProps) {
     const tags = useLiveQuery(async () => {
         const tags =
             (await getTagsByIds(tagIds))
-                .filter((tag): tag is Tag => tag !== undefined)
+                .filter((tag): tag is Tag => tag !== undefined);
         return tags;
-    })
+    });
 
     return (
         <Box sx={{ display: "flex", flexDirection: "column" }}>

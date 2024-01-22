@@ -21,7 +21,7 @@ export function FavoriteRecipes() {
     const { setCurrentRoute } = useContext(DrawerContext);
     useEffect(() => {
         setCurrentRoute(RouteFavoriteRecipesName);
-    }, [setCurrentRoute])
+    }, [setCurrentRoute]);
 
     // todo: implement proper pagination to only load a subset into memory
     const recipes = useLiveQuery(

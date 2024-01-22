@@ -21,11 +21,11 @@ export function TagChip(props: TagChipProps) {
 
     const handleLike = useCallback(async () => {
         await partialUpdateTag(id!, { isFavorite: true });
-    }, [id])
+    }, [id]);
 
     const handleUnlike = useCallback(async () => {
         await partialUpdateTag(id!, { isFavorite: false });
-    }, [id])
+    }, [id]);
 
 
     return (
@@ -51,7 +51,7 @@ export function TagChip(props: TagChipProps) {
                             "tag-name": name
                         }).toString()
                     }
-                )
+                );
             }}
             label={name}
             variant={"filled"}

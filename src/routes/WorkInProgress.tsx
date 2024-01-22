@@ -13,7 +13,7 @@ export function WorkInProgress() {
     const { t } = useTranslation();
     useEffect(() => {
         setCurrentRoute(RouteWorkInProgressName);
-    }, [setCurrentRoute])
+    }, [setCurrentRoute]);
 
     return (
         <Paper style={{ height: "100%", display: "flex", flexDirection: "column", justifyContent: "space-evenly", backgroundColor: "#5bd3e0" }}>

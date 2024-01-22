@@ -35,7 +35,7 @@ import { RouteDetailsRecipesName, getEditRecipeRoute } from "../routes/routes";
 export const detailsRecipeLoader: ActionFunction = async ({ params }) => {
     const { id } = params;
     if (id === undefined) {
-        return undefined
+        return undefined;
     }
 
     const numberId = parseInt(id);
@@ -48,13 +48,13 @@ export const detailsRecipeLoader: ActionFunction = async ({ params }) => {
         return undefined;
     }
     return recipe;
-}
+};
 
 export function DetailsRecipe() {
     const { setCurrentRoute } = useContext(DrawerContext);
     useEffect(() => {
         setCurrentRoute(RouteDetailsRecipesName);
-    }, [setCurrentRoute])
+    }, [setCurrentRoute]);
 
     const recipe = useLoaderData() as Recipe;
 
@@ -68,21 +68,21 @@ export function DetailsRecipe() {
 
     const handleClickPortionSelection = useCallback(() => {
         setShowPortionSelection(!showPortionSelection);
-    }, [showPortionSelection])
+    }, [showPortionSelection]);
 
     const increasePortion = useCallback(() => {
         setPortion(portion + 1);
-    }, [portion])
+    }, [portion]);
 
     const decreasePortion = useCallback(() => {
         if (portion > 1) {
             setPortion(portion - 1);
         }
-    }, [portion])
+    }, [portion]);
 
     const resetPortion = useCallback(() => {
         setPortion(recipe.portion);
-    }, [recipe.portion])
+    }, [recipe.portion]);
 
 
     const handleTabsChangeIndex = (index: number) => {
@@ -206,5 +206,5 @@ export function DetailsRecipe() {
                 <EditIcon />
             </Fab>
         </ Paper >
-    )
+    );
 }

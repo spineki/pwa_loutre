@@ -47,7 +47,7 @@ export function FormStepField<T extends FieldValues>(props: FormStepFieldProps<T
     const handleMoreOptionsClick = (event: React.MouseEvent<HTMLButtonElement>) => {
         setAnchorEl(event.currentTarget);
 
-    }
+    };
     const handleMoreOptionsClose = () => {
         setAnchorEl(null);
     };
@@ -153,6 +153,6 @@ export function FormStepField<T extends FieldValues>(props: FormStepFieldProps<T
             )
             }
         </Draggable >
-    )
+    );
 
 }

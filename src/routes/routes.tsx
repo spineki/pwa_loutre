@@ -14,11 +14,11 @@ export const RouteChangelogsName = "/changelogs";
  * @returns 
  */
 export function getDetailsRecipeRoute(id: number): string {
-    return `/recipes/${id}`
+    return `/recipes/${id}`;
 }
 
 export function getEditRecipeRoute(id: number): string {
-    return `/recipes/${id}/edit`
+    return `/recipes/${id}/edit`;
 }
 
 export type RoutesType =

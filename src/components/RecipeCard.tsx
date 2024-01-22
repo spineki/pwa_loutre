@@ -28,11 +28,11 @@ export function RecipeCard(props: RecipeCardProps) {
 
     const handleLike = useCallback(async () => {
         await partialUpdateRecipe(id, { isFavorite: true });
-    }, [id])
+    }, [id]);
 
     const handleUnlike = useCallback(async () => {
         await partialUpdateRecipe(id, { isFavorite: false });
-    }, [id])
+    }, [id]);
 
     return (
         <Card elevation={2}>

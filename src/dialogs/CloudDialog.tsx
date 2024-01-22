@@ -45,7 +45,7 @@ export function CloudDialog() {
         //todo, handle error code
         await importRecipesFromFileContent(content);
         setShowDialog(false);
-    }
+    };
 
     // import files from an input field
     // This is dirty, and we could only use this instead of the handleImport
@@ -62,7 +62,7 @@ export function CloudDialog() {
         }
 
         setShowDialog(false);
-    }
+    };
 
     const handleExport = async () => {
         const allRecipes = await getAllRecipes();
@@ -70,7 +70,7 @@ export function CloudDialog() {
             delete element.id;
         });
         shareFile(allRecipes);
-    }
+    };
 
     const handleDownload = async () => {
         const allRecipes = await getAllRecipes();
@@ -78,7 +78,7 @@ export function CloudDialog() {
             delete element.id;
         });
         downloadFile(allRecipes);
-    }
+    };
 
     return (
         <Dialog onClose={handleClose} open={showDialog}>
