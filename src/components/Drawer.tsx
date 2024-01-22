@@ -27,6 +27,7 @@ import { ColorModeContext } from "../contexts/ColormodeContext";
 import { DrawerContext } from "../contexts/DrawerContext";
 import { RouteAllRecipesName, RouteChangelogsName, RouteFavoriteRecipesName, RouteTagsName } from "../routes/routes";
 import { DrawerListItem } from "./DrawerListItem";
+import { LanguageSelector } from "./LanguageSelector";
 
 export function Drawer() {
     const theme = useTheme();
@@ -115,6 +116,12 @@ export function Drawer() {
                             }
                         </ListItemButton>
                     </ListItem>
+
+                    <ListItem>
+                        <LanguageSelector />
+                        <ListItemText sx={{ paddingLeft: 2 }} primary={t("Language")} />
+                    </ListItem>
+
                 </StyledList>
                 <Divider />
                 <StyledList
