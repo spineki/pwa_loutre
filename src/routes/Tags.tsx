@@ -51,8 +51,8 @@ export function Tags() {
                         {
                             groupedTags ?
                                 groupedTags.map(([letter, tags]) =>
-                                    <List key={letter}>
-                                        <ListItem>
+                                    <List key={letter} sx={{ paddingTop: 0, paddingBottom: 0 }}>
+                                        <ListItem sx={{ paddingTop: 0, paddingBottom: 0 }}>
                                             <ListItemText>
                                                 {letter.toUpperCase()}
                                             </ListItemText>
