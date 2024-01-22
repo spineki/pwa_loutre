@@ -27,8 +27,6 @@ export function RecipeCard(props: RecipeCardProps) {
     const { id, name, picture, time, isFavorite } = props;
 
     const theme = useTheme();
-    console.log(!!picture);
-
 
     const handleLike = useCallback(async () => {
         await partialUpdateRecipe(id, { isFavorite: true });
@@ -38,13 +36,11 @@ export function RecipeCard(props: RecipeCardProps) {
         await partialUpdateRecipe(id, { isFavorite: false });
     }, [id]);
 
-
     return (
         <Card elevation={2} sx={{
-            backgroundImage:
-                `
-                linear-gradient(0deg, rgba(42,42,42,0.65) 0%, rgba(42,42,42,0.65) 35%, rgba(255,255,255,0) 55%)
-                , url(/tutorial_picture.png);
+            backgroundImage: `
+                linear-gradient(0deg, rgba(42,42,42,0.65) 0%, rgba(42,42,42,0.65) 35%, rgba(255,255,255,0) 55%),
+                url(${picture ?? "/tutorial_picture.png"});
             `,
             height: "100%",
             width: "100%",
@@ -53,10 +49,10 @@ export function RecipeCard(props: RecipeCardProps) {
             flexDirection: "column",
             color: theme.palette.getContrastText("rgba(42,42,42,0.6)")
         }}>
-
             <CardActionArea
                 sx={{ display: "flex", flex: 1, flexDirection: "column", alignItems: "flex-start", justifyContent: "flex-end", paddingLeft: 1 }}
                 component={Link}
+
                 to={getDetailsRecipeRoute(id)}>
                 <CardContent style={{ padding: 2, paddingBottom: 0, paddingTop: 1 }}>
                     <Typography
