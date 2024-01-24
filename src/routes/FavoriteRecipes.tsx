@@ -51,11 +51,11 @@ export function FavoriteRecipes() {
 
     return (
         <Paper sx={{
-            height: "100%",
+            flex: 1,
             p: 2,
             display: "flex",
             flexDirection: "column",
-            justifyContent: "center",
+            justifyContent: "start",
             gap: 2
         }}>
             <Typography variant={"h4"} fontFamily={"Cookie-Regular"} sx={{ alignSelf: "center" }} >
