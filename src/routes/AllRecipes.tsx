@@ -109,12 +109,11 @@ export function AllRecipes() {
                     <InfiniteScroll
                         dataLength={recipes.length}
                         next={fetchData}
-                        hasMore={true} // Replace with a condition based on your data source
+                        hasMore={false} // Replace with a condition based on your data source
                         loader={<p>Loading...(currently {recipes.length} recipes)</p>}
-                        endMessage={<p>No more data to load.</p>}
                     >
                         <Box sx={{ flexGrow: 1 }}>
-                            <Grid container spacing={2} columns={{ xs: 2, sm: 4, md: 6 }}>
+                            <Grid container spacing={1.5} columns={{ xs: 2, sm: 4, md: 6 }}>
                                 {recipes.map(recipe => (
                                     <Grid key={recipe.id!} item xs={1} sx={{ aspectRatio: "1/1" }}>
                                         <RecipeCard

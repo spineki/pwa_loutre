@@ -18,15 +18,17 @@ import SpeedDialIcon from "@mui/material/SpeedDialIcon";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 
-import AddIcon from '@mui/icons-material/Add';
-import CloseIcon from '@mui/icons-material/Close';
-import DriveFileRenameOutlineIcon from '@mui/icons-material/DriveFileRenameOutline';
-import EggIcon from '@mui/icons-material/Egg';
-import MicrowaveIcon from '@mui/icons-material/Microwave';
+import AddIcon from "@mui/icons-material/Add";
+import ClearIcon from '@mui/icons-material/Clear';
+import CloseIcon from "@mui/icons-material/Close";
+import DriveFileRenameOutlineIcon from "@mui/icons-material/DriveFileRenameOutline";
+import EggIcon from "@mui/icons-material/Egg";
+import MicrowaveIcon from "@mui/icons-material/Microwave";
 import SaveIcon from "@mui/icons-material/Save";
-import ShortTextIcon from '@mui/icons-material/ShortText';
-import TuneIcon from '@mui/icons-material/Tune';
+import ShortTextIcon from "@mui/icons-material/ShortText";
+import TuneIcon from "@mui/icons-material/Tune";
 
+import { Fab } from "@mui/material";
 import { FormImageInputField } from "../components/FormImageInputField";
 import { FormIngredientField } from "../components/FormIngredientField";
 import { FormStepField } from "../components/FormStepField";
@@ -37,6 +39,7 @@ import { getRecipeById, insertRecipe, upsertRecipe } from "../database/controlle
 import { getAllTags, getTagByName, getTagsByIds, upsertTag } from "../database/controllers/tagController";
 import { IngredientSection, Recipe, StepSection, getEmptyRecipe } from "../database/models/Recipe";
 import { Tag, sanitizeTagName } from "../database/models/Tag";
+import { BlockerDialog } from "../dialogs/BlockerDialog";
 import { RouteEditRecipeName, getDetailsRecipeRoute } from "./routes";
 
 /**
@@ -123,7 +126,7 @@ interface EditRecipeFormInput {
     ingredients: Array<{ text: string, isSection: boolean }>
     name: string,
     portion: number,
-    picture?: Blob,
+    picture?: Blob | null,
     source: string,
     steps: Array<{ text: string, isSection: boolean }>
     tags: Array<{ name: string }>,
@@ -325,6 +328,8 @@ export function EditRecipe() {
 
     return (
         <Paper sx={{ p: 2, flex: 1, display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
+            <BlockerDialog block={formState.isDirty && !formState.isSubmitting} />
+
             {
                 formState.isLoading ? <CircularProgress /> :
                     <>
@@ -432,10 +437,22 @@ export function EditRecipe() {
                                                     }) => (
                                                         value
                                                             ?
-                                                            <Box
-                                                                sx={{ width: "100%" }}
-                                                                component="img"
-                                                                src={URL.createObjectURL(value)} />
+                                                            <Box sx={{ position: "relative" }}>
+                                                                <Box
+                                                                    sx={{ width: "100%" }}
+                                                                    component="img"
+                                                                    src={URL.createObjectURL(value)}>
+                                                                </Box>
+                                                                <Fab
+                                                                    onClick={() => {
+                                                                        setValue("picture", null);
+                                                                    }}
+                                                                    color="error"
+                                                                    size="small"
+                                                                    sx={{ position: "absolute", top: 8, right: 8 }}>
+                                                                    <ClearIcon />
+                                                                </Fab>
+                                                            </Box>
                                                             : <></>
                                                     )}
                                                 />

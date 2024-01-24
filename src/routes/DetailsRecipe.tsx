@@ -18,6 +18,7 @@ import ReplayIcon from '@mui/icons-material/Replay';
 import ShareIcon from '@mui/icons-material/Share';
 
 import { RecipeComments } from "../components/RecipeComments";
+import { RecipePreview } from "../components/RecipePreview";
 import { RecipeRequirements } from "../components/RecipeRequirements";
 import { RecipeSteps } from "../components/RecipeSteps";
 import { RecipeTabs } from "../components/RecipeTabs";
@@ -94,7 +95,12 @@ export function DetailsRecipe() {
     }, [recipe, shareFile]);
 
     return (
-        <Paper sx={{ p: 1, width: "100%", height: "100%", display: "flex", flexDirection: "column" }} >
+        <Paper sx={{
+            display: "flex",
+            flexDirection: "column",
+            width: "100%",
+            height: "100%",
+        }} >
 
             <Box sx={{ width: "100%", position: "fixed", zIndex: 1, }}>
                 <RecipeTabs currentTabIndex={currentTabIndex} handleTabsChange={handleTabsChangeIndex} />
@@ -105,29 +111,44 @@ export function DetailsRecipe() {
             </Box>
             <SwipeableViews
                 axis={theme.direction === "rtl" ? "x-reverse" : "x"}
-                style={{ padding: 8, height: "100%" }}
                 index={currentTabIndex}
+                style={{ display: "flex", flex: 1 }}
+                slideStyle={{
+                    flex: 1,
+                    display: "flex",
+                    flexDirection: "column",
+                    minWidth: "100%",
+                    overflowY: "hidden"
+                }}
+                containerStyle={{
+                    flex: 1,
+                    display: "flex"
+                }}
                 onChangeIndex={handleTabsChangeIndex}
             >
-                {currentTabIndex == 0 ?
-                    <RecipeRequirements
-                        ingredientSections={recipe.ingredientSections}
-                        multiplicator={portion / recipe.portion}
-                        name={recipe.name}
-                        time={recipe.time}
-                    />
-                    :
-                    <></>
-                }
-                {currentTabIndex == 1 ? <RecipeSteps stepSections={recipe.stepSections} tagIds={recipe.tagIds} /> : <></>}
-                {currentTabIndex == 2 ? <RecipeComments comments={recipe.comments} /> : <></>}
+                {currentTabIndex == 0 ? <RecipePreview
+                    name={recipe.name}
+                    picture={recipe.pictures.length > 0 ? URL.createObjectURL(recipe.pictures[0]) : undefined}
+                    tagIds={recipe.tagIds}
+                    time={recipe.time}
+                /> : <></>}
+
+                {/* Replaceing the tab content by an empty div to avoid all pages to have the maximal height
+                even if the page as small elements
+                this avoid short pages to still have a y-scroll enabled */}
+                {currentTabIndex == 1 ? <RecipeRequirements
+                    ingredientSections={recipe.ingredientSections}
+                    multiplicator={portion / recipe.portion}
+                /> : <></>}
+                {currentTabIndex == 2 ? <RecipeSteps stepSections={recipe.stepSections} /> : <></>}
+                {currentTabIndex == 3 ? <RecipeComments comments={recipe.comments} /> : <></>}
             </SwipeableViews>
 
-            {(currentTabIndex == 0 && showPortionSelection) &&
+            {(currentTabIndex === 1 && showPortionSelection) &&
                 <Box
                     sx={{
                         position: "fixed",
-                        bottom: 212,
+                        bottom: 80,
                         right: 16,
                         paddingRight: 0.5,
                     }}>
@@ -165,14 +186,14 @@ export function DetailsRecipe() {
                     </Grid>
                 </Box>
             }
-            {currentTabIndex == 0 &&
+            {currentTabIndex === 1 &&
                 <Fab
                     onClick={() => handleClickPortionSelection()}
                     size="medium"
                     color="primary"
                     sx={{
                         position: "fixed",
-                        bottom: 144,
+                        bottom: 16,
                         right: 16,
                     }}>
                     <Badge badgeContent={portion} color="secondary" sx={{ p: 0.5 }}>
@@ -181,30 +202,35 @@ export function DetailsRecipe() {
                 </Fab>
             }
 
-            <Fab
-                onClick={() => shareRecipe()}
-                size="medium"
-                color="secondary"
-                sx={{
-                    position: "fixed",
-                    bottom: 80,
-                    right: 16,
-                }}>
-                <ShareIcon />
-            </Fab>
+            {currentTabIndex === 0 &&
+                <>
+                    <Fab
+                        onClick={() => shareRecipe()}
+                        size="medium"
+                        color="secondary"
+                        sx={{
+                            position: "fixed",
+                            bottom: 80,
+                            right: 16,
+                        }}>
+                        <ShareIcon />
+                    </Fab>
 
-            <Fab
-                component={Link}
-                to={getEditRecipeRoute(recipe.id!)}
-                size="medium"
-                color="info"
-                sx={{
-                    position: "fixed",
-                    bottom: 16,
-                    right: 16,
-                }}>
-                <EditIcon />
-            </Fab>
+                    <Fab
+                        component={Link}
+                        to={getEditRecipeRoute(recipe.id!)}
+                        size="medium"
+                        color="info"
+                        sx={{
+                            position: "fixed",
+                            bottom: 16,
+                            right: 16,
+                        }}>
+                        <EditIcon />
+                    </Fab>
+                </>
+            }
+
         </ Paper >
     );
 }

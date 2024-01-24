@@ -10,11 +10,12 @@ export interface ColorModeContextInterface {
     theme: Theme,
     colorMode: PaletteMode
     toggleColorMode: () => Promise<void>;
+    getTheme: (mode: PaletteMode) => Theme;
 }
 
 export const ColorModeContext = createContext<ColorModeContextInterface>({} as ColorModeContextInterface);
 
-const getDesignTokens = (mode: PaletteMode) => ({
+export const getDesignTokens = (mode: PaletteMode) => ({
     palette: {
         mode,
         ...(mode === "light"
@@ -78,8 +79,12 @@ export function ColorModeProvider({
             return createTheme(getDesignTokens(colorMode));
         }, [colorMode]);
 
+    const getTheme = useCallback((colorMode: PaletteMode) => {
+        return createTheme(getDesignTokens(colorMode));
+    }, []);
+
     return (
-        <ColorModeContext.Provider value={{ toggleColorMode, colorMode, theme }}>
+        <ColorModeContext.Provider value={{ toggleColorMode, colorMode, theme, getTheme }}>
             {children}
         </ColorModeContext.Provider>
     );

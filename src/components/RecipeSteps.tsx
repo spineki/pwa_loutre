@@ -1,4 +1,3 @@
-import { useLiveQuery } from "dexie-react-hooks";
 import { useTranslation } from "react-i18next";
 
 import Avatar from "@mui/material/Avatar";
@@ -13,45 +12,26 @@ import ListItemText from "@mui/material/ListItemText";
 import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
 
-import { getTagsByIds } from "../database/controllers/tagController";
 import { StepSection } from "../database/models/Recipe";
-import { Tag } from "../database/models/Tag";
+
 
 
 interface RecipeStepsProps {
-    tagIds: number[],
+
     stepSections: StepSection[],
 }
 
 export function RecipeSteps(props: RecipeStepsProps) {
-    const { stepSections, tagIds } = props;
+    const { stepSections, } = props;
     const { t } = useTranslation();
 
-    const tags = useLiveQuery(async () => {
-        const tags =
-            (await getTagsByIds(tagIds))
-                .filter((tag): tag is Tag => tag !== undefined);
-        return tags;
-    });
-
     return (
-        <Box sx={{ display: "flex", flexDirection: "column" }}>
+        <Box sx={{ display: "flex", flexDirection: "column", p: 2 }}>
             <Grid container>
                 <Grid item xs={0} md={4} />
                 <Grid item xs={12} md={4}>
 
                     <List>
-                        {
-                            tags &&
-                            <ListItem sx={{ display: "flex", flexWrap: "wrap", gap: 1 }}>
-                                {
-                                    tags.map(tag =>
-                                        <Chip key={tag.name} label={tag.name} />
-                                    )
-                                }
-                            </ListItem>
-                        }
-
                         <ListItem sx={{ display: "flex", justifyContent: "center", paddingLeft: 0 }}>
                             <ListItemAvatar>
                                 <Avatar
