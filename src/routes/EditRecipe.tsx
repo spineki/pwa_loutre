@@ -39,6 +39,7 @@ import { getRecipeById, insertRecipe, upsertRecipe } from "../database/controlle
 import { getAllTags, getTagByName, getTagsByIds, upsertTag } from "../database/controllers/tagController";
 import { IngredientSection, Recipe, StepSection, getEmptyRecipe } from "../database/models/Recipe";
 import { Tag, sanitizeTagName } from "../database/models/Tag";
+import { BlockerDialog } from "../dialogs/BlockerDialog";
 import { RouteEditRecipeName, getDetailsRecipeRoute } from "./routes";
 
 /**
@@ -327,6 +328,8 @@ export function EditRecipe() {
 
     return (
         <Paper sx={{ p: 2, flex: 1, display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
+            <BlockerDialog block={formState.isDirty && !formState.isSubmitting} />
+
             {
                 formState.isLoading ? <CircularProgress /> :
                     <>
