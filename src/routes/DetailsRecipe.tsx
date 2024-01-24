@@ -148,7 +148,7 @@ export function DetailsRecipe() {
                 <Box
                     sx={{
                         position: "fixed",
-                        bottom: 212,
+                        bottom: 80,
                         right: 16,
                         paddingRight: 0.5,
                     }}>
