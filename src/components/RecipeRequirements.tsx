@@ -11,23 +11,20 @@ import ListItemText from "@mui/material/ListItemText";
 import Typography from "@mui/material/Typography";
 
 import Grid from "@mui/material/Grid";
-import { IngredientSection, Time } from "../database/models/Recipe";
+import { IngredientSection } from "../database/models/Recipe";
 import { ColouredNumberText } from "./ColouredNumberText";
-import { TimeRow } from "./TimeRow";
 
 interface RecipeRequirementsProps {
     ingredientSections: IngredientSection[],
     multiplicator: number,
-    name: string,
-    time: Time,
 }
 
 export function RecipeRequirements(props: RecipeRequirementsProps) {
-    const { ingredientSections, multiplicator, name, time } = props;
+    const { ingredientSections, multiplicator } = props;
     const { t } = useTranslation();
 
     return (
-        <Box sx={{ display: "flex", flexDirection: "column" }}>
+        <Box sx={{ display: "flex", flexDirection: "column", p: 2 }}>
             <Grid container >
                 <Grid item xs={0} md={4} />
 
@@ -52,16 +49,6 @@ export function RecipeRequirements(props: RecipeRequirementsProps) {
 
                             </ListItemText>
 
-                        </ListItem>
-
-                        <ListItem sx={{ display: "flex", justifyContent: "center" }}>
-                            <Typography>
-                                {name}
-                            </Typography>
-                        </ListItem>
-
-                        <ListItem>
-                            <TimeRow time={time} />
                         </ListItem>
 
                         {
