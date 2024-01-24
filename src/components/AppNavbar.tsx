@@ -19,7 +19,7 @@ import { SearchBar } from "./SearchBar";
 
 
 // An offset is required to make some room for the appNavbar (scrolling issue)
-const Offset = styled("div")(({ theme }) => theme.mixins.toolbar);
+const AppNavBarOffset = styled("div")(({ theme }) => theme.mixins.toolbar);
 
 export function AppNavbar() {
 
@@ -83,7 +83,7 @@ export function AppNavbar() {
                     </IconButton>
                 </Toolbar>
             </AppBar>
-            <Offset />
+            <AppNavBarOffset />
         </Box>
     );
 }

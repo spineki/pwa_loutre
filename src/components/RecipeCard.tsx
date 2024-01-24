@@ -40,7 +40,7 @@ export function RecipeCard(props: RecipeCardProps) {
         <Card elevation={2} sx={{
             backgroundImage: `
                 linear-gradient(0deg, rgba(42,42,42,0.65) 0%, rgba(42,42,42,0.65) 35%, rgba(255,255,255,0) 55%),
-                url(${picture ?? "/tutorial_picture.png"});
+                url(${picture ?? "/tutorial_picture.png"})
             `,
             height: "100%",
             width: "100%",
@@ -50,7 +50,14 @@ export function RecipeCard(props: RecipeCardProps) {
             color: theme.palette.getContrastText("rgba(42,42,42,0.6)")
         }}>
             <CardActionArea
-                sx={{ display: "flex", flex: 1, flexDirection: "column", alignItems: "flex-start", justifyContent: "flex-end", paddingLeft: 1 }}
+                sx={{
+                    display: "flex",
+                    flex: 1, flexDirection: "column",
+                    alignItems: "flex-start",
+                    justifyContent: "end",
+                    paddingLeft: 1,
+                    paddingRight: 1
+                }}
                 component={Link}
 
                 to={getDetailsRecipeRoute(id)}>
