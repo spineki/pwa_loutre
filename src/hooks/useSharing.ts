@@ -16,7 +16,7 @@ interface LaunchQueue {
 
 function createTxtFileFromObject(fileName: string, object: object): File {
   const jsonContent = JSON.stringify(object, null, 2);
-  const file = new File([jsonContent], `${fileName}.txt`, {
+  const file = new File([jsonContent], fileName, {
     type: "text/plain",
   });
   return file;
@@ -25,7 +25,7 @@ function createTxtFileFromObject(fileName: string, object: object): File {
 function getAllRecipesFileName() {
   const now = new Date();
   const formattedDate = dateToPathCompatibleIsoFormat(now);
-  const fileName = `all_recipes_${formattedDate}`;
+  const fileName = `all_recipes_${formattedDate}.txt`;
   return fileName;
 }
 

@@ -21,6 +21,7 @@ import {
   getAllRecipes,
   importRecipesFromFileContent,
 } from "../database/controllers/recipeController";
+import { getJsonCompatibleRecipe } from "../database/models/Recipe";
 import { useSharing } from "../hooks/useSharing";
 
 export function CloudDialog() {
@@ -88,18 +89,21 @@ export function CloudDialog() {
 
   const handleExport = async () => {
     const allRecipes = await getAllRecipes();
-    allRecipes.forEach((element) => {
-      delete element.id;
-    });
-    shareFile(allRecipes);
+
+    const jsonCompatibleRecipe = await Promise.all(
+      allRecipes.map(async (recipe) => getJsonCompatibleRecipe(recipe)),
+    );
+
+    shareFile(jsonCompatibleRecipe);
   };
 
   const handleDownload = async () => {
     const allRecipes = await getAllRecipes();
-    allRecipes.forEach((element) => {
-      delete element.id;
-    });
-    downloadFile(allRecipes);
+
+    const jsonCompatibleRecipe = await Promise.all(
+      allRecipes.map(async (recipe) => getJsonCompatibleRecipe(recipe)),
+    );
+    downloadFile(jsonCompatibleRecipe);
   };
 
   return (

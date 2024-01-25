@@ -3,7 +3,11 @@ import { z } from "zod";
 import { tutorialRecipe, tutorialTags } from "../../fixtures";
 import { Result } from "../../utils/errorHandling";
 import { database } from "../database";
-import { Recipe, RecipeSchema } from "../models/Recipe";
+import {
+  JsonCompatibleRecipeSchema,
+  Recipe,
+  getRecipeFromJSonCompatibleRecipe,
+} from "../models/Recipe";
 import { getTagByName, upsertTag } from "./tagController";
 
 // RECIPES --------------------------------------
@@ -52,6 +56,10 @@ export async function partialUpdateRecipe(
   await database.recipes.update(id, changes);
 }
 
+export async function deleteRecipe(id: number) {
+  await database.recipes.delete(id);
+}
+
 // Helpers
 
 /**
@@ -72,16 +80,17 @@ export async function importRecipesFromFileContent(
       return true;
     }, "An error occured while parsing files to json")
     .transform((content) => JSON.parse(content))
-    .pipe(RecipeSchema.array())
+    .pipe(JsonCompatibleRecipeSchema.array())
     .safeParse(content);
 
   if (result.success) {
-    const recipes = result.data;
-    recipes.forEach((recipe) => {
-      if (recipe.id) {
-        delete recipe.id;
-      }
-    });
+    const recipes: Array<Recipe> = await Promise.all(
+      // eslint-disable-next-line
+      result.data.map((jsonCompatibleRecipe) =>
+        getRecipeFromJSonCompatibleRecipe(jsonCompatibleRecipe),
+      ),
+    );
+
     await bulkUpsertRecipes(recipes);
     return { success: true };
   } else {

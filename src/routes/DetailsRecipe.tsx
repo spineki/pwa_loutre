@@ -24,7 +24,7 @@ import { RecipeSteps } from "../components/RecipeSteps";
 import { RecipeTabs } from "../components/RecipeTabs";
 import { DrawerContext } from "../contexts/DrawerContext";
 import { getRecipeById } from "../database/controllers/recipeController";
-import { Recipe } from "../database/models/Recipe";
+import { Recipe, getJsonCompatibleRecipe } from "../database/models/Recipe";
 import { useSharing } from "../hooks/useSharing";
 import { RouteDetailsRecipesName, getEditRecipeRoute } from "../routes/routes";
 
@@ -89,8 +89,8 @@ export function DetailsRecipe() {
     setCurrentTabIndex(index);
   };
 
-  const shareRecipe = useCallback(() => {
-    shareFile([recipe]);
+  const shareRecipe = useCallback(async () => {
+    await shareFile([await getJsonCompatibleRecipe(recipe)]);
   }, [recipe, shareFile]);
 
   return (
