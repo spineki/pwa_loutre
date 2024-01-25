@@ -16,6 +16,7 @@ import CloudDownloadIcon from "@mui/icons-material/CloudDownload";
 import DownloadIcon from "@mui/icons-material/Download";
 
 import { CloudDialogContext } from "../contexts/CloudDialogContext";
+import { MessageContext } from "../contexts/MessageContext";
 import {
   getAllRecipes,
   importRecipesFromFileContent,
@@ -25,11 +26,13 @@ import { useSharing } from "../hooks/useSharing";
 export function CloudDialog() {
   const { t } = useTranslation();
   const { showDialog, setShowDialog } = useContext(CloudDialogContext);
+  const { pushMessage } = useContext(MessageContext);
+
   const {
     browserCanShareFiles,
     browserCanImportFiles,
     downloadFile,
-    importFile,
+    loadTextFileContent,
     shareFile,
   } = useSharing();
 
@@ -38,14 +41,22 @@ export function CloudDialog() {
   };
 
   const handleImport = async () => {
-    const content = await importFile();
+    const content = await loadTextFileContent();
     if (!(typeof content === "string")) {
       console.error(`Error while handling import ${content.error}`);
       return;
     }
 
     //todo, handle error code
-    await importRecipesFromFileContent(content);
+    const result = await importRecipesFromFileContent(content);
+
+    if (!result.success) {
+      const issues = result.error.issues.map(
+        (error) => `message: ${error.message}, path:${error.path}`,
+      );
+      pushMessage(issues.join("\n"));
+    }
+
     setShowDialog(false);
   };
 
@@ -62,7 +73,14 @@ export function CloudDialog() {
 
     for (const file of files) {
       const content = await file.text();
-      await importRecipesFromFileContent(content);
+      const result = await importRecipesFromFileContent(content);
+
+      if (!result.success) {
+        const issues = result.error.issues.map(
+          (error) => `message: ${error.message}, path:${error.path}`,
+        );
+        pushMessage(issues.join("\n"));
+      }
     }
 
     setShowDialog(false);
@@ -87,63 +105,61 @@ export function CloudDialog() {
   return (
     <Dialog onClose={handleClose} open={showDialog}>
       <DialogTitle>{t("Saves")}</DialogTitle>
-      {browserCanShareFiles ? (
-        <List sx={{ pt: 0 }}>
-          {browserCanImportFiles ? (
-            <ListItem disableGutters>
-              <ListItemButton onClick={() => handleImport()}>
-                <ListItemIcon>
-                  <CloudDownloadIcon />
-                </ListItemIcon>
-                <ListItemText primary={t("Import saved recipes")} />
-              </ListItemButton>
-            </ListItem>
-          ) : (
-            <ListItem disableGutters>
-              <ListItemButton component="label">
-                <ListItemIcon>
-                  <CloudDownloadIcon />
-                </ListItemIcon>
-                <input
-                  type="file"
-                  accept="text/plain"
-                  hidden
-                  onChange={handleImportOldWay}
-                />
-                <ListItemText primary={t("Import saved recipes")} />
-              </ListItemButton>
-            </ListItem>
-          )}
+      <List sx={{ pt: 0 }}>
+        {browserCanImportFiles ? (
           <ListItem disableGutters>
-            <ListItemButton
-              disabled={!browserCanShareFiles}
-              onClick={() => handleExport()}
-            >
+            <ListItemButton onClick={() => handleImport()}>
               <ListItemIcon>
-                <BackupIcon />
+                <CloudDownloadIcon />
               </ListItemIcon>
-              <ListItemText primary={t("Export saved recipes")} />
+              <ListItemText primary={t("Import saved recipes")} />
             </ListItemButton>
           </ListItem>
+        ) : (
           <ListItem disableGutters>
-            <ListItemButton
-              disabled={!browserCanShareFiles}
-              onClick={() => handleDownload()}
-            >
+            <ListItemButton component="label">
               <ListItemIcon>
-                <DownloadIcon />
+                <CloudDownloadIcon />
               </ListItemIcon>
-              <ListItemText primary={t("DownloadRecipes")} />
+              <input
+                type="file"
+                accept="text/plain"
+                hidden
+                onChange={handleImportOldWay}
+              />
+              <ListItemText primary={t("Import saved recipes")} />
             </ListItemButton>
           </ListItem>
-        </List>
-      ) : (
-        <DialogContent>
-          <DialogContentText>
-            Your website does not seem to be able to share files. Sorry.
-          </DialogContentText>
-        </DialogContent>
-      )}
+        )}
+        <ListItem disableGutters>
+          <ListItemButton
+            disabled={!browserCanShareFiles}
+            onClick={() => handleExport()}
+          >
+            <ListItemIcon>
+              <BackupIcon />
+            </ListItemIcon>
+            <ListItemText primary={t("Export saved recipes")} />
+          </ListItemButton>
+        </ListItem>
+        <ListItem disableGutters>
+          <ListItemButton
+            disabled={!browserCanShareFiles}
+            onClick={() => handleDownload()}
+          >
+            <ListItemIcon>
+              <DownloadIcon />
+            </ListItemIcon>
+            <ListItemText primary={t("DownloadRecipes")} />
+          </ListItemButton>
+        </ListItem>
+      </List>
+
+      <DialogContent>
+        <DialogContentText>
+          Your website does not seem to be able to share files. Sorry.
+        </DialogContentText>
+      </DialogContent>
     </Dialog>
   );
 }

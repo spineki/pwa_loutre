@@ -1,6 +1,9 @@
+import { z } from "zod";
+
 import { tutorialRecipe, tutorialTags } from "../../fixtures";
+import { Result } from "../../utils/errorHandling";
 import { database } from "../database";
-import { Recipe } from "../models/Recipe";
+import { Recipe, RecipeSchema } from "../models/Recipe";
 import { getTagByName, upsertTag } from "./tagController";
 
 // RECIPES --------------------------------------
@@ -56,20 +59,29 @@ export async function partialUpdateRecipe(
  * @param content
  * @returns
  */
-export async function importRecipesFromFileContent(content: string) {
-  let recipes;
-  try {
-    recipes = JSON.parse(content);
-  } catch (error: unknown) {
-    console.error("An error occured while parsing files to json");
-    return { error };
-  }
+export async function importRecipesFromFileContent(
+  content: string,
+): Promise<Result<null, z.ZodError<string>>> {
+  const result = z
+    .custom<string>((content) => {
+      try {
+        JSON.parse(content as string);
+      } catch (error) {
+        return false;
+      }
+      return true;
+    }, "An error occured while parsing files to json")
+    .transform((content) => JSON.parse(content))
+    .pipe(RecipeSchema.array())
+    .safeParse(content);
 
-  if (!Array.isArray(recipes)) {
-    return { error: "The provided document does not contain an array" };
+  if (result.success) {
+    const recipes = result.data;
+    await bulkUpsertRecipes(recipes);
+    return { success: true };
+  } else {
+    return { success: false, error: result.error };
   }
-
-  await bulkUpsertRecipes(recipes);
 }
 
 export async function initTutorialRecipe() {

@@ -21,6 +21,7 @@ import { RouteAllRecipesName, RouteCreateRecipeName } from "../routes/routes";
 
 export function AllRecipes() {
   const { setCurrentRoute } = useContext(DrawerContext);
+
   useEffect(() => {
     setCurrentRoute(RouteAllRecipesName);
   }, [setCurrentRoute]);

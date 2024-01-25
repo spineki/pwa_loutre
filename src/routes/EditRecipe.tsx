@@ -1,7 +1,7 @@
 import {
-    DragDropContext,
-    Droppable,
-    OnDragEndResponder,
+  DragDropContext,
+  Droppable,
+  OnDragEndResponder,
 } from "@hello-pangea/dnd";
 import { useLiveQuery } from "dexie-react-hooks";
 import moment from "moment";
@@ -23,7 +23,7 @@ import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 
 import AddIcon from "@mui/icons-material/Add";
-import ClearIcon from '@mui/icons-material/Clear';
+import ClearIcon from "@mui/icons-material/Clear";
 import CloseIcon from "@mui/icons-material/Close";
 import DriveFileRenameOutlineIcon from "@mui/icons-material/DriveFileRenameOutline";
 import EggIcon from "@mui/icons-material/Egg";
@@ -40,21 +40,21 @@ import { FormTextField } from "../components/FormTextField";
 import { FormTimePicker } from "../components/FormTimePicker";
 import { DrawerContext } from "../contexts/DrawerContext";
 import {
-    getRecipeById,
-    insertRecipe,
-    upsertRecipe,
+  getRecipeById,
+  insertRecipe,
+  upsertRecipe,
 } from "../database/controllers/recipeController";
 import {
-    getAllTags,
-    getTagByName,
-    getTagsByIds,
-    upsertTag,
+  getAllTags,
+  getTagByName,
+  getTagsByIds,
+  upsertTag,
 } from "../database/controllers/tagController";
 import {
-    IngredientSection,
-    Recipe,
-    StepSection,
-    getEmptyRecipe,
+  IngredientSection,
+  Recipe,
+  StepSection,
+  getEmptyRecipe,
 } from "../database/models/Recipe";
 import { Tag, sanitizeTagName } from "../database/models/Tag";
 import { BlockerDialog } from "../dialogs/BlockerDialog";
@@ -157,20 +157,20 @@ function convertIngredientsToIngredientSections(
 }
 
 interface EditRecipeFormInput {
-    comments: string,
-    isFavorite: boolean,
-    ingredients: Array<{ text: string, isSection: boolean }>
-    name: string,
-    portion: number,
-    picture?: Blob | null,
-    source: string,
-    steps: Array<{ text: string, isSection: boolean }>
-    tags: Array<{ name: string }>,
-    time: {
-        preparation: moment.Moment,
-        baking: moment.Moment,
-        total: moment.Moment,
-    },
+  comments: string;
+  isFavorite: boolean;
+  ingredients: Array<{ text: string; isSection: boolean }>;
+  name: string;
+  portion: number;
+  picture?: Blob | null;
+  source: string;
+  steps: Array<{ text: string; isSection: boolean }>;
+  tags: Array<{ name: string }>;
+  time: {
+    preparation: moment.Moment;
+    baking: moment.Moment;
+    total: moment.Moment;
+  };
 }
 
 export function EditRecipe() {
@@ -392,33 +392,47 @@ export function EditRecipe() {
     navigate(getDetailsRecipeRoute(id));
   };
 
-    return (
-        <Paper sx={{ p: 2, flex: 1, display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
-            <BlockerDialog block={formState.isDirty && !formState.isSubmitting} />
+  return (
+    <Paper
+      sx={{
+        p: 2,
+        flex: 1,
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+        alignItems: "center",
+      }}
+    >
+      <BlockerDialog block={formState.isDirty && !formState.isSubmitting} />
 
-            {
-                formState.isLoading ? <CircularProgress /> :
-                    <>
-                        <Grid container sx={{ display: "flex", flex: 1 }}>
-                            <Grid item xs={0} md={4} />
-                            <Grid item xs={12} md={4} sx={{ display: "flex", flex: 1 }}>
-                                <Box
-                                    component="form"
-                                    noValidate
-                                    autoComplete="off"
-                                    style={{ display: "flex", flexDirection: "column", flex: 1, gap: 16 }}
-                                >
-                                    <Typography variant="h5">
-                                        {recipe.id == null ? t("NewRecipe") : t("Edit")}
-                                    </Typography>
-                                    {
-                                        currentTabIndex == 0 ?
-                                            <>
-                                                <FormTextField
-                                                    control={control}
-                                                    name="name"
-                                                    label={t("RecipeName")}
-                                                />
+      {formState.isLoading ? (
+        <CircularProgress />
+      ) : (
+        <>
+          <Grid container sx={{ display: "flex", flex: 1 }}>
+            <Grid item xs={0} md={4} />
+            <Grid item xs={12} md={4} sx={{ display: "flex", flex: 1 }}>
+              <Box
+                component="form"
+                noValidate
+                autoComplete="off"
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  flex: 1,
+                  gap: 16,
+                }}
+              >
+                <Typography variant="h5">
+                  {recipe.id == null ? t("NewRecipe") : t("Edit")}
+                </Typography>
+                {currentTabIndex == 0 ? (
+                  <>
+                    <FormTextField
+                      control={control}
+                      name="name"
+                      label={t("RecipeName")}
+                    />
 
                     <FormTextField
                       control={control}
@@ -501,129 +515,135 @@ export function EditRecipe() {
                       setValue={setValue}
                     />
 
-                                                <Controller
-                                                    name={"picture"}
-                                                    control={control}
-                                                    render={({
-                                                        field: { value },
-                                                    }) => (
-                                                        value
-                                                            ?
-                                                            <Box sx={{ position: "relative" }}>
-                                                                <Box
-                                                                    sx={{ width: "100%" }}
-                                                                    component="img"
-                                                                    src={URL.createObjectURL(value)}>
-                                                                </Box>
-                                                                <Fab
-                                                                    onClick={() => {
-                                                                        setValue("picture", null);
-                                                                    }}
-                                                                    color="error"
-                                                                    size="small"
-                                                                    sx={{ position: "absolute", top: 8, right: 8 }}>
-                                                                    <ClearIcon />
-                                                                </Fab>
-                                                            </Box>
-                                                            : <></>
-                                                    )}
-                                                />
-
-                                            </>
-
-                                            : currentTabIndex == 1 ?
-                                                <>
-                                                    <DragDropContext onDragEnd={handleIngredientsDrag}>
-                                                        <Droppable droppableId="ingredients-items">
-                                                            {(provided) => (
-                                                                <Box
-                                                                    ref={provided.innerRef}
-                                                                    {...provided.droppableProps}
-                                                                    sx={{ display: "flex", flexDirection: "column", gap: 2 }}
-                                                                >
-                                                                    {ingredientsFields.map((step, index) => (
-                                                                        <FormIngredientField
-                                                                            key={`test[${index}]`}
-                                                                            id={step.id}
-                                                                            index={index}
-                                                                            control={control}
-                                                                            watch={watch}
-                                                                            split={splitIngredients}
-                                                                            remove={ingredientsRemove}
-                                                                            minRows={2}
-                                                                            textName={`ingredients.${index}.text`}
-                                                                            isSectionName={`ingredients.${index}.isSection`}
-                                                                        />
-                                                                    ))}
-                                                                    {provided.placeholder}
-                                                                </Box>
-                                                            )}
-                                                        </Droppable>
-
-                                                    </DragDropContext>
-                                                    <IconButton
-                                                        sx={{ alignSelf: "center" }}
-                                                        color="primary"
-                                                        onClick={() => ingredientsAppend({ text: "", isSection: false })}
-                                                    >
-                                                        <AddIcon />
-                                                    </IconButton>
-                                                </>
-
-                                                : currentTabIndex == 2 ?
-                                                    <>
-                                                        <DragDropContext onDragEnd={handleStepsDrag}>
-                                                            <Droppable droppableId="steps-items">
-                                                                {(provided) => (
-                                                                    <Box
-                                                                        ref={provided.innerRef}
-                                                                        {...provided.droppableProps}
-                                                                        sx={{ display: "flex", flexDirection: "column", gap: 2 }}
-                                                                    >
-                                                                        {stepsFields.map((step, index) => (
-                                                                            <FormStepField
-                                                                                key={`test[${index}]`}
-                                                                                id={step.id}
-                                                                                index={index}
-                                                                                control={control}
-                                                                                watch={watch}
-                                                                                split={splitSteps}
-                                                                                remove={stepsRemove}
-                                                                                minRows={2}
-                                                                                textName={`steps.${index}.text`}
-                                                                                isSectionName={`steps.${index}.isSection`}
-                                                                            />
-                                                                        ))}
-                                                                        {provided.placeholder}
-                                                                    </Box>
-                                                                )}
-                                                            </Droppable>
-
-                                                        </DragDropContext>
-                                                        <IconButton
-                                                            sx={{ alignSelf: "center" }}
-                                                            color="primary"
-                                                            onClick={() => stepsAppend({ text: "", isSection: false })}
-                                                        >
-                                                            <AddIcon />
-                                                        </IconButton>
-                                                    </>
-                                                    :
-                                                    <>
-                                                        <FormTextField
-                                                            control={control}
-                                                            name="comments"
-                                                            label={t("Comments")}
-                                                            multiline
-                                                            minRows={10}
-                                                        />
-                                                    </>
-                                    }
-
-                                </Box>
-                            </Grid>
-                            <Grid item xs={0} md={4} />
-                        </Grid>
+                    <Controller
+                      name={"picture"}
+                      control={control}
+                      render={({ field: { value } }) =>
+                        value ? (
+                          <Box sx={{ position: "relative" }}>
+                            <Box
+                              sx={{ width: "100%" }}
+                              component="img"
+                              src={URL.createObjectURL(value)}
+                            ></Box>
+                            <Fab
+                              onClick={() => {
+                                setValue("picture", null);
+                              }}
+                              color="error"
+                              size="small"
+                              sx={{ position: "absolute", top: 8, right: 8 }}
+                            >
+                              <ClearIcon />
+                            </Fab>
+                          </Box>
+                        ) : (
+                          <></>
+                        )
+                      }
+                    />
+                  </>
+                ) : currentTabIndex == 1 ? (
+                  <>
+                    <DragDropContext onDragEnd={handleIngredientsDrag}>
+                      <Droppable droppableId="ingredients-items">
+                        {(provided) => (
+                          <Box
+                            ref={provided.innerRef}
+                            {...provided.droppableProps}
+                            sx={{
+                              display: "flex",
+                              flexDirection: "column",
+                              gap: 2,
+                            }}
+                          >
+                            {ingredientsFields.map((step, index) => (
+                              <FormIngredientField
+                                key={`test[${index}]`}
+                                id={step.id}
+                                index={index}
+                                control={control}
+                                watch={watch}
+                                split={splitIngredients}
+                                remove={ingredientsRemove}
+                                minRows={2}
+                                textName={`ingredients.${index}.text`}
+                                isSectionName={`ingredients.${index}.isSection`}
+                              />
+                            ))}
+                            {provided.placeholder}
+                          </Box>
+                        )}
+                      </Droppable>
+                    </DragDropContext>
+                    <IconButton
+                      sx={{ alignSelf: "center" }}
+                      color="primary"
+                      onClick={() =>
+                        ingredientsAppend({ text: "", isSection: false })
+                      }
+                    >
+                      <AddIcon />
+                    </IconButton>
+                  </>
+                ) : currentTabIndex == 2 ? (
+                  <>
+                    <DragDropContext onDragEnd={handleStepsDrag}>
+                      <Droppable droppableId="steps-items">
+                        {(provided) => (
+                          <Box
+                            ref={provided.innerRef}
+                            {...provided.droppableProps}
+                            sx={{
+                              display: "flex",
+                              flexDirection: "column",
+                              gap: 2,
+                            }}
+                          >
+                            {stepsFields.map((step, index) => (
+                              <FormStepField
+                                key={`test[${index}]`}
+                                id={step.id}
+                                index={index}
+                                control={control}
+                                watch={watch}
+                                split={splitSteps}
+                                remove={stepsRemove}
+                                minRows={2}
+                                textName={`steps.${index}.text`}
+                                isSectionName={`steps.${index}.isSection`}
+                              />
+                            ))}
+                            {provided.placeholder}
+                          </Box>
+                        )}
+                      </Droppable>
+                    </DragDropContext>
+                    <IconButton
+                      sx={{ alignSelf: "center" }}
+                      color="primary"
+                      onClick={() =>
+                        stepsAppend({ text: "", isSection: false })
+                      }
+                    >
+                      <AddIcon />
+                    </IconButton>
+                  </>
+                ) : (
+                  <>
+                    <FormTextField
+                      control={control}
+                      name="comments"
+                      label={t("Comments")}
+                      multiline
+                      minRows={10}
+                    />
+                  </>
+                )}
+              </Box>
+            </Grid>
+            <Grid item xs={0} md={4} />
+          </Grid>
 
           <SpeedDial
             ariaLabel="SpeedDial tooltip example"

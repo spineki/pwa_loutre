@@ -1,9 +1,9 @@
 import { z } from "zod";
 
 const TimeSchema = z.object({
-  preparation: z.number().positive(),
-  baking: z.number().positive(),
-  total: z.number().positive(),
+  preparation: z.number().nonnegative().default(0),
+  baking: z.number().nonnegative().default(0),
+  total: z.number().nonnegative().default(0),
 });
 
 export type Time = z.infer<typeof TimeSchema>;
@@ -22,17 +22,17 @@ const StepSectionSchema = z.object({
 
 export type StepSection = z.infer<typeof StepSectionSchema>;
 
-const RecipeSchema = z.object({
+export const RecipeSchema = z.object({
   id: z.number().optional(),
-  comments: z.string(),
+  comments: z.string().default(""),
   name: z.string(),
-  isFavorite: z.boolean(),
-  ingredientSections: IngredientSectionSchema.array(),
-  portion: z.number().positive(),
-  pictures: z.instanceof(Blob).array(),
-  source: z.string(),
-  stepSections: StepSectionSchema.array(),
-  tagIds: z.number().array(), // foreign key for tags
+  isFavorite: z.boolean().default(false),
+  ingredientSections: IngredientSectionSchema.array().default([]),
+  portion: z.number().positive().default(1),
+  pictures: z.instanceof(Blob).array().default([]),
+  source: z.string().default(""),
+  stepSections: StepSectionSchema.array().default([]),
+  tagIds: z.number().array().default([]), // foreign key for tags
   time: TimeSchema,
 });
 

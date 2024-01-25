@@ -85,7 +85,7 @@ export function useSharing() {
     link.remove();
   }, []);
 
-  const importFile = useCallback(async (): Promise<
+  const loadTextFileContent = useCallback(async (): Promise<
     string | { error: unknown }
   > => {
     try {
@@ -124,7 +124,7 @@ export function useSharing() {
     browserCanImportFiles,
     browserCanShareFiles,
     downloadFile,
-    importFile,
+    loadTextFileContent,
     receiveFile,
     shareFile,
   };

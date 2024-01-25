@@ -3,6 +3,7 @@ import { Outlet } from "react-router-dom";
 import Box from "@mui/material/Box";
 
 import { AppNavbar } from "../components/AppNavbar";
+import { ConsecutiveMessageSnackbar } from "../components/ConsecutiveMessageSnackbar";
 import { Drawer } from "../components/Drawer";
 import { CloudDialogContextProvider } from "../contexts/CloudDialogContext";
 import { ConversionDialogContextProvider } from "../contexts/ConversionDialogContext";
@@ -24,6 +25,7 @@ export function Root() {
           <Drawer />
           <CloudDialog />
           <ConversionDialog />
+          <ConsecutiveMessageSnackbar />
           <Outlet />
         </Box>
       </ConversionDialogContextProvider>

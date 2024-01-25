@@ -6,6 +6,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import "./App.css";
 import { ThemedApp } from "./ThemedApp";
 import { ColorModeProvider } from "./contexts/ColormodeContext";
+import { MessageContextProvider } from "./contexts/MessageContext";
 import { initUserPreferences } from "./database/controllers/preferencesController";
 import { initTutorialRecipe } from "./database/controllers/recipeController";
 import { useSharing } from "./hooks/useSharing";
@@ -31,7 +32,9 @@ function App() {
   return (
     <ColorModeProvider>
       <LocalizationProvider dateAdapter={AdapterMoment}>
-        <ThemedApp />
+        <MessageContextProvider>
+          <ThemedApp />
+        </MessageContextProvider>
       </LocalizationProvider>
     </ColorModeProvider>
   );
