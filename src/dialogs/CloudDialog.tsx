@@ -143,10 +143,7 @@ export function CloudDialog() {
           </ListItemButton>
         </ListItem>
         <ListItem disableGutters>
-          <ListItemButton
-            disabled={!browserCanShareFiles}
-            onClick={() => handleDownload()}
-          >
+          <ListItemButton onClick={() => handleDownload()}>
             <ListItemIcon>
               <DownloadIcon />
             </ListItemIcon>
