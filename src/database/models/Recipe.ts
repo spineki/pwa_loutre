@@ -1,32 +1,42 @@
-export type Time = {
-  preparation: number;
-  baking: number;
-  total: number;
-};
+import { z } from "zod";
 
-export type IngredientSection = {
-  title?: string;
-  ingredients: string[];
-};
+const TimeSchema = z.object({
+  preparation: z.number().positive(),
+  baking: z.number().positive(),
+  total: z.number().positive(),
+});
 
-export type StepSection = {
-  title?: string;
-  steps: string[];
-};
+export type Time = z.infer<typeof TimeSchema>;
 
-export interface Recipe {
-  id?: number;
-  comments: string;
-  name: string;
-  isFavorite: boolean;
-  ingredientSections: IngredientSection[];
-  portion: number;
-  pictures: Blob[];
-  source: string;
-  stepSections: StepSection[];
-  tagIds: number[]; // foreignkey for tags
-  time: Time;
-}
+const IngredientSectionSchema = z.object({
+  title: z.string().optional(),
+  ingredients: z.string().array(),
+});
+
+export type IngredientSection = z.infer<typeof IngredientSectionSchema>;
+
+const StepSectionSchema = z.object({
+  title: z.string().optional(),
+  steps: z.string().array(),
+});
+
+export type StepSection = z.infer<typeof StepSectionSchema>;
+
+const RecipeSchema = z.object({
+  id: z.number().optional(),
+  comments: z.string(),
+  name: z.string(),
+  isFavorite: z.boolean(),
+  ingredientSections: IngredientSectionSchema.array(),
+  portion: z.number().positive(),
+  pictures: z.instanceof(Blob).array(),
+  source: z.string(),
+  stepSections: StepSectionSchema.array(),
+  tagIds: z.number().array(), // foreign key for tags
+  time: TimeSchema,
+});
+
+export type Recipe = z.infer<typeof RecipeSchema>;
 
 /**
  * Create an empty recipe object (could be seen as an empty constructor)

@@ -42,7 +42,8 @@
     "workbox-range-requests": "^6.4.2",
     "workbox-routing": "^6.4.2",
     "workbox-strategies": "^6.4.2",
-    "workbox-streams": "^6.4.2"
+    "workbox-streams": "^6.4.2",
+    "zod": "^3.22.4"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -51,7 +52,8 @@
     "eject": "react-scripts eject",
     "analyze": "source-map-explorer 'build/static/js/*.js'",
     "lint": "eslint .",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "prettify": "yarn prettier . --write"
   },
   "eslintConfig": {
     "extends": [
@@ -81,9 +83,13 @@
     "eslint-plugin-react-hooks": "^4.6.0",
     "husky": "^8.0.3",
     "lint-staged": "^15.2.0",
+    "prettier": "3.2.4",
     "source-map-explorer": "^2.5.3"
   },
   "lint-staged": {
-    "*.{ts,tsx}": "yarn lint"
+    "*.{ts,tsx}": [
+      "yarn lint",
+      "yarn prettify"
+    ]
   }
 }
