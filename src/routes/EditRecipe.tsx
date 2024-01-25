@@ -25,6 +25,7 @@ import Typography from "@mui/material/Typography";
 import AddIcon from "@mui/icons-material/Add";
 import ClearIcon from "@mui/icons-material/Clear";
 import CloseIcon from "@mui/icons-material/Close";
+import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import DriveFileRenameOutlineIcon from "@mui/icons-material/DriveFileRenameOutline";
 import EggIcon from "@mui/icons-material/Egg";
 import MicrowaveIcon from "@mui/icons-material/Microwave";
@@ -40,6 +41,7 @@ import { FormTextField } from "../components/FormTextField";
 import { FormTimePicker } from "../components/FormTimePicker";
 import { DrawerContext } from "../contexts/DrawerContext";
 import {
+  deleteRecipe,
   getRecipeById,
   insertRecipe,
   upsertRecipe,
@@ -58,7 +60,12 @@ import {
 } from "../database/models/Recipe";
 import { Tag, sanitizeTagName } from "../database/models/Tag";
 import { BlockerDialog } from "../dialogs/BlockerDialog";
-import { RouteEditRecipeName, getDetailsRecipeRoute } from "./routes";
+import { DeleteRecipeDialog } from "../dialogs/DeleteRecipeDialog";
+import {
+  RouteAllRecipesName,
+  RouteEditRecipeName,
+  getDetailsRecipeRoute,
+} from "./routes";
 
 /**
  * While using the create route, giving an empty recipe as a placeholder for future filling
@@ -187,6 +194,7 @@ export function EditRecipe() {
     return await getAllTags();
   }, []);
 
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [currentTabIndex, setCurrentTabIndex] = useState(0);
 
   const actions = [
@@ -392,6 +400,11 @@ export function EditRecipe() {
     navigate(getDetailsRecipeRoute(id));
   };
 
+  const handleDeleteRecipe = useCallback(() => {
+    deleteRecipe(recipe.id!);
+    navigate(RouteAllRecipesName);
+  }, [navigate, recipe.id]);
+
   return (
     <Paper
       sx={{
@@ -409,6 +422,12 @@ export function EditRecipe() {
         <CircularProgress />
       ) : (
         <>
+          <DeleteRecipeDialog
+            show={showDeleteDialog}
+            onClose={() => setShowDeleteDialog(false)}
+            onConfirm={() => handleDeleteRecipe()}
+          />
+
           <Grid container sx={{ display: "flex", flex: 1 }}>
             <Grid item xs={0} md={4} />
             <Grid item xs={12} md={4} sx={{ display: "flex", flex: 1 }}>
@@ -423,9 +442,22 @@ export function EditRecipe() {
                   gap: 16,
                 }}
               >
-                <Typography variant="h5">
-                  {recipe.id == null ? t("NewRecipe") : t("Edit")}
-                </Typography>
+                <Box
+                  sx={{
+                    display: "flex",
+                    flexDirection: "row",
+                    justifyContent: "space-between",
+                  }}
+                >
+                  <Typography variant="h5">
+                    {recipe.id == null ? t("NewRecipe") : t("Edit")}
+                  </Typography>
+
+                  <IconButton onClick={() => setShowDeleteDialog(true)}>
+                    <DeleteForeverIcon />
+                  </IconButton>
+                </Box>
+
                 {currentTabIndex == 0 ? (
                   <>
                     <FormTextField
