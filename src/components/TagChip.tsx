@@ -11,49 +11,52 @@ import { Tag } from "../database/models/Tag";
 import { RouteAllRecipesName } from "../routes/routes";
 
 interface TagChipProps {
-    tag: Tag
+  tag: Tag;
 }
 
 export function TagChip(props: TagChipProps) {
-    const { id, isFavorite, name } = props.tag;
+  const { id, isFavorite, name } = props.tag;
 
-    const navigate = useNavigate();
+  const navigate = useNavigate();
 
-    const handleLike = useCallback(async () => {
-        await partialUpdateTag(id!, { isFavorite: true });
-    }, [id]);
+  const handleLike = useCallback(async () => {
+    await partialUpdateTag(id!, { isFavorite: true });
+  }, [id]);
 
-    const handleUnlike = useCallback(async () => {
-        await partialUpdateTag(id!, { isFavorite: false });
-    }, [id]);
+  const handleUnlike = useCallback(async () => {
+    await partialUpdateTag(id!, { isFavorite: false });
+  }, [id]);
 
-
-    return (
-        <Chip
-            icon={
-                isFavorite ?
-                    <FavoriteIcon style={{ color: "red" }} onClick={(event) => {
-                        event.stopPropagation();
-                        handleUnlike();
-                    }} />
-                    :
-                    <FavoriteBorderIcon onClick={(event) => {
-                        event.stopPropagation();
-                        handleLike();
-                    }} />
-            }
-
-            onClick={() => {
-                navigate(
-                    {
-                        pathname: RouteAllRecipesName,
-                        search: createSearchParams({
-                            "tag-name": name
-                        }).toString()
-                    }
-                );
+  return (
+    <Chip
+      icon={
+        isFavorite ? (
+          <FavoriteIcon
+            style={{ color: "red" }}
+            onClick={(event) => {
+              event.stopPropagation();
+              handleUnlike();
             }}
-            label={name}
-            variant={"filled"}
-        />);
+          />
+        ) : (
+          <FavoriteBorderIcon
+            onClick={(event) => {
+              event.stopPropagation();
+              handleLike();
+            }}
+          />
+        )
+      }
+      onClick={() => {
+        navigate({
+          pathname: RouteAllRecipesName,
+          search: createSearchParams({
+            "tag-name": name,
+          }).toString(),
+        });
+      }}
+      label={name}
+      variant={"filled"}
+    />
+  );
 }

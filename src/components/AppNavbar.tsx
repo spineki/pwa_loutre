@@ -17,73 +17,68 @@ import { RouteAllRecipesName } from "../routes/routes";
 import { QuickAccessSearchBar } from "./QuickAccessSearchBar";
 import { SearchBar } from "./SearchBar";
 
-
 // An offset is required to make some room for the appNavbar (scrolling issue)
 const AppNavBarOffset = styled("div")(({ theme }) => theme.mixins.toolbar);
 
 export function AppNavbar() {
+  const { currentRoute, toggleDrawer } = useContext(DrawerContext);
 
-    const {
-        currentRoute,
-        toggleDrawer
-    } = useContext(DrawerContext);
+  const { setShowDialog: setShowCloudDialog } = useContext(CloudDialogContext);
 
-    const {
-        setShowDialog: setShowCloudDialog
-    } = useContext(CloudDialogContext);
+  const { setShowDialog: setShowConversionDialog } = useContext(
+    ConversionDialogContext,
+  );
 
-    const {
-        setShowDialog: setShowConversionDialog
-    } = useContext(ConversionDialogContext);
+  const openCloudDialog = () => {
+    setShowCloudDialog(true);
+  };
+  const openConversionDialog = () => {
+    setShowConversionDialog(true);
+  };
 
-    const openCloudDialog = () => {
-        setShowCloudDialog(true);
-    };
-    const openConversionDialog = () => {
-        setShowConversionDialog(true);
-    };
+  return (
+    <Box>
+      <AppBar position="fixed">
+        <Toolbar sx={{ paddingRight: 0 }}>
+          <IconButton
+            size="large"
+            edge="start"
+            color="inherit"
+            sx={{ mr: 2 }}
+            onClick={() => toggleDrawer()}
+          >
+            <MenuIcon />
+          </IconButton>
 
-    return (
-        <Box>
-            <AppBar position="fixed" >
-                <Toolbar sx={{ paddingRight: 0 }}>
-                    <IconButton
-                        size="large"
-                        edge="start"
-                        color="inherit"
-                        sx={{ mr: 2 }}
-                        onClick={() => toggleDrawer()}
-                    >
-                        <MenuIcon />
-                    </IconButton>
+          {currentRoute === RouteAllRecipesName ? (
+            <SearchBar />
+          ) : (
+            <QuickAccessSearchBar />
+          )}
 
-                    {
-                        currentRoute === RouteAllRecipesName ? <SearchBar /> : <QuickAccessSearchBar />
-                    }
+          <Box sx={{ flexGrow: 1 }} />
+          <IconButton
+            size="medium"
+            edge="start"
+            color="inherit"
+            sx={{ mr: 1 }}
+            onClick={openCloudDialog}
+          >
+            <CloudIcon fontSize="medium" />
+          </IconButton>
 
-                    <Box sx={{ flexGrow: 1 }} />
-                    <IconButton
-                        size="medium"
-                        edge="start"
-                        color="inherit"
-                        sx={{ mr: 1 }}
-                        onClick={openCloudDialog}
-                    >
-                        <CloudIcon fontSize="medium" />
-                    </IconButton>
-
-                    <IconButton
-                        size="medium"
-                        edge="start"
-                        color="inherit"
-                        sx={{ mr: 1 }}
-                        onClick={openConversionDialog}
-                    >
-                        <ScaleIcon fontSize="medium" />
-                    </IconButton>
-                </Toolbar>
-            </AppBar>
-            <AppNavBarOffset />
-        </Box>
-    );
+          <IconButton
+            size="medium"
+            edge="start"
+            color="inherit"
+            sx={{ mr: 1 }}
+            onClick={openConversionDialog}
+          >
+            <ScaleIcon fontSize="medium" />
+          </IconButton>
+        </Toolbar>
+      </AppBar>
+      <AppNavBarOffset />
+    </Box>
+  );
 }

@@ -1,11 +1,14 @@
 import { createContext, ReactElement, useState } from "react";
 
 export interface ConversionDialogContextInterface {
-    showDialog: boolean,
-    setShowDialog: (visibility: boolean) => void
+  showDialog: boolean;
+  setShowDialog: (visibility: boolean) => void;
 }
 
-export const ConversionDialogContext = createContext<ConversionDialogContextInterface>({} as ConversionDialogContextInterface);
+export const ConversionDialogContext =
+  createContext<ConversionDialogContextInterface>(
+    {} as ConversionDialogContextInterface,
+  );
 
 /**
  * A theme to
@@ -13,15 +16,15 @@ export const ConversionDialogContext = createContext<ConversionDialogContextInte
  * @returns
  */
 export function ConversionDialogContextProvider({
-    children,
+  children,
 }: {
-    children: ReactElement;
+  children: ReactElement;
 }): ReactElement {
-    const [showDialog, setShowDialog] = useState<boolean>(false);
+  const [showDialog, setShowDialog] = useState<boolean>(false);
 
-    return (
-        <ConversionDialogContext.Provider value={{ showDialog, setShowDialog }}>
-            {children}
-        </ConversionDialogContext.Provider>
-    );
+  return (
+    <ConversionDialogContext.Provider value={{ showDialog, setShowDialog }}>
+      {children}
+    </ConversionDialogContext.Provider>
+  );
 }

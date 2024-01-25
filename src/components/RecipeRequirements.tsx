@@ -15,85 +15,85 @@ import { IngredientSection } from "../database/models/Recipe";
 import { ColouredNumberText } from "./ColouredNumberText";
 
 interface RecipeRequirementsProps {
-    ingredientSections: IngredientSection[],
-    multiplicator: number,
+  ingredientSections: IngredientSection[];
+  multiplicator: number;
 }
 
 export function RecipeRequirements(props: RecipeRequirementsProps) {
-    const { ingredientSections, multiplicator } = props;
-    const { t } = useTranslation();
+  const { ingredientSections, multiplicator } = props;
+  const { t } = useTranslation();
 
-    return (
-        <Box sx={{ display: "flex", flexDirection: "column", p: 2 }}>
-            <Grid container >
-                <Grid item xs={0} md={4} />
+  return (
+    <Box sx={{ display: "flex", flexDirection: "column", p: 2 }}>
+      <Grid container>
+        <Grid item xs={0} md={4} />
 
-                <Grid item xs={12} md={4}>
-                    <List>
+        <Grid item xs={12} md={4}>
+          <List>
+            <ListItem sx={{ display: "flex", justifyContent: "center" }}>
+              <ListItemAvatar>
+                <Avatar src="/ingredients.png" variant="square" />
+              </ListItemAvatar>
+              <ListItemText sx={{ flexGrow: 0 }}>
+                <Typography
+                  variant="h4"
+                  component="h2"
+                  fontFamily={"Cookie-Regular"}
+                  alignSelf="center"
+                >
+                  {t("YourIngredients")}
+                </Typography>
+              </ListItemText>
+            </ListItem>
 
-                        <ListItem sx={{ display: "flex", justifyContent: "center" }}>
-                            <ListItemAvatar>
-                                <Avatar
-                                    src="/ingredients.png"
-                                    variant="square" />
-                            </ListItemAvatar>
-                            <ListItemText sx={{ flexGrow: 0 }}>
-                                <Typography
-                                    variant="h4"
-                                    component="h2"
-                                    fontFamily={"Cookie-Regular"}
-                                    alignSelf="center"
-                                >
-                                    {t("YourIngredients")}
-                                </Typography>
+            {ingredientSections.map((ingredientSection, sectionIndex) => (
+              <div key={`${sectionIndex}`}>
+                {ingredientSection.title && (
+                  <ListItem sx={{ paddingTop: 0, paddingBottom: 0 }}>
+                    <ListItemIcon sx={{ minWidth: 16 }}>
+                      <Badge badgeContent="" color="primary" variant="dot" />
+                    </ListItemIcon>
 
-                            </ListItemText>
+                    <ListItemText>
+                      <ColouredNumberText
+                        text={ingredientSection.title}
+                        multiplicator={multiplicator}
+                      />
+                    </ListItemText>
+                  </ListItem>
+                )}
 
-                        </ListItem>
+                <List sx={{ paddingLeft: ingredientSection.title ? 2 : 0 }}>
+                  {ingredientSection.ingredients.map(
+                    (ingredient, recipeIndex) => (
+                      <ListItem
+                        key={`${sectionIndex}_${recipeIndex}`}
+                        sx={{ paddingTop: 0, paddingBottom: 0 }}
+                      >
+                        <ListItemIcon sx={{ minWidth: 16 }}>
+                          <Badge
+                            badgeContent=""
+                            color="primary"
+                            variant="dot"
+                          />
+                        </ListItemIcon>
 
-                        {
-                            ingredientSections.map((ingredientSection, sectionIndex) =>
-                                <div key={`${sectionIndex}`} >
-                                    {
-                                        ingredientSection.title &&
-                                        <ListItem sx={{ paddingTop: 0, paddingBottom: 0 }} >
-                                            <ListItemIcon sx={{ minWidth: 16 }}>
-                                                <Badge badgeContent="" color="primary" variant="dot" />
-                                            </ListItemIcon>
-
-                                            <ListItemText >
-                                                <ColouredNumberText
-                                                    text={ingredientSection.title}
-                                                    multiplicator={multiplicator}
-                                                />
-                                            </ListItemText>
-                                        </ListItem>
-                                    }
-
-                                    <List sx={{ paddingLeft: ingredientSection.title ? 2 : 0 }}>
-                                        {ingredientSection.ingredients.map((ingredient, recipeIndex) =>
-                                            <ListItem key={`${sectionIndex}_${recipeIndex}`} sx={{ paddingTop: 0, paddingBottom: 0 }} >
-                                                <ListItemIcon sx={{ minWidth: 16 }}>
-                                                    <Badge badgeContent="" color="primary" variant="dot" />
-                                                </ListItemIcon>
-
-                                                <ListItemText >
-                                                    <ColouredNumberText
-                                                        text={ingredient}
-                                                        multiplicator={multiplicator}
-                                                    />
-                                                </ListItemText>
-                                            </ListItem>
-                                        )}
-                                    </List>
-                                </div>
-
-                            )
-                        }
-                    </List>
-                </Grid>
-            </Grid>
-            <Grid item xs={0} md={4} />
-        </Box >
-    );
+                        <ListItemText>
+                          <ColouredNumberText
+                            text={ingredient}
+                            multiplicator={multiplicator}
+                          />
+                        </ListItemText>
+                      </ListItem>
+                    ),
+                  )}
+                </List>
+              </div>
+            ))}
+          </List>
+        </Grid>
+      </Grid>
+      <Grid item xs={0} md={4} />
+    </Box>
+  );
 }

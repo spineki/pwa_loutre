@@ -120,7 +120,7 @@ export function convertFahrenheitToCelcius(degree: number): number {
 export function convertMass(
   unit_src: Masses,
   unit_dest: Masses,
-  value: number
+  value: number,
 ): number {
   return (value / massData[unit_src]) * massData[unit_dest];
 }
@@ -128,7 +128,7 @@ export function convertMass(
 export function convertVolume(
   unit_src: Volumes,
   unit_dest: Volumes,
-  value: number
+  value: number,
 ): number {
   return (value / volumeData[unit_src]) * volumeData[unit_dest];
 }
@@ -137,7 +137,7 @@ export function convertVolumeMatterToMass(
   unit_src: Volumes,
   matter: Matter,
   unit_dest: Masses,
-  value: number
+  value: number,
 ): number {
   // convert volume to litre
   const litre_volume = convertVolume(unit_src, Volumes.L, value);

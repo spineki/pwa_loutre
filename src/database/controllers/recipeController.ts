@@ -44,7 +44,7 @@ export async function upsertRecipe(recipe: Recipe) {
  */
 export async function partialUpdateRecipe(
   id: number,
-  changes: Partial<Recipe>
+  changes: Partial<Recipe>,
 ) {
   await database.recipes.update(id, changes);
 }
@@ -87,8 +87,8 @@ export async function initTutorialRecipe() {
           return upsertTag(tutorialTag);
         }
         return tag.id!;
-      })
-    )
+      }),
+    ),
   );
 
   // adding recipe to database

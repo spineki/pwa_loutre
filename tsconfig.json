@@ -17,7 +17,7 @@
     "skipLibCheck": true,
     "strict": true,
     "strictNullChecks": true,
-    "types": ["@types/wicg-file-system-access"]
+    "types": ["@types/wicg-file-system-access"],
   },
-  "include": ["src"]
+  "include": ["src"],
 }

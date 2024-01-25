@@ -10,23 +10,23 @@ export const RouteChangelogsName = "/changelogs";
 
 /**
  * Create an absolute path for a detail route page for the given recipe id
- * @param id 
- * @returns 
+ * @param id
+ * @returns
  */
 export function getDetailsRecipeRoute(id: number): string {
-    return `/recipes/${id}`;
+  return `/recipes/${id}`;
 }
 
 export function getEditRecipeRoute(id: number): string {
-    return `/recipes/${id}/edit`;
+  return `/recipes/${id}/edit`;
 }
 
 export type RoutesType =
-    | typeof RouteRootName
-    | typeof RouteAllRecipesName
-    | typeof RouteDetailsRecipesName
-    | typeof RouteEditRecipeName
-    | typeof RouteFavoriteRecipesName
-    | typeof RouteWorkInProgressName
-    | typeof RouteTagsName
-    | typeof RouteChangelogsName;
+  | typeof RouteRootName
+  | typeof RouteAllRecipesName
+  | typeof RouteDetailsRecipesName
+  | typeof RouteEditRecipeName
+  | typeof RouteFavoriteRecipesName
+  | typeof RouteWorkInProgressName
+  | typeof RouteTagsName
+  | typeof RouteChangelogsName;

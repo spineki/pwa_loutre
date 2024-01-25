@@ -1,11 +1,13 @@
 import { createContext, ReactElement, useState } from "react";
 
 export interface CloudDialogContextInterface {
-    showDialog: boolean,
-    setShowDialog: (visibility: boolean) => void
+  showDialog: boolean;
+  setShowDialog: (visibility: boolean) => void;
 }
 
-export const CloudDialogContext = createContext<CloudDialogContextInterface>({} as CloudDialogContextInterface);
+export const CloudDialogContext = createContext<CloudDialogContextInterface>(
+  {} as CloudDialogContextInterface,
+);
 
 /**
  * A theme to
@@ -13,15 +15,15 @@ export const CloudDialogContext = createContext<CloudDialogContextInterface>({} 
  * @returns
  */
 export function CloudDialogContextProvider({
-    children,
+  children,
 }: {
-    children: ReactElement;
+  children: ReactElement;
 }): ReactElement {
-    const [showDialog, setShowDialog] = useState<boolean>(false);
+  const [showDialog, setShowDialog] = useState<boolean>(false);
 
-    return (
-        <CloudDialogContext.Provider value={{ showDialog, setShowDialog }}>
-            {children}
-        </CloudDialogContext.Provider>
-    );
+  return (
+    <CloudDialogContext.Provider value={{ showDialog, setShowDialog }}>
+      {children}
+    </CloudDialogContext.Provider>
+  );
 }

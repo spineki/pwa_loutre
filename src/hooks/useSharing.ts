@@ -72,7 +72,7 @@ export function useSharing() {
         alert("Browser cannot share file");
       }
     },
-    [browserCanShareFiles]
+    [browserCanShareFiles],
   );
 
   const downloadFile = useCallback((object: object) => {

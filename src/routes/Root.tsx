@@ -9,24 +9,24 @@ import { ConversionDialogContextProvider } from "../contexts/ConversionDialogCon
 import { CloudDialog } from "../dialogs/CloudDialog";
 import { ConversionDialog } from "../dialogs/ConversionDialog";
 
-
 export function Root() {
-
-    return (
-        <CloudDialogContextProvider>
-            <ConversionDialogContextProvider>
-                <Box sx={{
-                    display: "flex",
-                    flexDirection: "column",
-                    flex: 1
-                }}>
-                    <AppNavbar />
-                    <Drawer />
-                    <CloudDialog />
-                    <ConversionDialog />
-                    <Outlet />
-                </Box>
-            </ConversionDialogContextProvider>
-        </CloudDialogContextProvider>
-    );
+  return (
+    <CloudDialogContextProvider>
+      <ConversionDialogContextProvider>
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            flex: 1,
+          }}
+        >
+          <AppNavbar />
+          <Drawer />
+          <CloudDialog />
+          <ConversionDialog />
+          <Outlet />
+        </Box>
+      </ConversionDialogContextProvider>
+    </CloudDialogContextProvider>
+  );
 }

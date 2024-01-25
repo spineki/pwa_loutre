@@ -20,18 +20,21 @@ body,
 
 @font-face {
   font-family: "AtomicAge-Regular";
-  src: local("AtomicAge-Regular"),
+  src:
+    local("AtomicAge-Regular"),
     url("./fonts/AtomicAge/AtomicAge-Regular.ttf") format("truetype");
 }
 
 @font-face {
   font-family: "Cookie-Regular";
-  src: local("Cookie-Regular"),
+  src:
+    local("Cookie-Regular"),
     url("./fonts/Cookie/Cookie-Regular.ttf") format("truetype");
 }
 
 @font-face {
   font-family: "Roboto";
-  src: local("Roboto-Regular"),
+  src:
+    local("Roboto-Regular"),
     url("./fonts/Roboto/Roboto-Regular.ttf") format("truetype");
 }

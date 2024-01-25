@@ -12,34 +12,45 @@ import { DrawerContext } from "../contexts/DrawerContext";
 import { RoutesType } from "../routes/routes";
 
 interface DrawerListItemProps {
-    to: RoutesType,
-    CustomIcon: React.ComponentType<SvgIconProps>
-    /**
-     * If not iconColor given, default to use theme.palette.primary.main
-     */
-    iconColor?: string,
-    text: string
+  to: RoutesType;
+  CustomIcon: React.ComponentType<SvgIconProps>;
+  /**
+   * If not iconColor given, default to use theme.palette.primary.main
+   */
+  iconColor?: string;
+  text: string;
 }
 
 export function DrawerListItem(props: DrawerListItemProps) {
-    const { to, CustomIcon, iconColor, text } = props;
+  const { to, CustomIcon, iconColor, text } = props;
 
-    const theme = useTheme();
-    const { currentRoute } = useContext(DrawerContext);
+  const theme = useTheme();
+  const { currentRoute } = useContext(DrawerContext);
 
-    const matchCurrentRoute = currentRoute === to;
+  const matchCurrentRoute = currentRoute === to;
 
-    return (
-        <ListItem disablePadding style={{ background: theme.palette.background.paper }}>
-            <ListItemButton
-                component={Link}
-                to={to}
-                selected={matchCurrentRoute} >
-                <ListItemIcon>
-                    <CustomIcon htmlColor={matchCurrentRoute ? iconColor ?? theme.palette.primary.main : "inherit"} />
-                </ListItemIcon>
-                <ListItemText primary={text} style={{ color: matchCurrentRoute ? theme.palette.primary.main : "inherit" }} />
-            </ListItemButton>
-        </ListItem>
-    );
+  return (
+    <ListItem
+      disablePadding
+      style={{ background: theme.palette.background.paper }}
+    >
+      <ListItemButton component={Link} to={to} selected={matchCurrentRoute}>
+        <ListItemIcon>
+          <CustomIcon
+            htmlColor={
+              matchCurrentRoute
+                ? iconColor ?? theme.palette.primary.main
+                : "inherit"
+            }
+          />
+        </ListItemIcon>
+        <ListItemText
+          primary={text}
+          style={{
+            color: matchCurrentRoute ? theme.palette.primary.main : "inherit",
+          }}
+        />
+      </ListItemButton>
+    </ListItem>
+  );
 }

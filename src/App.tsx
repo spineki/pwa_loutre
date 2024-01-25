@@ -11,7 +11,6 @@ import { initTutorialRecipe } from "./database/controllers/recipeController";
 import { useSharing } from "./hooks/useSharing";
 
 function App() {
-
   useEffect(() => {
     async function setupDatabase() {
       await initUserPreferences();
@@ -20,7 +19,6 @@ function App() {
     setupDatabase();
   }, []);
 
-
   const { receiveFile } = useSharing();
 
   useEffect(() => {
@@ -28,15 +26,14 @@ function App() {
       await receiveFile();
     }
     checkReceivedFiles();
-
   }, [receiveFile]);
 
   return (
-    <ColorModeProvider >
+    <ColorModeProvider>
       <LocalizationProvider dateAdapter={AdapterMoment}>
         <ThemedApp />
       </LocalizationProvider>
-    </ColorModeProvider >
+    </ColorModeProvider>
   );
 }
 
