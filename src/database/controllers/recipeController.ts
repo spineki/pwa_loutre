@@ -77,6 +77,11 @@ export async function importRecipesFromFileContent(
 
   if (result.success) {
     const recipes = result.data;
+    recipes.forEach((recipe) => {
+      if (recipe.id) {
+        delete recipe.id;
+      }
+    });
     await bulkUpsertRecipes(recipes);
     return { success: true };
   } else {
