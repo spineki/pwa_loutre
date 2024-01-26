@@ -4,11 +4,13 @@ import { Link } from "react-router-dom";
 import Card from "@mui/material/Card";
 import CardActionArea from "@mui/material/CardActionArea";
 import CardContent from "@mui/material/CardContent";
+import Skeleton from "@mui/material/Skeleton";
 import Typography from "@mui/material/Typography";
 
 import { useTheme } from "@mui/material";
 import { partialUpdateRecipe } from "../database/controllers/recipeController";
 import { Time } from "../database/models/Recipe";
+import { useProgressiveImage } from "../hooks/useProgressiveImage";
 import { getDetailsRecipeRoute } from "../routes/routes";
 import { CardRow } from "./CardRow";
 
@@ -22,6 +24,9 @@ type RecipeCardProps = {
 
 export function RecipeCard(props: RecipeCardProps) {
   const { id, name, picture, time, isFavorite } = props;
+  const loadedBackground = useProgressiveImage(
+    picture ?? "/tutorial_picture.png",
+  );
 
   const theme = useTheme();
 
@@ -33,13 +38,13 @@ export function RecipeCard(props: RecipeCardProps) {
     await partialUpdateRecipe(id, { isFavorite: false });
   }, [id]);
 
-  return (
+  return loadedBackground ? (
     <Card
       elevation={2}
       sx={{
         backgroundImage: `
                 linear-gradient(0deg, rgba(42,42,42,0.65) 0%, rgba(42,42,42,0.65) 35%, rgba(255,255,255,0) 55%),
-                url(${picture ?? "/tutorial_picture.png"})
+                url(${loadedBackground})
             `,
         height: "100%",
         width: "100%",
@@ -99,5 +104,7 @@ export function RecipeCard(props: RecipeCardProps) {
         />
       </CardContent>
     </Card>
+  ) : (
+    <Skeleton variant="rectangular" sx={{ height: "100%", width: "100%" }} />
   );
 }

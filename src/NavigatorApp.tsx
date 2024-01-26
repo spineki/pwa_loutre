@@ -13,7 +13,7 @@ import {
   EditRecipe,
   editRecipeLoader,
 } from "./routes/EditRecipe";
-import { FavoriteRecipes } from "./routes/FavoriteRecipes";
+// import { FavoriteRecipes } from "./routes/FavoriteRecipes";
 import { NotFound } from "./routes/NotFound";
 import { Root } from "./routes/Root";
 import {
@@ -22,7 +22,7 @@ import {
   RouteCreateRecipeName,
   RouteDetailsRecipesName,
   RouteEditRecipeName,
-  RouteFavoriteRecipesName,
+  // RouteFavoriteRecipesName,
   RouteTagsName,
   RouteWorkInProgressName,
 } from "./routes/routes";
@@ -49,10 +49,10 @@ const router = createBrowserRouter([
         loader: detailsRecipeLoader,
         errorElement: <NotFound />,
       },
-      {
-        path: RouteFavoriteRecipesName,
-        element: <FavoriteRecipes />,
-      },
+      // {
+      //   path: RouteFavoriteRecipesName,
+      //   element: <FavoriteRecipes />,
+      // },
       {
         path: RouteTagsName,
         element: <Tags />,

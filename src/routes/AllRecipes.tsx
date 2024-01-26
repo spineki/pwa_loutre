@@ -1,15 +1,18 @@
 import { useLiveQuery } from "dexie-react-hooks";
-import { useContext, useEffect } from "react";
-import InfiniteScroll from "react-infinite-scroll-component";
+import { CSSProperties, memo, useContext, useEffect, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
+import AutoSizer from "react-virtualized-auto-sizer";
+import { FixedSizeList, areEqual } from "react-window";
+import InfiniteLoader from "react-window-infinite-loader";
 
-import Box from "@mui/material/Box";
+import { useTheme } from "@mui/material";
 import CircularProgress from "@mui/material/CircularProgress";
-import Fab from "@mui/material/Fab";
 import Grid from "@mui/material/Grid";
-import Paper from "@mui/material/Paper";
+import useMediaQuery from "@mui/material/useMediaQuery";
 
 import AddIcon from "@mui/icons-material/Add";
+import Fab from "@mui/material/Fab";
+import Paper from "@mui/material/Paper";
 
 import { RecipeCard } from "../components/RecipeCard";
 import { DrawerContext } from "../contexts/DrawerContext";
@@ -19,8 +22,48 @@ import { database } from "../database/database";
 import { Recipe } from "../database/models/Recipe";
 import { RouteAllRecipesName, RouteCreateRecipeName } from "../routes/routes";
 
+const RowWrapper = (recipes: Recipe[], numberColumn: number) =>
+  // eslint-disable-next-line react/display-name
+  memo(({ index, style }: { index: number; style: CSSProperties }) => {
+    return (
+      <Grid
+        key={index}
+        container
+        spacing={1.5}
+        columns={{ xs: 2, sm: 4, md: 6 }}
+        style={style}
+      >
+        {recipes!
+          .slice(numberColumn * index, numberColumn * (index + 1))
+          .map((recipe) => (
+            <Grid key={recipe.id!} item xs={1} sx={{ aspectRatio: "1/1" }}>
+              <RecipeCard
+                key={recipe.id!}
+                id={recipe.id!}
+                isFavorite={recipe.isFavorite}
+                name={recipe.name}
+                picture={
+                  recipe.pictures.length > 0
+                    ? URL.createObjectURL(recipe.pictures[0])
+                    : undefined
+                }
+                time={recipe.time}
+              />
+            </Grid>
+          ))}
+      </Grid>
+    );
+  }, areEqual);
+
 export function AllRecipes() {
   const { setCurrentRoute } = useContext(DrawerContext);
+
+  const theme = useTheme();
+  const isSmallerThanSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
+  const isSmallerThanMediumScreen = useMediaQuery(theme.breakpoints.down("md"));
+  const [numberColumn] = useState(
+    isSmallerThanSmallScreen ? 2 : isSmallerThanMediumScreen ? 4 : 6,
+  );
 
   useEffect(() => {
     setCurrentRoute(RouteAllRecipesName);
@@ -99,9 +142,9 @@ export function AllRecipes() {
     [searchParams], // dependencies
   );
 
-  function fetchData() {
-    console.log("called", "test");
-  }
+  const loadMoreItems = () => {
+    console.log("loadMoreItems called");
+  };
 
   return (
     <Paper
@@ -111,33 +154,31 @@ export function AllRecipes() {
       }}
     >
       {recipes ? (
-        <InfiniteScroll
-          dataLength={recipes.length}
-          next={fetchData}
-          hasMore={false} // Replace with a condition based on your data source
-          loader={<p>Loading...(currently {recipes.length} recipes)</p>}
-        >
-          <Box sx={{ flexGrow: 1 }}>
-            <Grid container spacing={1.5} columns={{ xs: 2, sm: 4, md: 6 }}>
-              {recipes.map((recipe: Recipe) => (
-                <Grid key={recipe.id!} item xs={1} sx={{ aspectRatio: "1/1" }}>
-                  <RecipeCard
-                    // A recipe has an id, asserting it for ts
-                    id={recipe.id!}
-                    isFavorite={recipe.isFavorite}
-                    name={recipe.name}
-                    picture={
-                      recipe.pictures.length > 0
-                        ? URL.createObjectURL(recipe.pictures[0])
-                        : undefined
-                    }
-                    time={recipe.time}
-                  />
-                </Grid>
-              ))}
-            </Grid>
-          </Box>
-        </InfiniteScroll>
+        <AutoSizer>
+          {({ height, width }) => (
+            <InfiniteLoader
+              threshold={2}
+              minimumBatchSize={numberColumn * 6} // prefetching n rows
+              isItemLoaded={(index) => index < recipes.length}
+              itemCount={recipes.length / numberColumn}
+              loadMoreItems={loadMoreItems}
+            >
+              {({ onItemsRendered, ref }) => (
+                <FixedSizeList
+                  ref={ref}
+                  itemCount={recipes.length / numberColumn}
+                  onItemsRendered={onItemsRendered}
+                  itemSize={width / numberColumn}
+                  height={height}
+                  width={width}
+                  layout="vertical"
+                >
+                  {RowWrapper(recipes, numberColumn)}
+                </FixedSizeList>
+              )}
+            </InfiniteLoader>
+          )}
+        </AutoSizer>
       ) : (
         <CircularProgress />
       )}

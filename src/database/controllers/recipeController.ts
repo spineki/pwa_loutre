@@ -3,6 +3,7 @@ import { z } from "zod";
 import { tutorialRecipe, tutorialTags } from "../../fixtures";
 import { Result } from "../../utils/errorHandling";
 import { database } from "../database";
+import { fastForward } from "../helpers";
 import {
   JsonCompatibleRecipeSchema,
   Recipe,
@@ -21,6 +22,38 @@ export async function getRecipeById(id: number) {
 
 export async function getAllRecipes() {
   return await database.recipes.orderBy("name").toArray();
+}
+
+const PAGE_SIZE = 20;
+
+export async function getFirstPaginatedRecipes(
+  filter: (recipe: Recipe) => boolean,
+): Promise<Recipe[]> {
+  const page = await database.recipes
+    .orderBy("name") // Utilize index for sorting
+    .filter(filter)
+    .limit(PAGE_SIZE)
+    .toArray();
+
+  return page;
+}
+
+export async function getPaginatedRecipes(
+  lastRecipe: Recipe,
+  filter: (recipe: Recipe) => boolean,
+): Promise<Recipe[]> {
+  const page = await database.recipes
+    // Use index to fast forward as much as possible
+    // This line is what makes the paging optimized
+    .where("name")
+    .aboveOrEqual(lastRecipe.name) // makes it sorted by name
+    // Use helper function to fast forward to the exact last result:
+    .filter(fastForward(lastRecipe, "id", filter))
+    // Limit to page size:
+    .limit(PAGE_SIZE)
+    .toArray();
+
+  return page;
 }
 
 export async function bulkUpsertRecipes(recipes: Recipe[]) {
