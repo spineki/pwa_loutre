@@ -27,7 +27,7 @@ export async function getAllRecipes() {
 const PAGE_SIZE = 20;
 
 export async function getFirstPaginatedRecipes(
-  filter: (recipe: Recipe) => boolean,
+  filter: (recipe: Recipe) => boolean = () => true,
 ): Promise<Recipe[]> {
   const page = await database.recipes
     .orderBy("name") // Utilize index for sorting
@@ -40,7 +40,7 @@ export async function getFirstPaginatedRecipes(
 
 export async function getPaginatedRecipes(
   lastRecipe: Recipe,
-  filter: (recipe: Recipe) => boolean,
+  filter: (recipe: Recipe) => boolean = () => true,
 ): Promise<Recipe[]> {
   const page = await database.recipes
     // Use index to fast forward as much as possible

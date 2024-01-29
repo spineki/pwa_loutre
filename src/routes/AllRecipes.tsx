@@ -1,5 +1,12 @@
 import { useLiveQuery } from "dexie-react-hooks";
-import { CSSProperties, memo, useContext, useEffect, useState } from "react";
+import {
+  CSSProperties,
+  memo,
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import AutoSizer from "react-virtualized-auto-sizer";
 import { FixedSizeList, areEqual } from "react-window";
@@ -16,7 +23,11 @@ import Paper from "@mui/material/Paper";
 
 import { RecipeCard } from "../components/RecipeCard";
 import { DrawerContext } from "../contexts/DrawerContext";
-import { getAllRecipes } from "../database/controllers/recipeController";
+import {
+  getAllRecipes,
+  getFirstPaginatedRecipes,
+  getPaginatedRecipes,
+} from "../database/controllers/recipeController";
 import { getTagByName } from "../database/controllers/tagController";
 import { database } from "../database/database";
 import { Recipe } from "../database/models/Recipe";
@@ -73,78 +84,97 @@ export function AllRecipes() {
   const [searchParams] = useSearchParams();
 
   // todo: implement proper pagination to only load a subset into memory
-  const recipes = useLiveQuery(
-    async () => {
-      // if we are currently filtering recipes by name, only showing those containing a name that contains this string
-      if (searchParams.has("recipe-name")) {
-        const searchedRecipeName = searchParams
-          .get("recipe-name")!
-          .trim()
-          .toLowerCase();
-        // if search is empty, returning all recipes
-        // todo! add pagination to this
-        if (searchedRecipeName == "") {
-          return await getAllRecipes();
-        }
-
-        const recipes = await database.recipes
-          .orderBy("name")
-          .filter((recipe: Recipe) =>
-            recipe.name.toLowerCase().includes(searchedRecipeName),
-          )
-          .toArray();
-        return recipes;
-      }
-
-      if (searchParams.has("tag-name")) {
-        const searchedTagName = searchParams
-          .get("tag-name")!
-          .trim()
-          .toLowerCase();
-        // if search is empty, returning all recipes
-        // todo! add pagination to this
-        if (searchedTagName == "") {
-          return await getAllRecipes();
-        }
-
-        const searchedTagId = (await getTagByName(searchedTagName))?.id;
-
-        if (searchedTagId == null) {
-          return await getAllRecipes();
-        }
-
-        const recipes = await database.recipes
-          .orderBy("name")
-          .filter((recipe: Recipe) => {
-            let matchFound = false;
-
-            for (const recipeTagId of recipe.tagIds) {
-              if (recipeTagId === searchedTagId) {
-                matchFound = true;
-                break;
-              }
-            }
-
-            return matchFound;
-          })
-          .toArray();
-
-        return recipes;
-      }
-
-      // if we are currently filtering recipes by tag, only showing those that contains exactly this tag
-
-      // if no filter is given, defaulting to returning all recipes
+  const initialRecipes = useLiveQuery(async () => {
+    // if we are currently filtering recipes by name, only showing those containing a name that contains this string
+    if (searchParams.has("recipe-name")) {
+      const searchedRecipeName = searchParams
+        .get("recipe-name")!
+        .trim()
+        .toLowerCase();
+      // if search is empty, returning all recipes
       // todo! add pagination to this
-      return await getAllRecipes();
-    },
-    // specify vars that affect query:
-    [searchParams], // dependencies
-  );
+      if (searchedRecipeName == "") {
+        return await getAllRecipes();
+      }
 
-  const loadMoreItems = () => {
-    console.log("loadMoreItems called");
-  };
+      const recipes = await database.recipes
+        .orderBy("name")
+        .filter((recipe: Recipe) =>
+          recipe.name.toLowerCase().includes(searchedRecipeName),
+        )
+        .toArray();
+      return recipes;
+    }
+
+    if (searchParams.has("tag-name")) {
+      const searchedTagName = searchParams
+        .get("tag-name")!
+        .trim()
+        .toLowerCase();
+      // if search is empty, returning all recipes
+      // todo! add pagination to this
+      if (searchedTagName == "") {
+        return await getAllRecipes();
+      }
+
+      const searchedTagId = (await getTagByName(searchedTagName))?.id;
+
+      if (searchedTagId == null) {
+        return await getAllRecipes();
+      }
+
+      const recipes = await database.recipes
+        .orderBy("name")
+        .filter((recipe: Recipe) => {
+          let matchFound = false;
+
+          for (const recipeTagId of recipe.tagIds) {
+            if (recipeTagId === searchedTagId) {
+              matchFound = true;
+              break;
+            }
+          }
+
+          return matchFound;
+        })
+        .toArray();
+
+      return recipes;
+    }
+
+    // if we are currently filtering recipes by tag, only showing those that contains exactly this tag
+
+    // if no filter is given, defaulting to return all recipes
+    // todo! add pagination to this
+
+    return await getFirstPaginatedRecipes();
+  }, [searchParams]);
+
+  const [recipes, setRecipes] = useState<Array<Recipe>>([]);
+
+  useEffect(() => {
+    setRecipes(initialRecipes ?? []);
+  }, [initialRecipes]);
+
+  const loadMoreItems = useCallback(async () => {
+    const lastRecipe = recipes.at(-1);
+    if (lastRecipe === undefined) {
+      return; // todo, check when this could happen
+    }
+
+    const newRecipes = (await getPaginatedRecipes(lastRecipe)) ?? [];
+
+    setRecipes(recipes.concat(newRecipes));
+  }, [recipes]);
+
+  // todo change this
+  const hasNextPage = true;
+
+  const itemCount = recipes
+    ? hasNextPage
+      ? Math.ceil(recipes.length / numberColumn) + 1
+      : Math.ceil(recipes.length / numberColumn)
+    : 0;
 
   return (
     <Paper
@@ -156,27 +186,29 @@ export function AllRecipes() {
       {recipes ? (
         <AutoSizer>
           {({ height, width }) => (
-            <InfiniteLoader
-              threshold={2}
-              minimumBatchSize={numberColumn * 6} // prefetching n rows
-              isItemLoaded={(index) => index < recipes.length}
-              itemCount={recipes.length / numberColumn}
-              loadMoreItems={loadMoreItems}
-            >
-              {({ onItemsRendered, ref }) => (
-                <FixedSizeList
-                  ref={ref}
-                  itemCount={recipes.length / numberColumn}
-                  onItemsRendered={onItemsRendered}
-                  itemSize={width / numberColumn}
-                  height={height}
-                  width={width}
-                  layout="vertical"
-                >
-                  {RowWrapper(recipes, numberColumn)}
-                </FixedSizeList>
-              )}
-            </InfiniteLoader>
+            <div style={{ height, width }}>
+              <InfiniteLoader
+                isItemLoaded={(index) => {
+                  return index < itemCount - 1;
+                }}
+                itemCount={itemCount}
+                loadMoreItems={loadMoreItems}
+              >
+                {({ onItemsRendered, ref }) => (
+                  <FixedSizeList
+                    ref={ref}
+                    itemCount={itemCount}
+                    onItemsRendered={onItemsRendered}
+                    itemSize={width / numberColumn}
+                    height={height}
+                    width={width}
+                    layout="vertical"
+                  >
+                    {RowWrapper(recipes, numberColumn)}
+                  </FixedSizeList>
+                )}
+              </InfiniteLoader>
+            </div>
           )}
         </AutoSizer>
       ) : (
