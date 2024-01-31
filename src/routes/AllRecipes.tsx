@@ -1,5 +1,5 @@
 import { useLiveQuery } from "dexie-react-hooks";
-import { useContext, useEffect, useRef, useState } from "react";
+import { useCallback, useContext, useEffect, useRef, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import {
   InfiniteLoader,
@@ -9,7 +9,7 @@ import {
 } from "react-virtualized";
 import AutoSizer from "react-virtualized-auto-sizer";
 
-import { Skeleton, useTheme } from "@mui/material";
+import { Grid, Skeleton, useTheme } from "@mui/material";
 import useMediaQuery from "@mui/material/useMediaQuery";
 
 import AddIcon from "@mui/icons-material/Add";
@@ -128,7 +128,8 @@ export function AllRecipes() {
   const recipeStatusMap = useRef<Record<number, 1 | 2>>({});
   const rowCount =
     useLiveQuery(async () => {
-      return await getRecipeCount();
+      console.log("max nb recipe", await getRecipeCount());
+      return Math.ceil((await getRecipeCount()) / numberColumn);
     }, []) ?? 0;
 
   const isRowLoaded: InfiniteLoaderProps["isRowLoaded"] = ({
@@ -149,18 +150,23 @@ export function AllRecipes() {
     }
 
     // using the startIndex, we can get the last fetched recipe id
-    const DEFAULT_PAGE_SIZE = 30;
-    const lastRecipeIndex = startIndex - 1;
+    const pageSize = (stopIndex - startIndex + 1) * numberColumn;
+    const lastRecipeIndex = startIndex * numberColumn - 1;
     let page: Recipe[];
     if (lastRecipeIndex < 0) {
-      page = await getFirstPaginatedRecipes(DEFAULT_PAGE_SIZE);
+      page = await getFirstPaginatedRecipes(pageSize);
     } else {
       const lastRecipe = recipes.current.at(lastRecipeIndex);
       if (lastRecipe === undefined) {
-        page = await getFirstPaginatedRecipes(DEFAULT_PAGE_SIZE);
+        page = await getFirstPaginatedRecipes(pageSize);
       } else {
-        const pageSize = stopIndex - startIndex; // todo, check it stopIndex is included. if so, add 1
+        console.log(
+          "using real pagination, start:",
+          lastRecipeIndex,
+          lastRecipe,
+        );
         page = await getPaginatedRecipes(lastRecipe, pageSize);
+        console.log(page);
       }
     }
 
@@ -174,67 +180,48 @@ export function AllRecipes() {
     }
   };
 
-  const rowRenderer: ListRowRenderer = ({ key, index, style }) => {
-    let row;
-    if (
-      recipeStatusMap.current[index] === undefined ||
-      recipeStatusMap.current[index] === LoadState.LOADING
-    ) {
-      row = (
-        <Skeleton
-          variant="rectangular"
-          style={{ height: "96%", marginTop: 1, marginBottom: 1 }}
-        />
+  const rowRenderer: ListRowRenderer = useCallback(
+    ({ key, index, style }) => {
+      let row;
+      if (
+        recipeStatusMap.current[index] === undefined ||
+        recipeStatusMap.current[index] === LoadState.LOADING
+      ) {
+        row = <Skeleton variant="rectangular" />;
+      } else {
+        row = (
+          <Grid
+            key={index}
+            container
+            spacing={1.5}
+            columns={{ xs: 2, sm: 4, md: 6 }}
+          >
+            {recipes.current
+              .slice(numberColumn * index, numberColumn * (index + 1))
+              .map((recipe) => (
+                <Grid key={recipe.id!} item xs={1} sx={{ aspectRatio: "1/1" }}>
+                  <RecipeCardMemoized
+                    key={recipe.id!}
+                    id={recipe.id!}
+                    isFavorite={recipe.isFavorite}
+                    name={recipe.name}
+                    picture={recipe.pictures.at(0) ?? undefined}
+                    time={recipe.time}
+                  />
+                </Grid>
+              ))}
+          </Grid>
+        );
+      }
+
+      return (
+        <div key={key} style={style}>
+          {row}
+        </div>
       );
-    } else {
-      const recipe = recipes.current[index];
-
-      row = (
-        <RecipeCardMemoized
-          key={recipe.id!}
-          id={recipe.id!}
-          isFavorite={recipe.isFavorite}
-          name={recipe.name}
-          picture={recipe.pictures.at(0) ?? undefined}
-          time={recipe.time}
-        />
-      );
-    }
-
-    return (
-      <div key={key} style={style}>
-        {row}
-      </div>
-    );
-  };
-
-  // const RowRender = useCallback(
-  //   ({ index, style }: { index: number; style: CSSProperties }) => (
-  //     <Grid
-  //       key={index}
-  //       container
-  //       spacing={1.5}
-  //       columns={{ xs: 2, sm: 4, md: 6 }}
-  //       style={style}
-  //     >
-  //       {recipes
-  //         .slice(numberColumn * index, numberColumn * (index + 1))
-  //         .map((recipe) => (
-  //           <Grid key={recipe.id!} item xs={1} sx={{ aspectRatio: "1/1" }}>
-  //             <RecipeCardMemoized
-  //               key={recipe.id!}
-  //               id={recipe.id!}
-  //               isFavorite={recipe.isFavorite}
-  //               name={recipe.name}
-  //               picture={recipe.pictures.at(0) ?? undefined}
-  //               time={recipe.time}
-  //             />
-  //           </Grid>
-  //         ))}
-  //     </Grid>
-  //   ),
-  //   [recipes, numberColumn],
-  // );
+    },
+    [numberColumn],
+  );
 
   return (
     <Paper
@@ -250,12 +237,14 @@ export function AllRecipes() {
               isRowLoaded={isRowLoaded}
               loadMoreRows={loadMoreRows}
               rowCount={rowCount}
+              minimumBatchSize={numberColumn * 2}
+              threshold={numberColumn * 2}
             >
               {({ onRowsRendered, registerChild }) => (
                 <List
                   ref={registerChild}
                   onRowsRendered={onRowsRendered}
-                  rowHeight={width / numberColumn}
+                  rowHeight={width / numberColumn + 6}
                   height={height}
                   width={width}
                   rowCount={rowCount}
