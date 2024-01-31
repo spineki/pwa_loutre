@@ -29,6 +29,7 @@
     "react-router-dom": "^6.21.1",
     "react-scripts": "5.0.1",
     "react-swipeable-views": "^0.14.0",
+    "react-virtualized": "^9.22.5",
     "react-virtualized-auto-sizer": "^1.0.21",
     "react-window": "^1.8.10",
     "react-window-infinite-loader": "^1.0.9",
@@ -79,6 +80,7 @@
   },
   "devDependencies": {
     "@types/react-swipeable-views": "^0.13.5",
+    "@types/react-virtualized": "^9.21.29",
     "@types/react-window": "^1.8.8",
     "@types/react-window-infinite-loader": "^1.0.9",
     "@types/wicg-file-system-access": "^2023.10.4",

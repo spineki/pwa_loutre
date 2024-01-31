@@ -24,15 +24,14 @@ export async function getAllRecipes() {
   return await database.recipes.orderBy("name").toArray();
 }
 
-const PAGE_SIZE = 20;
-
 export async function getFirstPaginatedRecipes(
+  pageSize: number,
   filter: (recipe: Recipe) => boolean = () => true,
 ): Promise<Recipe[]> {
   const page = await database.recipes
     .orderBy("name") // Utilize index for sorting
     .filter(filter)
-    .limit(PAGE_SIZE)
+    .limit(pageSize)
     .toArray();
 
   return page;
@@ -40,6 +39,7 @@ export async function getFirstPaginatedRecipes(
 
 export async function getPaginatedRecipes(
   lastRecipe: Recipe,
+  pageSize: number,
   filter: (recipe: Recipe) => boolean = () => true,
 ): Promise<Recipe[]> {
   const page = await database.recipes
@@ -50,7 +50,7 @@ export async function getPaginatedRecipes(
     // Use helper function to fast forward to the exact last result:
     .filter(fastForward(lastRecipe, "id", filter))
     // Limit to page size:
-    .limit(PAGE_SIZE)
+    .limit(pageSize)
     .toArray();
 
   return page;
