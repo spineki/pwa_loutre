@@ -1,4 +1,4 @@
-import { useCallback } from "react";
+import { memo, useCallback, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
 import Card from "@mui/material/Card";
@@ -10,7 +10,7 @@ import Typography from "@mui/material/Typography";
 import { useTheme } from "@mui/material";
 import { partialUpdateRecipe } from "../database/controllers/recipeController";
 import { Time } from "../database/models/Recipe";
-import { useProgressiveImage } from "../hooks/useProgressiveImage";
+import { useCountRender } from "../hooks/useCountRenders";
 import { getDetailsRecipeRoute } from "../routes/routes";
 import { CardRow } from "./CardRow";
 
@@ -18,15 +18,35 @@ type RecipeCardProps = {
   id: number;
   isFavorite: boolean;
   name: string;
-  picture?: string;
+  picture?: Blob;
   time: Time;
 };
 
+type LoadState =
+  | { isLoaded: false }
+  | { isLoaded: true; payload: string | null };
+
 export function RecipeCard(props: RecipeCardProps) {
   const { id, name, picture, time, isFavorite } = props;
-  const loadedBackground = useProgressiveImage(
-    picture ?? "/tutorial_picture.png",
-  );
+
+  const [sourceLoaded, setSourceLoaded] = useState<LoadState>({
+    isLoaded: false,
+  });
+
+  useCountRender(id.toString(), "1579");
+
+  useEffect(() => {
+    if (picture === undefined) {
+      setSourceLoaded({ isLoaded: true, payload: "/tutorial_picture.png" });
+    } else {
+      const url = URL.createObjectURL(picture);
+      setSourceLoaded({ isLoaded: true, payload: url });
+
+      return () => {
+        URL.revokeObjectURL(url);
+      };
+    }
+  }, [picture]);
 
   const theme = useTheme();
 
@@ -38,13 +58,13 @@ export function RecipeCard(props: RecipeCardProps) {
     await partialUpdateRecipe(id, { isFavorite: false });
   }, [id]);
 
-  return loadedBackground ? (
+  return sourceLoaded.isLoaded ? (
     <Card
       elevation={2}
       sx={{
         backgroundImage: `
                 linear-gradient(0deg, rgba(42,42,42,0.65) 0%, rgba(42,42,42,0.65) 35%, rgba(255,255,255,0) 55%),
-                url(${loadedBackground})
+                url(${sourceLoaded.payload})   
             `,
         height: "100%",
         width: "100%",
@@ -108,3 +128,7 @@ export function RecipeCard(props: RecipeCardProps) {
     <Skeleton variant="rectangular" sx={{ height: "100%", width: "100%" }} />
   );
 }
+
+export const RecipeCardMemoized = memo(RecipeCard, (prev, next) => {
+  return prev.id === next.id;
+});

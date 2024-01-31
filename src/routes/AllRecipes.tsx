@@ -1,19 +1,14 @@
 import { useLiveQuery } from "dexie-react-hooks";
 import {
   CSSProperties,
-  memo,
   useCallback,
   useContext,
   useEffect,
   useState,
 } from "react";
 import { Link, useSearchParams } from "react-router-dom";
-import AutoSizer from "react-virtualized-auto-sizer";
-import { FixedSizeList, areEqual } from "react-window";
-import InfiniteLoader from "react-window-infinite-loader";
 
 import { useTheme } from "@mui/material";
-import CircularProgress from "@mui/material/CircularProgress";
 import Grid from "@mui/material/Grid";
 import useMediaQuery from "@mui/material/useMediaQuery";
 
@@ -21,7 +16,8 @@ import AddIcon from "@mui/icons-material/Add";
 import Fab from "@mui/material/Fab";
 import Paper from "@mui/material/Paper";
 
-import { RecipeCard } from "../components/RecipeCard";
+import { InfiniteList } from "../components/InfiniteList";
+import { RecipeCardMemoized } from "../components/RecipeCard";
 import { DrawerContext } from "../contexts/DrawerContext";
 import {
   getAllRecipes,
@@ -33,48 +29,8 @@ import { database } from "../database/database";
 import { Recipe } from "../database/models/Recipe";
 import { RouteAllRecipesName, RouteCreateRecipeName } from "../routes/routes";
 
-const RowWrapper = (recipes: Recipe[], numberColumn: number) =>
-  // eslint-disable-next-line react/display-name
-  memo(({ index, style }: { index: number; style: CSSProperties }) => {
-    return (
-      <Grid
-        key={index}
-        container
-        spacing={1.5}
-        columns={{ xs: 2, sm: 4, md: 6 }}
-        style={style}
-      >
-        {recipes!
-          .slice(numberColumn * index, numberColumn * (index + 1))
-          .map((recipe) => (
-            <Grid key={recipe.id!} item xs={1} sx={{ aspectRatio: "1/1" }}>
-              <RecipeCard
-                key={recipe.id!}
-                id={recipe.id!}
-                isFavorite={recipe.isFavorite}
-                name={recipe.name}
-                picture={
-                  recipe.pictures.length > 0
-                    ? URL.createObjectURL(recipe.pictures[0])
-                    : undefined
-                }
-                time={recipe.time}
-              />
-            </Grid>
-          ))}
-      </Grid>
-    );
-  }, areEqual);
-
 export function AllRecipes() {
   const { setCurrentRoute } = useContext(DrawerContext);
-
-  const theme = useTheme();
-  const isSmallerThanSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
-  const isSmallerThanMediumScreen = useMediaQuery(theme.breakpoints.down("md"));
-  const [numberColumn] = useState(
-    isSmallerThanSmallScreen ? 2 : isSmallerThanMediumScreen ? 4 : 6,
-  );
 
   useEffect(() => {
     setCurrentRoute(RouteAllRecipesName);
@@ -150,31 +106,84 @@ export function AllRecipes() {
     return await getFirstPaginatedRecipes();
   }, [searchParams]);
 
-  const [recipes, setRecipes] = useState<Array<Recipe>>([]);
+  if (initialRecipes?.length ?? 0 > 10000) {
+    console.log("initialRecipes", initialRecipes?.length);
+  }
+
+  const theme = useTheme();
+  const isSmallerThanSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
+  const isSmallerThanMediumScreen = useMediaQuery(theme.breakpoints.down("md"));
+  const [numberColumn] = useState(
+    isSmallerThanSmallScreen ? 2 : isSmallerThanMediumScreen ? 4 : 6,
+  );
+
+  const [hasNextPage, setHasNextPage] = useState(true);
+  const [isNextPageLoading, setIsNextPageLoading] = useState(false);
+  const [recipes, setItems] = useState<Recipe[]>([]);
+
+  const loadNextPage = async () => {
+    console.log("load next page");
+    setIsNextPageLoading(true);
+  };
 
   useEffect(() => {
-    setRecipes(initialRecipes ?? []);
-  }, [initialRecipes]);
-
-  const loadMoreItems = useCallback(async () => {
-    const lastRecipe = recipes.at(-1);
-    if (lastRecipe === undefined) {
-      return; // todo, check when this could happen
+    // only handling page load
+    if (isNextPageLoading == false) {
+      return;
     }
 
-    const newRecipes = (await getPaginatedRecipes(lastRecipe)) ?? [];
+    const getNextPage = async () => {
+      const lastRecipe = recipes.at(-1);
+      let newRecipes;
+      if (lastRecipe == undefined) {
+        newRecipes = (await getFirstPaginatedRecipes()) ?? [];
+      } else {
+        newRecipes = (await getPaginatedRecipes(lastRecipe)) ?? [];
+      }
 
-    setRecipes(recipes.concat(newRecipes));
-  }, [recipes]);
+      setHasNextPage(true);
+      setIsNextPageLoading(false);
+      setItems([...recipes].concat(newRecipes));
+    };
 
-  // todo change this
-  const hasNextPage = true;
+    getNextPage();
+  }, [isNextPageLoading, recipes]);
 
-  const itemCount = recipes
-    ? hasNextPage
-      ? Math.ceil(recipes.length / numberColumn) + 1
-      : Math.ceil(recipes.length / numberColumn)
-    : 0;
+  const isItemLoaded = useCallback(
+    (index: number) => {
+      const condition = !hasNextPage || index < recipes.length / numberColumn;
+      return condition;
+    },
+    [hasNextPage, recipes.length, numberColumn],
+  );
+
+  const RowRender = useCallback(
+    ({ index, style }: { index: number; style: CSSProperties }) => (
+      <Grid
+        key={index}
+        container
+        spacing={1.5}
+        columns={{ xs: 2, sm: 4, md: 6 }}
+        style={style}
+      >
+        {recipes
+          .slice(numberColumn * index, numberColumn * (index + 1))
+          .map((recipe) => (
+            <Grid key={recipe.id!} item xs={1} sx={{ aspectRatio: "1/1" }}>
+              <RecipeCardMemoized
+                key={recipe.id!}
+                id={recipe.id!}
+                isFavorite={recipe.isFavorite}
+                name={recipe.name}
+                picture={recipe.pictures.at(0) ?? undefined}
+                time={recipe.time}
+              />
+            </Grid>
+          ))}
+      </Grid>
+    ),
+    [recipes, numberColumn],
+  );
 
   return (
     <Paper
@@ -183,37 +192,16 @@ export function AllRecipes() {
         p: 2,
       }}
     >
-      {recipes ? (
-        <AutoSizer>
-          {({ height, width }) => (
-            <div style={{ height, width }}>
-              <InfiniteLoader
-                isItemLoaded={(index) => {
-                  return index < itemCount - 1;
-                }}
-                itemCount={itemCount}
-                loadMoreItems={loadMoreItems}
-              >
-                {({ onItemsRendered, ref }) => (
-                  <FixedSizeList
-                    ref={ref}
-                    itemCount={itemCount}
-                    onItemsRendered={onItemsRendered}
-                    itemSize={width / numberColumn}
-                    height={height}
-                    width={width}
-                    layout="vertical"
-                  >
-                    {RowWrapper(recipes, numberColumn)}
-                  </FixedSizeList>
-                )}
-              </InfiniteLoader>
-            </div>
-          )}
-        </AutoSizer>
-      ) : (
-        <CircularProgress />
-      )}
+      <InfiniteList
+        hasNextPage={hasNextPage}
+        isNextPageLoading={isNextPageLoading}
+        nbColumns={numberColumn}
+        nbItems={recipes.length}
+        loadNextPage={loadNextPage}
+        isItemLoaded={isItemLoaded}
+        RowRender={RowRender}
+      />
+
       <Fab
         component={Link}
         to={RouteCreateRecipeName}
