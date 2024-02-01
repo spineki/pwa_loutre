@@ -20,15 +20,16 @@ import "react-virtualized/styles.css";
 import { RecipeCardMemoized } from "../components/RecipeCard";
 import { DrawerContext } from "../contexts/DrawerContext";
 import {
-  getAllRecipes,
   getFirstPaginatedRecipes,
   getPaginatedRecipes,
   getRecipeCount,
 } from "../database/controllers/recipeController";
 import { getTagByName } from "../database/controllers/tagController";
-import { database } from "../database/database";
 import { Recipe } from "../database/models/Recipe";
 import { RouteAllRecipesName, RouteCreateRecipeName } from "../routes/routes";
+
+// A displayable card element
+type CardRecipe = Omit<Recipe, "pictures"> & { picture?: string };
 
 enum LoadState {
   LOADING = 1,
@@ -45,49 +46,42 @@ export function AllRecipes() {
   // using url as a source to know which filters to apply to grid
   const [searchParams] = useSearchParams();
 
-  // todo: implement proper pagination to only load a subset into memory
-  const initialRecipes = useLiveQuery(async () => {
-    // if we are currently filtering recipes by name, only showing those containing a name that contains this string
-    if (searchParams.has("recipe-name")) {
-      const searchedRecipeName = searchParams
-        .get("recipe-name")!
-        .trim()
-        .toLowerCase();
-      // if search is empty, returning all recipes
-      // todo! add pagination to this
-      if (searchedRecipeName == "") {
-        return await getAllRecipes();
+  const filteringFunction: (recipe: Recipe) => boolean =
+    useLiveQuery(async () => {
+      // if we are currently filtering recipes by name, only showing those containing a name that contains this string
+      if (searchParams.has("recipe-name")) {
+        const searchedRecipeName = searchParams
+          .get("recipe-name")!
+          .trim()
+          .toLowerCase();
+        // if search is empty, returning all recipes
+        // todo! add pagination to this
+        if (searchedRecipeName == "") {
+          return () => true;
+        }
+
+        return (recipe: Recipe) =>
+          recipe.name.toLowerCase().includes(searchedRecipeName);
       }
 
-      const recipes = await database.recipes
-        .orderBy("name")
-        .filter((recipe: Recipe) =>
-          recipe.name.toLowerCase().includes(searchedRecipeName),
-        )
-        .toArray();
-      return recipes;
-    }
+      if (searchParams.has("tag-name")) {
+        const searchedTagName = searchParams
+          .get("tag-name")!
+          .trim()
+          .toLowerCase();
+        // if search is empty, returning all recipes
+        // todo! add pagination to this
+        if (searchedTagName == "") {
+          return () => true;
+        }
 
-    if (searchParams.has("tag-name")) {
-      const searchedTagName = searchParams
-        .get("tag-name")!
-        .trim()
-        .toLowerCase();
-      // if search is empty, returning all recipes
-      // todo! add pagination to this
-      if (searchedTagName == "") {
-        return await getAllRecipes();
-      }
+        const searchedTagId = (await getTagByName(searchedTagName))?.id;
 
-      const searchedTagId = (await getTagByName(searchedTagName))?.id;
+        if (searchedTagId == null) {
+          return () => true;
+        }
 
-      if (searchedTagId == null) {
-        return await getAllRecipes();
-      }
-
-      const recipes = await database.recipes
-        .orderBy("name")
-        .filter((recipe: Recipe) => {
+        return (recipe: Recipe) => {
           let matchFound = false;
 
           for (const recipeTagId of recipe.tagIds) {
@@ -98,23 +92,14 @@ export function AllRecipes() {
           }
 
           return matchFound;
-        })
-        .toArray();
+        };
+      }
 
-      return recipes;
-    }
+      // if we are currently filtering recipes by tag, only showing those that contains exactly this tag
 
-    // if we are currently filtering recipes by tag, only showing those that contains exactly this tag
-
-    // if no filter is given, defaulting to return all recipes
-    // todo! add pagination to this
-
-    return await getFirstPaginatedRecipes(30);
-  }, [searchParams]);
-
-  if (initialRecipes?.length ?? 0 > 10000) {
-    console.log("initialRecipes", initialRecipes?.length);
-  }
+      // if no filter is given, defaulting to return all recipes
+      return () => true;
+    }, [searchParams]) ?? (() => true);
 
   const theme = useTheme();
   const isSmallerThanSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
@@ -123,12 +108,11 @@ export function AllRecipes() {
     isSmallerThanSmallScreen ? 2 : isSmallerThanMediumScreen ? 4 : 6,
   );
 
-  const recipes = useRef<Recipe[]>([]);
+  const recipes = useRef<CardRecipe[]>([]);
 
-  const recipeStatusMap = useRef<Record<number, 1 | 2>>({});
+  const recipeStatusMap = useRef<Record<number, LoadState>>({});
   const rowCount =
     useLiveQuery(async () => {
-      console.log("max nb recipe", await getRecipeCount());
       return Math.ceil((await getRecipeCount()) / numberColumn);
     }, []) ?? 0;
 
@@ -154,24 +138,39 @@ export function AllRecipes() {
     const lastRecipeIndex = startIndex * numberColumn - 1;
     let page: Recipe[];
     if (lastRecipeIndex < 0) {
-      page = await getFirstPaginatedRecipes(pageSize);
+      page = await getFirstPaginatedRecipes(pageSize, filteringFunction);
     } else {
       const lastRecipe = recipes.current.at(lastRecipeIndex);
       if (lastRecipe === undefined) {
-        page = await getFirstPaginatedRecipes(pageSize);
+        page = await getFirstPaginatedRecipes(pageSize, filteringFunction);
       } else {
-        console.log(
-          "using real pagination, start:",
-          lastRecipeIndex,
+        page = await getPaginatedRecipes(
           lastRecipe,
+          pageSize,
+          filteringFunction,
         );
-        page = await getPaginatedRecipes(lastRecipe, pageSize);
-        console.log(page);
       }
     }
 
+    const cardRecipePage: CardRecipe[] = page.map((recipe) => {
+      const firstPicture = recipe.pictures.at(0);
+
+      let firstPictureUrl;
+
+      if (firstPicture) {
+        firstPictureUrl = URL.createObjectURL(firstPicture);
+      } else {
+        firstPictureUrl = "/tutorial_picture.png";
+      }
+
+      return {
+        ...recipe,
+        picture: firstPictureUrl,
+      };
+    });
+
     // updating recipes
-    for (const recipe of page) {
+    for (const recipe of cardRecipePage) {
       recipes.current.push(recipe);
     }
 
@@ -205,7 +204,7 @@ export function AllRecipes() {
                     id={recipe.id!}
                     isFavorite={recipe.isFavorite}
                     name={recipe.name}
-                    picture={recipe.pictures.at(0) ?? undefined}
+                    picture={recipe.picture}
                     time={recipe.time}
                   />
                 </Grid>

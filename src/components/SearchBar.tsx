@@ -1,10 +1,12 @@
 import { useLiveQuery } from "dexie-react-hooks";
-import { useEffect, useState } from "react";
+import { SyntheticEvent, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useSearchParams } from "react-router-dom";
 
 import SearchIcon from "@mui/icons-material/Search";
-import Autocomplete from "@mui/material/Autocomplete";
+import Autocomplete, {
+  AutocompleteInputChangeReason,
+} from "@mui/material/Autocomplete";
 import Chip from "@mui/material/Chip";
 import Grid from "@mui/material/Grid";
 import InputAdornment from "@mui/material/InputAdornment";
@@ -14,7 +16,7 @@ import { debounce } from "@mui/material/utils";
 import TagIcon from "@mui/icons-material/Tag";
 
 import { database } from "../database/database";
-import { sanitizeTagName } from "../database/models/Tag";
+import { Tag, sanitizeTagName } from "../database/models/Tag";
 
 export function SearchBar() {
   const { t } = useTranslation();
@@ -52,7 +54,7 @@ export function SearchBar() {
 
       const matchingTags = await database.tags
         .orderBy("name")
-        .filter((tag) => tag.name.includes(tagSearch))
+        .filter((tag: Tag) => tag.name.includes(tagSearch))
         .toArray();
 
       return matchingTags;
@@ -78,6 +80,7 @@ export function SearchBar() {
           options={options ?? []}
           getOptionLabel={(option) => "#" + option.name}
           noOptionsText={t("HelpSearch")}
+          clearOnEscape={false}
           onChange={(event, newValue) => {
             if (newValue == null) {
               setCurrentSearch("");
@@ -85,16 +88,27 @@ export function SearchBar() {
               setSearchParams({ "tag-name": sanitizeTagName(newValue.name) });
             }
           }}
-          onInputChange={debounce((event, newValue: string) => {
-            const searchText = newValue.toLocaleLowerCase().trim();
-            // saving text to keep track of what is currently typed (to tell appart partial recipe name and tag search)
-            setCurrentSearch(searchText);
+          onInputChange={debounce(
+            (
+              event: SyntheticEvent<Element, Event>,
+              newValue: string,
+              reason: AutocompleteInputChangeReason,
+            ) => {
+              // not doing anything if user click outside the component (reset reaon)
+              if (reason === "reset") {
+                return;
+              }
+              const searchText = newValue.toLocaleLowerCase().trim();
+              // saving text to keep track of what is currently typed (to tell appart partial recipe name and tag search)
+              setCurrentSearch(searchText);
 
-            // only updating current recipe name search we are not typing the name of tag
-            if (!searchText.startsWith("#")) {
-              setSearchParams({ "recipe-name": searchText });
-            }
-          }, 400)}
+              // only updating current recipe name search we are not typing the name of tag
+              if (!searchText.startsWith("#")) {
+                setSearchParams({ "recipe-name": searchText });
+              }
+            },
+            300,
+          )}
           renderOption={(props, item) => (
             <li {...props} key={item.id}>
               <Chip label={item.name} icon={<TagIcon />} />

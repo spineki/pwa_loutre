@@ -38,7 +38,7 @@ export async function getFirstPaginatedRecipes(
 }
 
 export async function getPaginatedRecipes(
-  lastRecipe: Recipe,
+  lastRecipe: Pick<Recipe, "id" | "name">,
   pageSize: number,
   filter: (recipe: Recipe) => boolean = () => true,
 ): Promise<Recipe[]> {
@@ -48,7 +48,7 @@ export async function getPaginatedRecipes(
     .where("name")
     .aboveOrEqual(lastRecipe.name) // makes it sorted by name
     // Use helper function to fast forward to the exact last result:
-    .filter(fastForward(lastRecipe, "id", filter))
+    .filter(fastForward(lastRecipe.id, "id", filter))
     // Limit to page size:
     .limit(pageSize)
     .toArray();
