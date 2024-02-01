@@ -1,8 +1,7 @@
-import { useLiveQuery } from "dexie-react-hooks";
 import { useContext, useEffect, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 
-import { useTheme } from "@mui/material";
+import { CircularProgress, useTheme } from "@mui/material";
 import useMediaQuery from "@mui/material/useMediaQuery";
 
 import AddIcon from "@mui/icons-material/Add";
@@ -12,25 +11,38 @@ import Paper from "@mui/material/Paper";
 import "react-virtualized/styles.css";
 import { RecipeList } from "../components/RecipeList";
 import { DrawerContext } from "../contexts/DrawerContext";
+import { getRecipeCount } from "../database/controllers/recipeController";
 import { getTagByName } from "../database/controllers/tagController";
 import { Recipe } from "../database/models/Recipe";
-import { useCountRender } from "../hooks/useCountRenders";
 import { RouteAllRecipesName, RouteCreateRecipeName } from "../routes/routes";
 
 export function AllRecipes() {
   const { setCurrentRoute } = useContext(DrawerContext);
-
   useEffect(() => {
     setCurrentRoute(RouteAllRecipesName);
   }, [setCurrentRoute]);
 
+  const theme = useTheme();
+  const isSmallerThanSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
+  const isSmallerThanMediumScreen = useMediaQuery(theme.breakpoints.down("md"));
+  const [nbColumn] = useState(
+    isSmallerThanSmallScreen ? 2 : isSmallerThanMediumScreen ? 4 : 6,
+  );
+
   // using url as a source to know which filters to apply to grid
   const [searchParams] = useSearchParams();
 
-  const filterFunction: (recipe: Recipe) => boolean =
-    useLiveQuery(async () => {
+  const [filterFunction, setFilterFunction] = useState<
+    null | ((recipe: Recipe) => boolean)
+  >(null);
+
+  const [nbRow, setNbRow] = useState(0);
+
+  useEffect(() => {
+    const createNextFilterFunction = async (
+      searchParams: URLSearchParams,
+    ): Promise<(recipe: Recipe) => boolean> => {
       // if we are currently filtering recipes by name, only showing those containing a name that contains this string
-      console.log(searchParams);
 
       if (searchParams.has("recipe-name")) {
         const searchedRecipeName = searchParams
@@ -42,8 +54,9 @@ export function AllRecipes() {
           return () => true;
         }
 
-        return (recipe: Recipe) =>
-          recipe.name.toLowerCase().includes(searchedRecipeName);
+        return (recipe: Recipe) => {
+          return recipe.name.toLowerCase().includes(searchedRecipeName);
+        };
       }
 
       if (searchParams.has("tag-name")) {
@@ -80,16 +93,19 @@ export function AllRecipes() {
 
       // if no filter is given, defaulting to return all recipes
       return () => true;
-    }, [searchParams]) ?? (() => true);
+    };
 
-  const theme = useTheme();
-  const isSmallerThanSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
-  const isSmallerThanMediumScreen = useMediaQuery(theme.breakpoints.down("md"));
-  const [numberColumn] = useState(
-    isSmallerThanSmallScreen ? 2 : isSmallerThanMediumScreen ? 4 : 6,
-  );
+    const handleFiltering = async (searchParams: URLSearchParams) => {
+      const nextFilterFunction: (recipe: Recipe) => boolean =
+        await createNextFilterFunction(searchParams);
+      setFilterFunction(() => nextFilterFunction);
+      setNbRow(
+        Math.ceil((await getRecipeCount(nextFilterFunction)) / nbColumn),
+      );
+    };
 
-  useCountRender("AllRecipe");
+    handleFiltering(searchParams);
+  }, [nbColumn, searchParams]);
 
   return (
     <Paper
@@ -98,11 +114,15 @@ export function AllRecipes() {
         p: 2,
       }}
     >
-      <RecipeList
-        key={searchParams.toString()}
-        nbColumn={numberColumn}
-        filterFunction={filterFunction}
-      />
+      {filterFunction ? (
+        <RecipeList
+          nbRow={nbRow}
+          nbColumn={nbColumn}
+          filterFunction={filterFunction}
+        />
+      ) : (
+        <CircularProgress />
+      )}
 
       <Fab
         component={Link}

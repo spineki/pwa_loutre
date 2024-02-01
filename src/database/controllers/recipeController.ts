@@ -12,8 +12,10 @@ import {
 import { getTagByName, upsertTag } from "./tagController";
 
 // RECIPES --------------------------------------
-export async function getRecipeCount() {
-  return await database.recipes.count();
+export async function getRecipeCount(
+  filter: (recipe: Recipe) => boolean = () => true,
+) {
+  return await database.recipes.filter(filter).count();
 }
 
 export async function getRecipeById(id: number) {
@@ -22,6 +24,17 @@ export async function getRecipeById(id: number) {
 
 export async function getAllRecipes() {
   return await database.recipes.orderBy("name").toArray();
+}
+
+export async function getFilteredRecipes(
+  filter: (recipe: Recipe) => boolean,
+): Promise<Recipe[]> {
+  const recipes = await database.recipes
+    .orderBy("name") // Utilize index for sorting
+    .filter(filter)
+    .toArray();
+
+  return recipes;
 }
 
 export async function getFirstPaginatedRecipes(

@@ -9,7 +9,6 @@ import Typography from "@mui/material/Typography";
 import { useTheme } from "@mui/material";
 import { partialUpdateRecipe } from "../database/controllers/recipeController";
 import { Time } from "../database/models/Recipe";
-import { useCountRender } from "../hooks/useCountRenders";
 import { getDetailsRecipeRoute } from "../routes/routes";
 import { CardRow } from "./CardRow";
 
@@ -23,8 +22,6 @@ type RecipeCardProps = {
 
 export function RecipeCard(props: RecipeCardProps) {
   const { id, name, picture, time, isFavorite } = props;
-
-  useCountRender(id.toString(), "1579");
 
   useEffect(() => {}, [picture]);
 
