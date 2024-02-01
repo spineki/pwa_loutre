@@ -1,12 +1,13 @@
 import { useContext, useEffect, useMemo, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 
-import { CircularProgress, useTheme } from "@mui/material";
+import CircularProgress from "@mui/material/CircularProgress";
+import Fab from "@mui/material/Fab";
+import Paper from "@mui/material/Paper";
+import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
 
 import AddIcon from "@mui/icons-material/Add";
-import Fab from "@mui/material/Fab";
-import Paper from "@mui/material/Paper";
 
 import "react-virtualized/styles.css";
 import { RecipeList } from "../components/RecipeList";

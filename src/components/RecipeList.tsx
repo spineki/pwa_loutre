@@ -1,8 +1,10 @@
-import { CircularProgress } from "@mui/material";
-import Grid from "@mui/material/Grid";
 import { useLiveQuery } from "dexie-react-hooks";
 import { useCallback } from "react";
 import { AutoSizer, List, ListRowRenderer } from "react-virtualized";
+
+import CircularProgress from "@mui/material/CircularProgress";
+import Grid from "@mui/material/Grid";
+
 import { getFilteredRecipes } from "../database/controllers/recipeController";
 import { Recipe } from "../database/models/Recipe";
 import { RecipeCardMemoized } from "./RecipeCard";

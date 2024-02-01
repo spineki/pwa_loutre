@@ -1,4 +1,4 @@
-import { memo, useCallback, useEffect } from "react";
+import { memo, useCallback } from "react";
 import { Link } from "react-router-dom";
 
 import Card from "@mui/material/Card";
@@ -22,8 +22,6 @@ type RecipeCardProps = {
 
 export function RecipeCard(props: RecipeCardProps) {
   const { id, name, picture, time, isFavorite } = props;
-
-  useEffect(() => {}, [picture]);
 
   const theme = useTheme();
 
