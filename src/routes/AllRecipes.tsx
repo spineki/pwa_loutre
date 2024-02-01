@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useMemo, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 
 import { CircularProgress, useTheme } from "@mui/material";
@@ -25,9 +25,10 @@ export function AllRecipes() {
   const theme = useTheme();
   const isSmallerThanSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
   const isSmallerThanMediumScreen = useMediaQuery(theme.breakpoints.down("md"));
-  const [nbColumn] = useState(
-    isSmallerThanSmallScreen ? 2 : isSmallerThanMediumScreen ? 4 : 6,
-  );
+
+  const nbColumn = useMemo(() => {
+    return isSmallerThanSmallScreen ? 2 : isSmallerThanMediumScreen ? 4 : 6;
+  }, [isSmallerThanMediumScreen, isSmallerThanSmallScreen]);
 
   // using url as a source to know which filters to apply to grid
   const [searchParams] = useSearchParams();

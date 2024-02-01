@@ -80,6 +80,7 @@ export function RecipeList(props: RecipeListProps) {
               width={width}
               rowCount={nbRow}
               rowRenderer={rowRenderer}
+              nbColumn={nbColumn}
             />
           </div>
         ) : (
