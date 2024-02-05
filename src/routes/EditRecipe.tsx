@@ -679,7 +679,11 @@ export function EditRecipe() {
 
           <SpeedDial
             ariaLabel="SpeedDial tooltip example"
-            sx={{ position: "fixed", bottom: 16, right: 16 }}
+            FabProps={{
+              size: "medium",
+              color: "secondary",
+            }}
+            sx={{ position: "fixed", bottom: 80, right: 12 }}
             icon={
               <SpeedDialIcon openIcon={<CloseIcon />} icon={<TuneIcon />} />
             }
@@ -701,14 +705,16 @@ export function EditRecipe() {
                 onClick={() => setCurrentTabIndex(index)}
               />
             ))}
-            <SpeedDialAction
-              key={t("Save")}
-              icon={<SaveIcon />}
-              tooltipTitle={t("Save")}
-              tooltipOpen
-              onClick={handleSubmit(onSubmit)}
-            />
           </SpeedDial>
+
+          <Fab
+            color="primary"
+            size="medium"
+            sx={{ position: "fixed", bottom: 16, right: 16 }}
+            onClick={handleSubmit(onSubmit)}
+          >
+            <SaveIcon />
+          </Fab>
         </>
       )}
     </Paper>
