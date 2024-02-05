@@ -21,7 +21,11 @@ import {
   getAllRecipes,
   importRecipesFromFileContent,
 } from "../database/controllers/recipeController";
-import { getJsonCompatibleRecipe } from "../database/models/Recipe";
+import { database_version } from "../database/database";
+import {
+  ShareFile,
+  getJsonCompatibleRecipeFromRecipe,
+} from "../database/models/Recipe";
 import { useSharing } from "../hooks/useSharing";
 
 export function CloudDialog() {
@@ -91,7 +95,9 @@ export function CloudDialog() {
     const allRecipes = await getAllRecipes();
 
     const jsonCompatibleRecipe = await Promise.all(
-      allRecipes.map(async (recipe) => getJsonCompatibleRecipe(recipe)),
+      allRecipes.map(async (recipe) =>
+        getJsonCompatibleRecipeFromRecipe(recipe),
+      ),
     );
 
     shareFile(jsonCompatibleRecipe);
@@ -100,10 +106,18 @@ export function CloudDialog() {
   const handleDownload = async () => {
     const allRecipes = await getAllRecipes();
 
-    const jsonCompatibleRecipe = await Promise.all(
-      allRecipes.map(async (recipe) => getJsonCompatibleRecipe(recipe)),
+    const jsonCompatibleRecipes = await Promise.all(
+      allRecipes.map(async (recipe) =>
+        getJsonCompatibleRecipeFromRecipe(recipe),
+      ),
     );
-    downloadFile(jsonCompatibleRecipe);
+
+    const fileToDownload: ShareFile = {
+      version: database_version,
+      recipes: jsonCompatibleRecipes,
+    };
+
+    downloadFile(fileToDownload);
   };
 
   return (
@@ -158,7 +172,7 @@ export function CloudDialog() {
 
       <DialogContent>
         <DialogContentText>
-          Your website does not seem to be able to share files. Sorry.
+          Your browser does not seem to be able to share files. Sorry.
         </DialogContentText>
       </DialogContent>
     </Dialog>

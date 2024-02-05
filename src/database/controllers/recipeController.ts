@@ -5,8 +5,8 @@ import { Result } from "../../utils/errorHandling";
 import { database } from "../database";
 import { fastForward } from "../helpers";
 import {
-  JsonCompatibleRecipeSchema,
   Recipe,
+  ShareFileSchema,
   getRecipeFromJSonCompatibleRecipe,
 } from "../models/Recipe";
 import { getTagByName, upsertTag } from "./tagController";
@@ -126,16 +126,21 @@ export async function importRecipesFromFileContent(
       return true;
     }, "An error occured while parsing files to json")
     .transform((content) => JSON.parse(content))
-    .pipe(JsonCompatibleRecipeSchema.array())
+    .pipe(ShareFileSchema)
     .safeParse(content);
 
   if (result.success) {
-    const recipes: Array<Recipe> = await Promise.all(
+    const version = result.data.version;
+
+    const recipes = await Promise.all(
       // eslint-disable-next-line
-      result.data.map((jsonCompatibleRecipe) =>
+      result.data.recipes.map((jsonCompatibleRecipe) =>
         getRecipeFromJSonCompatibleRecipe(jsonCompatibleRecipe),
       ),
     );
+
+    // todo, add extra verifications thanks to recipes version
+    console.log("Importing recipes from version", version);
 
     await bulkUpsertRecipes(recipes);
     return { success: true };

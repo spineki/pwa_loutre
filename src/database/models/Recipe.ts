@@ -56,7 +56,14 @@ export const JsonCompatibleRecipeSchema = RecipeSchema.omit({ pictures: true })
 
 export type JsonCompatibleRecipe = z.infer<typeof JsonCompatibleRecipeSchema>;
 
-export async function getJsonCompatibleRecipe(
+export const ShareFileSchema = z.object({
+  version: z.number(),
+  recipes: JsonCompatibleRecipeSchema.array(),
+});
+
+export type ShareFile = z.infer<typeof ShareFileSchema>;
+
+export async function getJsonCompatibleRecipeFromRecipe(
   recipe: Recipe,
 ): Promise<JsonCompatibleRecipe> {
   // eslint-disable-next-line

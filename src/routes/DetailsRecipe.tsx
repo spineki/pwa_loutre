@@ -24,7 +24,12 @@ import { RecipeSteps } from "../components/RecipeSteps";
 import { RecipeTabs } from "../components/RecipeTabs";
 import { DrawerContext } from "../contexts/DrawerContext";
 import { getRecipeById } from "../database/controllers/recipeController";
-import { Recipe, getJsonCompatibleRecipe } from "../database/models/Recipe";
+import { database_version } from "../database/database";
+import {
+  Recipe,
+  ShareFile,
+  getJsonCompatibleRecipeFromRecipe,
+} from "../database/models/Recipe";
 import { useSharing } from "../hooks/useSharing";
 import { RouteDetailsRecipesName, getEditRecipeRoute } from "../routes/routes";
 
@@ -90,7 +95,12 @@ export function DetailsRecipe() {
   };
 
   const shareRecipe = useCallback(async () => {
-    await shareFile([await getJsonCompatibleRecipe(recipe)]);
+    const fileToShare: ShareFile = {
+      version: database_version,
+      recipes: [await getJsonCompatibleRecipeFromRecipe(recipe)],
+    };
+
+    await shareFile(fileToShare);
   }, [recipe, shareFile]);
 
   return (
