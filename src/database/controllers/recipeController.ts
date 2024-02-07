@@ -103,7 +103,28 @@ export async function partialUpdateRecipe(
 }
 
 export async function deleteRecipe(id: number) {
+  const recipe = await getRecipeById(id);
+
+  // not deleting an existing recipe
+  if (recipe == undefined) {
+    return;
+  }
+
   await database.recipes.delete(id);
+
+  // If a tagId was only linked to this recipe, delete it
+  const tagIds = recipe.tagIds;
+
+  //? note: this is really not great performance-wise. A better alternative would be to have some foreign key consistency.
+  //? But as far as I know, there is no such thing in indexDB, and thus neither in dexie
+  for (const tagId of tagIds) {
+    const nbRecipeHavingThisTagId = await database.recipes
+      .filter((recipe) => recipe.tagIds.includes(tagId))
+      .count();
+    if (nbRecipeHavingThisTagId == 0) {
+      await database.tags.delete(tagId);
+    }
+  }
 }
 
 // Helpers
