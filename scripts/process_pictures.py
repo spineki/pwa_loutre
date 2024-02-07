@@ -67,6 +67,9 @@ tasks: List[Task] = [
     Task( "../heavy_assets/cooking_book.jpeg", "../public/cooking_book.png", True, (64, 64)),
     Task( "../heavy_assets/comments.jpeg", "../public/comments.png", True, (64, 64)),
     Task( "../heavy_assets/tutorial_picture.jpeg", "../public/tutorial_picture.png", False, (300, 300)),
+    Task( "../heavy_assets/loutre.png", "../public/favicon.ico", False, (16, 16)),
+    Task( "../heavy_assets/loutre.png", "../public/logo192.png", False, (192, 192)),
+    Task( "../heavy_assets/loutre.png", "../public/logo512.png", False, (512, 512)),
 ]
 
 for task in tasks:
