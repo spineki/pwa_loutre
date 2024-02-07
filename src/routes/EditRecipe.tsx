@@ -395,7 +395,7 @@ export function EditRecipe() {
       id = await insertRecipe(recipeToSave);
     } else {
       recipeToSave.id = id;
-      await upsertRecipe(recipeToSave);
+      await upsertRecipe(recipeToSave as Recipe & { id: number });
     }
     navigate(getDetailsRecipeRoute(id));
   };

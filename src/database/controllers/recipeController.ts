@@ -84,10 +84,33 @@ export async function insertRecipe(recipe: Recipe) {
 
 /**
  * Add a recipe if it does not exist, else overwrite existing recipe
+ * It also ensures that removed tags that are not part of another recipe are delete from the database.
  * @param recipe
  */
-export async function upsertRecipe(recipe: Recipe) {
-  return await database.recipes.put(recipe);
+export async function upsertRecipe(recipe: Recipe & { id: number }) {
+  // getting previous existing recipe
+  const previousRecipe = await database.recipes.get(recipe.id);
+
+  // updating database recipe
+  await database.recipes.put(recipe);
+
+  // Post process, checking if
+
+  if (previousRecipe !== undefined) {
+    // If a tagId was only linked to this recipe, delete it
+    const tagIds = previousRecipe.tagIds;
+
+    //? note: this is really not great performance-wise. A better alternative would be to have some foreign key consistency.
+    //? But as far as I know, there is no such thing in indexDB, and thus neither in dexie
+    for (const tagId of tagIds) {
+      const nbRecipeHavingThisTagId = await database.recipes
+        .filter((recipe) => recipe.tagIds.includes(tagId))
+        .count();
+      if (nbRecipeHavingThisTagId == 0) {
+        await database.tags.delete(tagId);
+      }
+    }
+  }
 }
 
 /**
@@ -103,17 +126,17 @@ export async function partialUpdateRecipe(
 }
 
 export async function deleteRecipe(id: number) {
-  const recipe = await getRecipeById(id);
+  const existingRecipe = await getRecipeById(id);
 
   // not deleting an existing recipe
-  if (recipe == undefined) {
+  if (existingRecipe == undefined) {
     return;
   }
 
   await database.recipes.delete(id);
 
   // If a tagId was only linked to this recipe, delete it
-  const tagIds = recipe.tagIds;
+  const tagIds = existingRecipe.tagIds;
 
   //? note: this is really not great performance-wise. A better alternative would be to have some foreign key consistency.
   //? But as far as I know, there is no such thing in indexDB, and thus neither in dexie
