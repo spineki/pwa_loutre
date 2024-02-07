@@ -6,8 +6,8 @@ export const resources: Resource = {
       "A recipe was found using the url":
         "A recipe was found using the url in your clipboard. Do you want to use it?",
       "Clipboard with usable address": "Clipboard with usable address",
-      "Do you really want to delete this delicious recipe?!":
-        "Do you really want to delete this delicious recipe?!",
+      DeleteRecipe: "Delete this recipe?",
+      DeleteRecipeLong: "Do you really want to delete this delicious recipe?!",
       "Export saved recipes": "Export saved recipes",
       "Import saved recipes": "Import saved recipes",
       "Type here": "Type here",
@@ -82,7 +82,8 @@ export const resources: Resource = {
         "Une recette a été trouvée en utilisant l'url du presse-papier. Voulez-vous l'utiliser?",
       "Clipboard with usable address":
         "Presse-Papier avec une addresse utilisable",
-      "Do you really want to delete this delicious recipe?!":
+      DeleteRecipe: "Delete this recipe ?",
+      DeleteRecipeLong:
         "Voulez-vous vraiment supprimer cette délicieuse recette?!",
       "Export saved recipes": "Exporter les recettes",
       "Import saved recipes": "Importer des recettes",

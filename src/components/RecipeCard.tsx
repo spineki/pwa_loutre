@@ -1,4 +1,4 @@
-import { useCallback } from "react";
+import { memo, useCallback } from "react";
 import { Link } from "react-router-dom";
 
 import Card from "@mui/material/Card";
@@ -39,11 +39,12 @@ export function RecipeCard(props: RecipeCardProps) {
       sx={{
         backgroundImage: `
                 linear-gradient(0deg, rgba(42,42,42,0.65) 0%, rgba(42,42,42,0.65) 35%, rgba(255,255,255,0) 55%),
-                url(${picture ?? "/tutorial_picture.png"})
+                url(${picture})   
             `,
         height: "100%",
         width: "100%",
-        backgroundSize: "contain",
+        backgroundSize: "cover",
+        backgroundPosition: "center",
         display: "flex",
         flexDirection: "column",
         color: theme.palette.getContrastText("rgba(42,42,42,0.6)"),
@@ -70,7 +71,7 @@ export function RecipeCard(props: RecipeCardProps) {
               fontFamily: "Cookie-Regular",
               paddingTop: 0,
               paddingBottom: 0,
-              whiteSpace: "nowrap",
+              whiteSpace: "wrap",
               overflow: "hidden",
               textOverflow: "ellipsis",
               textShadow: "0 2px 3px rgba(0, 0, 0, 0.3)",
@@ -100,3 +101,5 @@ export function RecipeCard(props: RecipeCardProps) {
     </Card>
   );
 }
+
+export const RecipeCardMemoized = memo(RecipeCard);

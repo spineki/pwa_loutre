@@ -1,56 +1,64 @@
-import { useLiveQuery } from "dexie-react-hooks";
-import { useContext, useEffect } from "react";
-import InfiniteScroll from "react-infinite-scroll-component";
+import { useContext, useEffect, useMemo, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 
-import Box from "@mui/material/Box";
 import CircularProgress from "@mui/material/CircularProgress";
 import Fab from "@mui/material/Fab";
-import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
+import { useTheme } from "@mui/material/styles";
+import useMediaQuery from "@mui/material/useMediaQuery";
 
 import AddIcon from "@mui/icons-material/Add";
 
-import { RecipeCard } from "../components/RecipeCard";
+import "react-virtualized/styles.css";
+import { RecipeList } from "../components/RecipeList";
 import { DrawerContext } from "../contexts/DrawerContext";
-import { getAllRecipes } from "../database/controllers/recipeController";
+import { getRecipeCount } from "../database/controllers/recipeController";
 import { getTagByName } from "../database/controllers/tagController";
-import { database } from "../database/database";
 import { Recipe } from "../database/models/Recipe";
 import { RouteAllRecipesName, RouteCreateRecipeName } from "../routes/routes";
 
 export function AllRecipes() {
   const { setCurrentRoute } = useContext(DrawerContext);
-
   useEffect(() => {
     setCurrentRoute(RouteAllRecipesName);
   }, [setCurrentRoute]);
 
+  const theme = useTheme();
+  const isSmallerThanSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
+  const isSmallerThanMediumScreen = useMediaQuery(theme.breakpoints.down("md"));
+
+  const nbColumn = useMemo(() => {
+    return isSmallerThanSmallScreen ? 2 : isSmallerThanMediumScreen ? 4 : 6;
+  }, [isSmallerThanMediumScreen, isSmallerThanSmallScreen]);
+
   // using url as a source to know which filters to apply to grid
   const [searchParams] = useSearchParams();
 
-  // todo: implement proper pagination to only load a subset into memory
-  const recipes = useLiveQuery(
-    async () => {
+  const [filterFunction, setFilterFunction] = useState<
+    null | ((recipe: Recipe) => boolean)
+  >(null);
+
+  const [nbRow, setNbRow] = useState(0);
+
+  useEffect(() => {
+    const createNextFilterFunction = async (
+      searchParams: URLSearchParams,
+    ): Promise<(recipe: Recipe) => boolean> => {
       // if we are currently filtering recipes by name, only showing those containing a name that contains this string
+
       if (searchParams.has("recipe-name")) {
         const searchedRecipeName = searchParams
           .get("recipe-name")!
           .trim()
           .toLowerCase();
         // if search is empty, returning all recipes
-        // todo! add pagination to this
         if (searchedRecipeName == "") {
-          return await getAllRecipes();
+          return () => true;
         }
 
-        const recipes = await database.recipes
-          .orderBy("name")
-          .filter((recipe: Recipe) =>
-            recipe.name.toLowerCase().includes(searchedRecipeName),
-          )
-          .toArray();
-        return recipes;
+        return (recipe: Recipe) => {
+          return recipe.name.toLowerCase().includes(searchedRecipeName);
+        };
       }
 
       if (searchParams.has("tag-name")) {
@@ -59,49 +67,47 @@ export function AllRecipes() {
           .trim()
           .toLowerCase();
         // if search is empty, returning all recipes
-        // todo! add pagination to this
         if (searchedTagName == "") {
-          return await getAllRecipes();
+          return () => true;
         }
 
         const searchedTagId = (await getTagByName(searchedTagName))?.id;
 
         if (searchedTagId == null) {
-          return await getAllRecipes();
+          return () => true;
         }
 
-        const recipes = await database.recipes
-          .orderBy("name")
-          .filter((recipe: Recipe) => {
-            let matchFound = false;
+        return (recipe: Recipe) => {
+          let matchFound = false;
 
-            for (const recipeTagId of recipe.tagIds) {
-              if (recipeTagId === searchedTagId) {
-                matchFound = true;
-                break;
-              }
+          for (const recipeTagId of recipe.tagIds) {
+            if (recipeTagId === searchedTagId) {
+              matchFound = true;
+              break;
             }
+          }
 
-            return matchFound;
-          })
-          .toArray();
-
-        return recipes;
+          return matchFound;
+        };
       }
 
       // if we are currently filtering recipes by tag, only showing those that contains exactly this tag
 
-      // if no filter is given, defaulting to returning all recipes
-      // todo! add pagination to this
-      return await getAllRecipes();
-    },
-    // specify vars that affect query:
-    [searchParams], // dependencies
-  );
+      // if no filter is given, defaulting to return all recipes
+      return () => true;
+    };
 
-  function fetchData() {
-    console.log("called", "test");
-  }
+    const handleFiltering = async (searchParams: URLSearchParams) => {
+      const nextFilterFunction: (recipe: Recipe) => boolean =
+        await createNextFilterFunction(searchParams);
+      setFilterFunction(() => nextFilterFunction);
+      setNbRow(
+        Math.ceil((await getRecipeCount(nextFilterFunction)) / nbColumn),
+      );
+    };
+
+    handleFiltering(searchParams);
+  }, [nbColumn, searchParams]);
 
   return (
     <Paper
@@ -110,37 +116,16 @@ export function AllRecipes() {
         p: 2,
       }}
     >
-      {recipes ? (
-        <InfiniteScroll
-          dataLength={recipes.length}
-          next={fetchData}
-          hasMore={false} // Replace with a condition based on your data source
-          loader={<p>Loading...(currently {recipes.length} recipes)</p>}
-        >
-          <Box sx={{ flexGrow: 1 }}>
-            <Grid container spacing={1.5} columns={{ xs: 2, sm: 4, md: 6 }}>
-              {recipes.map((recipe: Recipe) => (
-                <Grid key={recipe.id!} item xs={1} sx={{ aspectRatio: "1/1" }}>
-                  <RecipeCard
-                    // A recipe has an id, asserting it for ts
-                    id={recipe.id!}
-                    isFavorite={recipe.isFavorite}
-                    name={recipe.name}
-                    picture={
-                      recipe.pictures.length > 0
-                        ? URL.createObjectURL(recipe.pictures[0])
-                        : undefined
-                    }
-                    time={recipe.time}
-                  />
-                </Grid>
-              ))}
-            </Grid>
-          </Box>
-        </InfiniteScroll>
+      {filterFunction ? (
+        <RecipeList
+          nbRow={nbRow}
+          nbColumn={nbColumn}
+          filterFunction={filterFunction}
+        />
       ) : (
         <CircularProgress />
       )}
+
       <Fab
         component={Link}
         to={RouteCreateRecipeName}

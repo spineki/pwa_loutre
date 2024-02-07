@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { getBase64FromBlob, getBlobFromBase64 } from "../../utils/files";
 
 const TimeSchema = z
   .object({
@@ -46,6 +47,53 @@ export const RecipeSchema = z
 
 export type Recipe = z.infer<typeof RecipeSchema>;
 
+// a recipe stored in a file and given as input
+export const JsonCompatibleRecipeSchema = RecipeSchema.omit({ pictures: true })
+  .extend({
+    pictures: z.string().array(),
+  })
+  .strict();
+
+export type JsonCompatibleRecipe = z.infer<typeof JsonCompatibleRecipeSchema>;
+
+export const ShareFileSchema = z.object({
+  version: z.number(),
+  recipes: JsonCompatibleRecipeSchema.array(),
+});
+
+export type ShareFile = z.infer<typeof ShareFileSchema>;
+
+export async function getJsonCompatibleRecipeFromRecipe(
+  recipe: Recipe,
+): Promise<JsonCompatibleRecipe> {
+  // eslint-disable-next-line
+  const { id, pictures, ...rest } = recipe;
+
+  const jsonCompatibleRecipe: JsonCompatibleRecipe = {
+    ...rest,
+    pictures: (await Promise.all(
+      pictures.map((picture) => getBase64FromBlob(picture)),
+    )) as string[],
+  };
+
+  return jsonCompatibleRecipe;
+}
+
+export async function getRecipeFromJSonCompatibleRecipe(
+  jsonCompatibleRecipe: JsonCompatibleRecipe,
+): Promise<Recipe> {
+  // eslint-disable-next-line
+  const { id, pictures, ...rest } = jsonCompatibleRecipe;
+
+  const recipe: Recipe = {
+    ...rest,
+    pictures: await Promise.all(
+      pictures.map((picture) => getBlobFromBase64(picture)),
+    ),
+  };
+
+  return recipe;
+}
 /**
  * Create an empty recipe object (could be seen as an empty constructor)
  */

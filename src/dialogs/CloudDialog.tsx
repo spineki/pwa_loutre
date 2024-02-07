@@ -21,6 +21,11 @@ import {
   getAllRecipes,
   importRecipesFromFileContent,
 } from "../database/controllers/recipeController";
+import { database_version } from "../database/database";
+import {
+  ShareFile,
+  getJsonCompatibleRecipeFromRecipe,
+} from "../database/models/Recipe";
 import { useSharing } from "../hooks/useSharing";
 
 export function CloudDialog() {
@@ -88,18 +93,31 @@ export function CloudDialog() {
 
   const handleExport = async () => {
     const allRecipes = await getAllRecipes();
-    allRecipes.forEach((element) => {
-      delete element.id;
-    });
-    shareFile(allRecipes);
+
+    const jsonCompatibleRecipe = await Promise.all(
+      allRecipes.map(async (recipe) =>
+        getJsonCompatibleRecipeFromRecipe(recipe),
+      ),
+    );
+
+    shareFile(jsonCompatibleRecipe);
   };
 
   const handleDownload = async () => {
     const allRecipes = await getAllRecipes();
-    allRecipes.forEach((element) => {
-      delete element.id;
-    });
-    downloadFile(allRecipes);
+
+    const jsonCompatibleRecipes = await Promise.all(
+      allRecipes.map(async (recipe) =>
+        getJsonCompatibleRecipeFromRecipe(recipe),
+      ),
+    );
+
+    const fileToDownload: ShareFile = {
+      version: database_version,
+      recipes: jsonCompatibleRecipes,
+    };
+
+    downloadFile(fileToDownload);
   };
 
   return (
@@ -143,10 +161,7 @@ export function CloudDialog() {
           </ListItemButton>
         </ListItem>
         <ListItem disableGutters>
-          <ListItemButton
-            disabled={!browserCanShareFiles}
-            onClick={() => handleDownload()}
-          >
+          <ListItemButton onClick={() => handleDownload()}>
             <ListItemIcon>
               <DownloadIcon />
             </ListItemIcon>
@@ -157,7 +172,7 @@ export function CloudDialog() {
 
       <DialogContent>
         <DialogContentText>
-          Your website does not seem to be able to share files. Sorry.
+          Your browser does not seem to be able to share files. Sorry.
         </DialogContentText>
       </DialogContent>
     </Dialog>
