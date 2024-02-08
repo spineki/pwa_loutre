@@ -6,7 +6,10 @@ import { FixedSizeGrid, GridChildComponentProps, areEqual } from "react-window";
 import CircularProgress from "@mui/material/CircularProgress";
 import Grid from "@mui/material/Grid";
 
-import { getFilteredRecipes } from "../database/controllers/recipeController";
+import {
+  getFilteredRecipes,
+  partialUpdateRecipe,
+} from "../database/controllers/recipeController";
 import { Recipe } from "../database/models/Recipe";
 import { RecipeCard } from "./RecipeCard";
 
@@ -26,7 +29,7 @@ const MemoizedCell = memo(function Cell({
 }: GridChildComponentProps<{ recipes: CardRecipe[]; nbColumn: number }>) {
   const { recipes, nbColumn } = data;
   const singleColumnIndex = columnIndex + rowIndex * nbColumn;
-  const recipe = recipes[singleColumnIndex];
+  const recipe = recipes.at(singleColumnIndex);
 
   return (
     <div style={style}>
@@ -38,6 +41,12 @@ const MemoizedCell = memo(function Cell({
             name={recipe.name}
             picture={recipe.picture}
             time={recipe.time}
+            onLike={async () => {
+              await partialUpdateRecipe(recipe.id!, { isFavorite: true });
+            }}
+            onUnLike={async () => {
+              await partialUpdateRecipe(recipe.id!, { isFavorite: false });
+            }}
           />
         </Grid>
       )}

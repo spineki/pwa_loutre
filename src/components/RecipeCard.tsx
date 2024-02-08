@@ -1,4 +1,3 @@
-import { useCallback } from "react";
 import { Link } from "react-router-dom";
 
 import Card from "@mui/material/Card";
@@ -7,7 +6,6 @@ import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
 
 import { CardMedia, useTheme } from "@mui/material";
-import { partialUpdateRecipe } from "../database/controllers/recipeController";
 import { Time } from "../database/models/Recipe";
 import { getDetailsRecipeRoute } from "../routes/routes";
 import { CardRow } from "./CardRow";
@@ -18,20 +16,14 @@ type RecipeCardProps = {
   name: string;
   picture?: string;
   time: Time;
+  onLike: () => void;
+  onUnLike: () => void;
 };
 
 export function RecipeCard(props: RecipeCardProps) {
-  const { id, name, picture, time, isFavorite } = props;
+  const { id, name, picture, time, isFavorite, onLike, onUnLike } = props;
 
   const theme = useTheme();
-
-  const handleLike = useCallback(async () => {
-    await partialUpdateRecipe(id, { isFavorite: true });
-  }, [id]);
-
-  const handleUnlike = useCallback(async () => {
-    await partialUpdateRecipe(id, { isFavorite: false });
-  }, [id]);
 
   return (
     <Card
@@ -101,8 +93,8 @@ export function RecipeCard(props: RecipeCardProps) {
           <CardRow
             duration={time.total}
             isFavorite={isFavorite}
-            onLiked={handleLike}
-            onUnliked={handleUnlike}
+            onLiked={onLike}
+            onUnliked={onUnLike}
           />
         </CardContent>
       </CardActionArea>
