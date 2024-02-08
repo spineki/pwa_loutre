@@ -6,7 +6,7 @@ import CardActionArea from "@mui/material/CardActionArea";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
 
-import { useTheme } from "@mui/material";
+import { CardMedia, useTheme } from "@mui/material";
 import { partialUpdateRecipe } from "../database/controllers/recipeController";
 import { Time } from "../database/models/Recipe";
 import { getDetailsRecipeRoute } from "../routes/routes";
@@ -37,10 +37,6 @@ export function RecipeCard(props: RecipeCardProps) {
     <Card
       elevation={2}
       sx={{
-        backgroundImage: `
-                linear-gradient(0deg, rgba(42,42,42,0.65) 0%, rgba(42,42,42,0.65) 35%, rgba(255,255,255,0) 55%),
-                url(${picture})   
-            `,
         height: "100%",
         width: "100%",
         backgroundSize: "cover",
@@ -57,13 +53,34 @@ export function RecipeCard(props: RecipeCardProps) {
           flexDirection: "column",
           alignItems: "flex-start",
           justifyContent: "end",
-          paddingLeft: 1,
-          paddingRight: 1,
         }}
         component={Link}
         to={getDetailsRecipeRoute(id)}
       >
-        <CardContent style={{ padding: 2, paddingBottom: 0, paddingTop: 1 }}>
+        <CardMedia
+          component="img"
+          src={picture}
+          sx={{
+            position: "absolute",
+            top: 0,
+            right: 0,
+            height: "100%",
+            width: "100%",
+            maskImage:
+              "linear-gradient(180deg, rgb(42, 42, 42) 0%, rgba(42,42,42,0.95) 50%, rgba(255,255,255, 0.4) 80%)",
+            loading: "lazy",
+          }}
+        />
+
+        <CardContent
+          sx={{
+            backgroundColor: "transparent",
+            position: "relative",
+            padding: 1,
+            paddingBottom: 0.5,
+            width: "100%",
+          }}
+        >
           <Typography
             variant="h5"
             component="div"
@@ -81,23 +98,14 @@ export function RecipeCard(props: RecipeCardProps) {
           >
             {name}
           </Typography>
+          <CardRow
+            duration={time.total}
+            isFavorite={isFavorite}
+            onLiked={handleLike}
+            onUnliked={handleUnlike}
+          />
         </CardContent>
       </CardActionArea>
-      <CardContent
-        style={{
-          padding: 0,
-          paddingLeft: 0,
-          marginLeft: 4,
-          paddingBottom: 4,
-        }}
-      >
-        <CardRow
-          duration={time.total}
-          isFavorite={isFavorite}
-          onLiked={handleLike}
-          onUnliked={handleUnlike}
-        />
-      </CardContent>
     </Card>
   );
 }

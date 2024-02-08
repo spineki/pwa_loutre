@@ -36,8 +36,11 @@ export function CardRow(props: Props) {
       />
       {isFavorite ? (
         <IconButton
+          onMouseDown={(event) => {
+            event.preventDefault();
+          }}
           onClick={(event) => {
-            event.stopPropagation();
+            event.preventDefault();
             onUnliked();
           }}
         >
@@ -45,8 +48,11 @@ export function CardRow(props: Props) {
         </IconButton>
       ) : (
         <IconButton
+          onMouseDown={(event) => {
+            event.preventDefault();
+          }}
           onClick={(event) => {
-            event.stopPropagation();
+            event.preventDefault();
             onLiked();
           }}
           sx={{ color: "inherit" }}
