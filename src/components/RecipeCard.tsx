@@ -3,9 +3,9 @@ import { Link } from "react-router-dom";
 import Card from "@mui/material/Card";
 import CardActionArea from "@mui/material/CardActionArea";
 import CardContent from "@mui/material/CardContent";
+import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
 
-import { CardMedia, useTheme } from "@mui/material";
 import { Time } from "../database/models/Recipe";
 import { getDetailsRecipeRoute } from "../routes/routes";
 import { CardRow } from "./CardRow";
@@ -23,8 +23,6 @@ type RecipeCardProps = {
 export function RecipeCard(props: RecipeCardProps) {
   const { id, name, picture, time, isFavorite, onLike, onUnLike } = props;
 
-  const theme = useTheme();
-
   return (
     <Card
       elevation={2}
@@ -35,7 +33,6 @@ export function RecipeCard(props: RecipeCardProps) {
         backgroundPosition: "center",
         display: "flex",
         flexDirection: "column",
-        color: theme.palette.getContrastText("rgba(42,42,42,0.6)"),
       }}
     >
       <CardActionArea
@@ -66,7 +63,6 @@ export function RecipeCard(props: RecipeCardProps) {
 
         <CardContent
           sx={{
-            backgroundColor: "transparent",
             position: "relative",
             padding: 1,
             paddingBottom: 0.5,

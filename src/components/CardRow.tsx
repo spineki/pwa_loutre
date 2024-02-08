@@ -26,14 +26,9 @@ export function CardRow(props: Props) {
         alignItems: "center",
         justifyContent: "space-between",
         width: "100%",
-        color: "inherit",
       }}
     >
-      <Chip
-        icon={<RestoreIcon style={{ color: "inherit" }} />}
-        label={formatTime(duration)}
-        sx={{ color: "inherit" }}
-      />
+      <Chip icon={<RestoreIcon />} label={formatTime(duration)} />
       {isFavorite ? (
         <IconButton
           onMouseDown={(event) => {
@@ -55,9 +50,8 @@ export function CardRow(props: Props) {
             event.preventDefault();
             onLiked();
           }}
-          sx={{ color: "inherit" }}
         >
-          <FavoriteBorderIcon sx={{ color: "inherit" }} />
+          <FavoriteBorderIcon />
         </IconButton>
       )}
     </Box>

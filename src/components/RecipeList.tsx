@@ -1,5 +1,5 @@
 import { useLiveQuery } from "dexie-react-hooks";
-import { memo, useMemo } from "react";
+import { memo, useContext, useMemo } from "react";
 import AutoSizer from "react-virtualized-auto-sizer";
 import { FixedSizeGrid, GridChildComponentProps, areEqual } from "react-window";
 
@@ -12,6 +12,8 @@ import {
 } from "../database/controllers/recipeController";
 import { Recipe } from "../database/models/Recipe";
 import { RecipeCard } from "./RecipeCard";
+import { ThemeProvider } from "@mui/material/styles";
+import { ColorModeContext } from "../contexts/ColormodeContext";
 
 // A displayable card element
 type CardRecipe = Omit<Recipe, "pictures"> & { picture?: string };
@@ -57,6 +59,8 @@ const MemoizedCell = memo(function Cell({
 export function RecipeList(props: RecipeListProps) {
   const { nbColumn, filterFunction } = props;
 
+  const { getTheme } = useContext(ColorModeContext);
+
   const recipes = useLiveQuery(async () => {
     const recipes: Recipe[] = await getFilteredRecipes(filterFunction);
 
@@ -82,27 +86,29 @@ export function RecipeList(props: RecipeListProps) {
   );
 
   return (
-    <AutoSizer>
-      {({ height, width }) =>
-        recipes ? (
-          <div style={{ height, width }}>
-            <FixedSizeGrid
-              className="grid"
-              width={width}
-              height={height}
-              columnCount={nbColumn}
-              columnWidth={width / nbColumn}
-              rowCount={nbRow}
-              rowHeight={width / nbColumn}
-              itemData={{ recipes, nbColumn }}
-            >
-              {MemoizedCell}
-            </FixedSizeGrid>
-          </div>
-        ) : (
-          <CircularProgress />
-        )
-      }
-    </AutoSizer>
+    <ThemeProvider theme={getTheme("dark")}>
+      <AutoSizer>
+        {({ height, width }) =>
+          recipes ? (
+            <div style={{ height, width }}>
+              <FixedSizeGrid
+                className="grid"
+                width={width}
+                height={height}
+                columnCount={nbColumn}
+                columnWidth={width / nbColumn}
+                rowCount={nbRow}
+                rowHeight={width / nbColumn}
+                itemData={{ recipes, nbColumn }}
+              >
+                {MemoizedCell}
+              </FixedSizeGrid>
+            </div>
+          ) : (
+            <CircularProgress />
+          )
+        }
+      </AutoSizer>
+    </ThemeProvider>
   );
 }
