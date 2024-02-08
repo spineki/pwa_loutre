@@ -12,7 +12,6 @@ import AddIcon from "@mui/icons-material/Add";
 import "react-virtualized/styles.css";
 import { RecipeList } from "../components/RecipeList";
 import { DrawerContext } from "../contexts/DrawerContext";
-import { getRecipeCount } from "../database/controllers/recipeController";
 import { getTagByName } from "../database/controllers/tagController";
 import { Recipe } from "../database/models/Recipe";
 import { RouteAllRecipesName, RouteCreateRecipeName } from "../routes/routes";
@@ -37,8 +36,6 @@ export function AllRecipes() {
   const [filterFunction, setFilterFunction] = useState<
     null | ((recipe: Recipe) => boolean)
   >(null);
-
-  const [nbRow, setNbRow] = useState(0);
 
   useEffect(() => {
     const createNextFilterFunction = async (
@@ -101,9 +98,6 @@ export function AllRecipes() {
       const nextFilterFunction: (recipe: Recipe) => boolean =
         await createNextFilterFunction(searchParams);
       setFilterFunction(() => nextFilterFunction);
-      setNbRow(
-        Math.ceil((await getRecipeCount(nextFilterFunction)) / nbColumn),
-      );
     };
 
     handleFiltering(searchParams);
@@ -117,11 +111,7 @@ export function AllRecipes() {
       }}
     >
       {filterFunction ? (
-        <RecipeList
-          nbRow={nbRow}
-          nbColumn={nbColumn}
-          filterFunction={filterFunction}
-        />
+        <RecipeList nbColumn={nbColumn} filterFunction={filterFunction} />
       ) : (
         <CircularProgress />
       )}

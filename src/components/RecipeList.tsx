@@ -1,5 +1,5 @@
 import { useLiveQuery } from "dexie-react-hooks";
-import { useCallback } from "react";
+import { useCallback, useMemo } from "react";
 import { AutoSizer, List, ListRowRenderer } from "react-virtualized";
 
 import CircularProgress from "@mui/material/CircularProgress";
@@ -13,13 +13,12 @@ import { RecipeCardMemoized } from "./RecipeCard";
 type CardRecipe = Omit<Recipe, "pictures"> & { picture?: string };
 
 interface RecipeListProps {
-  nbRow: number;
   nbColumn: number;
   filterFunction: (recipe: Recipe) => boolean;
 }
 
 export function RecipeList(props: RecipeListProps) {
-  const { nbColumn, nbRow, filterFunction } = props;
+  const { nbColumn, filterFunction } = props;
 
   const recipes = useLiveQuery(async () => {
     const recipes: Recipe[] = await getFilteredRecipes(filterFunction);
@@ -69,6 +68,12 @@ export function RecipeList(props: RecipeListProps) {
       );
     },
     [nbColumn, recipes],
+  );
+
+  const nbRow = useMemo(
+    () => Math.ceil((recipes?.length ?? 0) / nbColumn),
+
+    [nbColumn, recipes?.length],
   );
 
   return (
