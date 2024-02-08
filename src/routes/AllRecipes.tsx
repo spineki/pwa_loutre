@@ -9,7 +9,6 @@ import useMediaQuery from "@mui/material/useMediaQuery";
 
 import AddIcon from "@mui/icons-material/Add";
 
-import "react-virtualized/styles.css";
 import { RecipeList } from "../components/RecipeList";
 import { DrawerContext } from "../contexts/DrawerContext";
 import { getTagByName } from "../database/controllers/tagController";

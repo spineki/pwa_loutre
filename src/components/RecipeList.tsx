@@ -1,13 +1,14 @@
 import { useLiveQuery } from "dexie-react-hooks";
-import { useCallback, useMemo } from "react";
-import { AutoSizer, List, ListRowRenderer } from "react-virtualized";
+import { memo, useMemo } from "react";
+import AutoSizer from "react-virtualized-auto-sizer";
+import { FixedSizeGrid, GridChildComponentProps, areEqual } from "react-window";
 
 import CircularProgress from "@mui/material/CircularProgress";
 import Grid from "@mui/material/Grid";
 
 import { getFilteredRecipes } from "../database/controllers/recipeController";
 import { Recipe } from "../database/models/Recipe";
-import { RecipeCardMemoized } from "./RecipeCard";
+import { RecipeCard } from "./RecipeCard";
 
 // A displayable card element
 type CardRecipe = Omit<Recipe, "pictures"> & { picture?: string };
@@ -16,6 +17,33 @@ interface RecipeListProps {
   nbColumn: number;
   filterFunction: (recipe: Recipe) => boolean;
 }
+
+const MemoizedCell = memo(function Cell({
+  columnIndex,
+  rowIndex,
+  style,
+  data,
+}: GridChildComponentProps<{ recipes: CardRecipe[]; nbColumn: number }>) {
+  const { recipes, nbColumn } = data;
+  const singleColumnIndex = columnIndex + rowIndex * nbColumn;
+  const recipe = recipes[singleColumnIndex];
+
+  return (
+    <div style={style}>
+      {recipe && (
+        <Grid item xs={1} sx={{ aspectRatio: "1/1", padding: 1 }}>
+          <RecipeCard
+            id={recipe.id!}
+            isFavorite={recipe.isFavorite}
+            name={recipe.name}
+            picture={recipe.picture}
+            time={recipe.time}
+          />
+        </Grid>
+      )}
+    </div>
+  );
+}, areEqual);
 
 export function RecipeList(props: RecipeListProps) {
   const { nbColumn, filterFunction } = props;
@@ -39,40 +67,8 @@ export function RecipeList(props: RecipeListProps) {
     return cardRecipes;
   }, [filterFunction]);
 
-  const rowRenderer: ListRowRenderer = useCallback(
-    ({ key, index, style }) => {
-      return (
-        <div key={key} style={style}>
-          <Grid
-            key={index}
-            container
-            spacing={1.5}
-            columns={{ xs: 2, sm: 4, md: 6 }}
-          >
-            {(recipes ?? [])
-              .slice(nbColumn * index, nbColumn * (index + 1))
-              .map((recipe) => (
-                <Grid key={recipe.id!} item xs={1} sx={{ aspectRatio: "1/1" }}>
-                  <RecipeCardMemoized
-                    key={recipe.id!}
-                    id={recipe.id!}
-                    isFavorite={recipe.isFavorite}
-                    name={recipe.name}
-                    picture={recipe.picture}
-                    time={recipe.time}
-                  />
-                </Grid>
-              ))}
-          </Grid>
-        </div>
-      );
-    },
-    [nbColumn, recipes],
-  );
-
   const nbRow = useMemo(
     () => Math.ceil((recipes?.length ?? 0) / nbColumn),
-
     [nbColumn, recipes?.length],
   );
 
@@ -81,14 +77,18 @@ export function RecipeList(props: RecipeListProps) {
       {({ height, width }) =>
         recipes ? (
           <div style={{ height, width }}>
-            <List
-              rowHeight={width / nbColumn + 6}
-              height={height}
+            <FixedSizeGrid
+              className="grid"
               width={width}
+              height={height}
+              columnCount={nbColumn}
+              columnWidth={width / nbColumn}
               rowCount={nbRow}
-              rowRenderer={rowRenderer}
-              nbColumn={nbColumn}
-            />
+              rowHeight={width / nbColumn}
+              itemData={{ recipes, nbColumn }}
+            >
+              {MemoizedCell}
+            </FixedSizeGrid>
           </div>
         ) : (
           <CircularProgress />

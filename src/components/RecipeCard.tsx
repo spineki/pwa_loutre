@@ -1,4 +1,4 @@
-import { memo, useCallback } from "react";
+import { useCallback } from "react";
 import { Link } from "react-router-dom";
 
 import Card from "@mui/material/Card";
@@ -109,5 +109,3 @@ export function RecipeCard(props: RecipeCardProps) {
     </Card>
   );
 }
-
-export const RecipeCardMemoized = memo(RecipeCard);
