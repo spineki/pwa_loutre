@@ -68,8 +68,8 @@ export function RecipeCard(props: RecipeCardProps) {
             width: "100%",
             maskImage:
               "linear-gradient(180deg, rgb(42, 42, 42) 0%, rgba(42,42,42,0.95) 50%, rgba(255,255,255, 0.4) 80%)",
-            loading: "lazy",
           }}
+          loading="lazy"
         />
 
         <CardContent
