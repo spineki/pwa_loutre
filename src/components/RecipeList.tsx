@@ -29,9 +29,6 @@ export function RecipeList(props: RecipeListProps) {
 
       let firstPicture: string;
       if (firstPictureBlob !== undefined) {
-        console.log("pictures", pictures);
-        console.log("rest", rest);
-        console.log("firstPictureBlob", firstPictureBlob);
         firstPicture = URL.createObjectURL(firstPictureBlob);
       } else {
         firstPicture = "/tutorial_picture.png";
