@@ -50,10 +50,6 @@ export function RecipeRequirements(props: RecipeRequirementsProps) {
               <div key={`${sectionIndex}`}>
                 {ingredientSection.title && (
                   <ListItem sx={{ paddingTop: 0, paddingBottom: 0 }}>
-                    <ListItemIcon sx={{ minWidth: 16 }}>
-                      <Badge badgeContent="" color="primary" variant="dot" />
-                    </ListItemIcon>
-
                     <ListItemText>
                       <ColouredNumberText
                         text={ingredientSection.title}
