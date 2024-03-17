@@ -267,7 +267,7 @@ export function EditRecipe() {
       const isSection = field.isSection;
       const fieldText = field.text;
       const chunks = fieldText
-        .split("\n\n")
+        .split("\n")
         .map((chunk) => chunk.trim())
         .filter((chunk) => chunk.length > 0);
       if (chunks.length <= 1) {
@@ -306,7 +306,7 @@ export function EditRecipe() {
       const isSection = field.isSection;
       const fieldText = field.text;
       const chunks = fieldText
-        .split("\n\n")
+        .split("\n")
         .map((chunk) => chunk.trim())
         .filter((chunk) => chunk.length > 0);
       if (chunks.length <= 1) {
