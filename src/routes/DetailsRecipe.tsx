@@ -12,6 +12,7 @@ import { useTheme } from "@mui/material/styles";
 
 import AddIcon from "@mui/icons-material/Add";
 import BreakfastDiningIcon from "@mui/icons-material/BreakfastDining";
+import DownloadIcon from "@mui/icons-material/Download";
 import EditIcon from "@mui/icons-material/Edit";
 import RemoveIcon from "@mui/icons-material/Remove";
 import ReplayIcon from "@mui/icons-material/Replay";
@@ -65,7 +66,7 @@ export function DetailsRecipe() {
 
   const { t } = useTranslation();
   const theme = useTheme();
-  const { shareFile } = useSharing();
+  const { shareFile, downloadFile } = useSharing();
 
   const [currentTabIndex, setCurrentTabIndex] = useState<number>(0);
   const [portion, setPortion] = useState<number>(recipe.portion);
@@ -102,6 +103,15 @@ export function DetailsRecipe() {
 
     await shareFile(fileToShare);
   }, [recipe, shareFile]);
+
+  const downloadRecipe = async () => {
+    const fileToDownload: ShareFile = {
+      version: database_version,
+      recipes: [await getJsonCompatibleRecipeFromRecipe(recipe)],
+    };
+
+    downloadFile(fileToDownload);
+  };
 
   return (
     <Paper
@@ -260,6 +270,19 @@ export function DetailsRecipe() {
 
       {currentTabIndex === 0 && (
         <>
+          <Fab
+            onClick={() => downloadRecipe()}
+            size="medium"
+            color="secondary"
+            sx={{
+              position: "fixed",
+              bottom: 144,
+              right: 16,
+            }}
+          >
+            <DownloadIcon />
+          </Fab>
+
           <Fab
             onClick={() => shareRecipe()}
             size="medium"
